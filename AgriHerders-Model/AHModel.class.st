@@ -64,16 +64,20 @@ AHModel >> initFarms [
 { #category : 'initialization' }
 AHModel >> initLandcover [
 
-	1 to: 11 do: [: i | (self cellAt: i) setLandcover: AHForest].
-	#(12 13 14 15 16 19 20 21 22 23 24) do: [: i | (self cellAt: i) setLandcover: AHPasture].
-	#(17 18 25 32 36 37 58) do: [: i | (self cellAt: i) setLandcover: AHMaize].
-	#(26 27 35 44) do: [: i | (self cellAt: i) setLandcover: AHCotton].
-	#(33 43) do: [: i | (self cellAt: i) setLandcover: AHCassava].
-	#(54 55 63) do: [: i | (self cellAt: i) setLandcover: AHFarmerHouse].
-	#(40 57)do: [: i | (self cellAt: i) setLandcover: AHFulaniCamp].
-	#(29 30 45 46 47 51 52 60 61) do: [: i | (self cellAt: i) setLandcover: AHCashew].
-	#(28 31 34 38 39 41 42 48 49 50 53 56  59 62 64) do: [: i | (self cellAt: i) setLandcover: AHBrush].
-
+	1 to: 11 do: [ :i | (self cellAt: i) setLandcover: AHForest ].
+	#( 12 13 14 15 16 19 20 21 22 23 24 ) do: [ :i |
+		(self cellAt: i) setLandcover: AHPasture ].
+	#( 17 18 25 32 36 37 58 ) do: [ :i |
+		(self cellAt: i) setLandcover: AHMaize ].
+	#( 26 27 35 44 ) do: [ :i | (self cellAt: i) setLandcover: AHCotton ].
+	#( 33 43 ) do: [ :i | (self cellAt: i) setLandcover: AHCassava ].
+	#( 54 55 63 ) do: [ :i |
+		(self cellAt: i) setLandcover: AHFarmerHouse ].
+	#( 40 57 ) do: [ :i | (self cellAt: i) setLandcover: AHFulaniCamp ].
+	#( 29 30 45 46 47 51 52 60 61 ) do: [ :i |
+		(self cellAt: i) setLandcover: AHCashew ].
+	#( 28 31 34 38 39 41 42 48 49 50 53 56 59 62 64 ) do: [ :i |
+		(self cellAt: i) setLandcover: AHBrush ]
 ]
 
 { #category : 'initialization' }
@@ -89,6 +93,7 @@ AHModel >> initModel [
 
 	self initializeAgents.
 	self initFarms.
+
 	AHPlot activePovSelector: #povLandcover
 ]
 
