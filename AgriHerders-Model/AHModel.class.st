@@ -42,19 +42,23 @@ AHModel class >> prefix [
 AHModel >> initFarms [
 
 	| farmCells |
-	
-	farmCells := {(self thePlots select: [ :c | #( 17 18 25 26 27 33 ) includes: c id ]).
-		(self thePlots select: [ :c | #( 35 36 37 43 44) includes: c id ]).
-		(self thePlots select: [ :c | #( 29 30 ) includes: c id ]).
-		(self thePlots select: [ :c | #( 32 40 ) includes: c id ]).
-		(self thePlots select: [ :c | #(45 46 47 ) includes: c id ]).
-		(self thePlots select: [ :c | #( 51 52 60 61 ) includes: c id ]).
-		(self thePlots select: [ :c | #( 57 58 ) includes: c id ])} flattened.
+	farmCells := {
+		             (self thePlots select: [ :c | 
+			              #( 17 18 25 26 27 33 ) includes: c id ]).
+		             (self thePlots select: [ :c |
+			              #( 35 36 37 43 44 ) includes: c id ]).
+		             (self thePlots select: [ :c |
+			              #( 29 30 ) includes: c id ]).
+		             (self thePlots select: [ :c |
+			              #( 32 40 ) includes: c id ]).
+		             (self thePlots select: [ :c |
+			              #( 45 46 47 ) includes: c id ]).
+		             (self thePlots select: [ :c |
+			              #( 51 52 60 61 ) includes: c id ]).
+		             (self thePlots select: [ :c |
+			              #( 57 58 ) includes: c id ]) } flattened.
 
-	self
-		createAggregate: AHFarm
-		from: farmCells
-		
+	self createAggregate: AHFarm from: farmCells
 ]
 
 { #category : 'initialization' }
