@@ -2,8 +2,7 @@ Class {
 	#name : 'AHForest',
 	#superclass : 'AHVegetation',
 	#instVars : [
-		'state',
-		'coordinates'
+		'state'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'

@@ -39,26 +39,60 @@ AHModel class >> prefix [
 ]
 
 { #category : 'initialization' }
-AHModel >> initFarms [
+AHModel >> createCattles [
+	"Je crée 10 troupeax pour chaque éleveur"
+
+	| aCattle |
+	self @@ AHSedentary do: [ :eleveur |
+			aCattle := self newEntity: AHCattleBatch.
+			eleveur herd add: aCattle.
+			aCattle owner: eleveur.
+			aCattle moveTo:
+				(eleveur house) ]
+]
+
+{ #category : 'initialization' }
+AHModel >> createOneFarmFrom: aListOfIDs forAgent: aTypeOfAgent [
+
+	| farmCells aFarm ag |
+	farmCells := self thePlots select: [ :c | aListOfIDs includes: c id ].
+	aFarm := self createAggregate: AHFarm from: farmCells.
+	ag := self newEntity: aTypeOfAgent.
+	ag myFarm: aFarm.
+	aFarm owner: ag.
+	aTypeOfAgent = AHAgricultor
+		ifTrue: [ag house: (self selectRandomlyFrom: self villagePlots) ]
+		ifFalse: [ag house: (aFarm components detect: [ :c | c cover class = AHFulaniCamp ]) ].
+	ag moveTo: ag house.
+]
+
+{ #category : 'accessing' }
+AHModel >> forestPlots [
+	"return the cells in  forest"
+
+	^ self plotsCoveredBy: AHForest
+]
+
+{ #category : 'initialization' }
+AHModel >> initFarmsAndAgents [
 
 	| farmCells |
-	farmCells := {
-		             (self thePlots select: [ :c | 
-			              #( 17 18 25 26 27 33 ) includes: c id ]).
-		             (self thePlots select: [ :c |
-			              #( 35 36 37 43 44 ) includes: c id ]).
-		             (self thePlots select: [ :c |
-			              #( 29 30 ) includes: c id ]).
-		             (self thePlots select: [ :c |
-			              #( 32 40 ) includes: c id ]).
-		             (self thePlots select: [ :c |
-			              #( 45 46 47 ) includes: c id ]).
-		             (self thePlots select: [ :c |
-			              #( 51 52 60 61 ) includes: c id ]).
-		             (self thePlots select: [ :c |
-			              #( 57 58 ) includes: c id ]) } flattened.
+	self createOneFarmFrom: #( 17 18 25 26 27 33 ) forAgent: AHAgricultor.
+	self createOneFarmFrom: #( 35 36 37 43 44 ) forAgent: AHAgricultor.
+	self createOneFarmFrom: #( 32 40 ) forAgent: AHSedentary.
+	self createOneFarmFrom: #( 57 58 ) forAgent: AHSedentary.
 
-	self createAggregate: AHFarm from: farmCells
+	"Ferme de cajou, sans proprietaire"
+	farmCells := self thePlots select: [ :c | #( 29 30 ) includes: c id ].
+	self createAggregate: AHFarm from: farmCells.
+
+	farmCells := self thePlots select: [ :c | #( 46 47 ) includes: c id ].
+	self createAggregate: AHFarm from: farmCells.
+
+	farmCells := self thePlots select: [ :c |
+		             #( 45 51 52 60 61 ) includes: c id ].
+
+	self newEntity: AHTranshumant
 ]
 
 { #category : 'initialization' }
@@ -71,13 +105,13 @@ AHModel >> initLandcover [
 		(self cellAt: i) setLandcover: AHMaize ].
 	#( 26 27 35 44 ) do: [ :i | (self cellAt: i) setLandcover: AHCotton ].
 	#( 33 43 ) do: [ :i | (self cellAt: i) setLandcover: AHCassava ].
-	#( 54 55 63 ) do: [ :i |
+	#( 54 55 62 ) do: [ :i |
 		(self cellAt: i) setLandcover: AHFarmerHouse ].
 	#( 40 57 ) do: [ :i | (self cellAt: i) setLandcover: AHFulaniCamp ].
 	#( 29 30 45 46 47 51 52 60 61 ) do: [ :i |
 		(self cellAt: i) setLandcover: AHCashew ].
-	#( 28 31 34 38 39 41 42 48 49 50 53 56 59 62 64 ) do: [ :i |
-		(self cellAt: i) setLandcover: AHBrush ]
+	#( 28 31 34 38 39 41 42 48 49 50 53 56 59 63 64 ) do: [ :i |
+		(self cellAt: i) setLandcover: AHBush ]
 ]
 
 { #category : 'initialization' }
@@ -91,19 +125,17 @@ AHModel >> initModel [
 		closed: true.
 	self initLandcover.
 
-	self initializeAgents.
-	self initFarms.
+	self initFarmsAndAgents.
+	self createCattles.
 
 	AHPlot activePovSelector: #povLandcover
 ]
 
-{ #category : 'initialization' }
-AHModel >> initializeAgents [
+{ #category : 'accessing' }
+AHModel >> plotsCoveredBy: aTypeOfCover [
+	"return the cells covered by aTypeOfCover"
 
-		
-	self
-		createN: self class initialNumberOfPhdCattleBatch
-		randomlyLocatedAloneEntities: AHCattleBatch .
+	^ self thePlots select: [ :c | c cover class = aTypeOfCover ]
 ]
 
 { #category : 'control' }
@@ -129,4 +161,11 @@ AHModel >> theCattleBatches [
 AHModel >> thePlots [
 
 	^ self @@ AHPlot 
+]
+
+{ #category : 'accessing' }
+AHModel >> villagePlots [
+	"return the 3 FarmerHouse cells"
+
+	^ self plotsCoveredBy:  AHFarmerHouse
 ]

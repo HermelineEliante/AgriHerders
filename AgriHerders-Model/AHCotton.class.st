@@ -7,5 +7,5 @@ Class {
 
 { #category : 'pov' }
 AHCotton >> myColor [
-	^(Color fromHexString: 'ECF0F1')
+	^(Color fromHexString: 'FCFFFF')
 ]

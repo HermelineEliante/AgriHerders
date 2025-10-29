@@ -3,30 +3,62 @@ Class {
 	#superclass : 'CMAgent',
 	#instVars : [
 		'name',
-		'status',
-		'location',
-		'myPlots'
+		'agreement',
+		'house',
+		'myFarm',
+		'territory',
+		'others'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
 
 { #category : 'accessing' }
-AHActor >> location [
+AHActor >> agreement [
 
-	^ location
+	^ agreement
 ]
 
 { #category : 'accessing' }
-AHActor >> location: anObject [
+AHActor >> agreement: anObject [
 
-	location := anObject
+	agreement := anObject
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
+AHActor >> house [
+
+	^ house
+]
+
+{ #category : 'accessing' }
+AHActor >> house: anObject [
+
+	house := anObject
+]
+
+{ #category : 'accessing' }
+AHActor >> initialize [ 
+	super initialize .
+	agreement := true.
+]
+
+{ #category : 'accessing' }
+AHActor >> myFarm [
+
+	^ myFarm
+]
+
+{ #category : 'accessing' }
+AHActor >> myFarm: anObject [
+
+	myFarm := anObject
+]
+
+{ #category : 'accessing' }
 AHActor >> myPlots [
 
-	^ self property components
+	^ self myFarm components
 ]
 
 { #category : 'accessing' }
@@ -41,7 +73,19 @@ AHActor >> name: anObject [
 	name := anObject
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
+AHActor >> others [
+
+	^ others
+]
+
+{ #category : 'accessing' }
+AHActor >> others: anObject [
+
+	others := anObject
+]
+
+{ #category : 'pov' }
 AHActor >> pov [
 
 	<pov>
@@ -49,29 +93,13 @@ AHActor >> pov [
 ]
 
 { #category : 'accessing' }
-AHActor >> property [
+AHActor >> territory [
 
-	^ property
+	^ territory
 ]
 
 { #category : 'accessing' }
-AHActor >> property: anObject [
+AHActor >> territory: anObject [
 
-	property := anObject
-]
-
-{ #category : 'accessing' }
-AHActor >> status [
-
-	^ status
-]
-
-{ #category : 'accessing' }
-AHActor >> status: anObject [
-
-	status := anObject
-]
-
-{ #category : 'as yet unclassified' }
-AHActor >> step [ 
+	territory := anObject
 ]

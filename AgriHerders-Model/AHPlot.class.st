@@ -85,6 +85,14 @@ AHPlot >> initializeWithRandomfertilitylevel [
 
 ]
 
+{ #category : 'as yet unclassified' }
+AHPlot >> myProperty [
+
+	^ self aggregates
+		  detect: [ :a | a isKindOf: AHFarm ]
+		  ifNone: [ nil ]
+]
+
 { #category : 'accessing' }
 AHPlot >> nextSoilFertility [
 	| i |
@@ -109,8 +117,11 @@ AHPlot >> povCowsCounter [
 
 { #category : 'pov' }
 AHPlot >> povFarm [
+
 	<pov>
-		(self getAggregateType: AHFarm) ifNil: [ ^ CMPointOfView color: Color white ] ifNotNil: [ ^ CMPointOfView color: Color red ].
+	(self getAggregateType: AHFarm)
+		ifNil: [ ^ CMPointOfView color: Color white ]
+		ifNotNil: [ ^ (self getAggregateType: AHFarm) povId ]
 ]
 
 { #category : 'pov' }

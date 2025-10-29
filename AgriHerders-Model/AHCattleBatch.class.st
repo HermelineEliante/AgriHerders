@@ -2,9 +2,10 @@ Class {
 	#name : 'AHCattleBatch',
 	#superclass : 'CMAgent',
 	#instVars : [
-		'numberOfHeads',
+		'heads',
 		'corporalCondition',
-		'dailyForrageNeed'
+		'dailyForrageNeed',
+		'owner'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
@@ -23,6 +24,22 @@ AHCattleBatch >> corporalCondition: anObject [
 ]
 
 { #category : 'accessing' }
+AHCattleBatch >> dailyConsume [
+
+	| quantity needs size |
+	(cell isNil or: [ size = 0 ]) ifTrue: [ ^ nil ].
+
+	self dailyBurnCorporalCondition.
+	needs := self class dailyNeedsPerHead * size.
+	needs := needs * 100 / (self corporalConditionPercent max: 0.1). "plus la vache est maigre, plus elle a faim"
+	quantity := self patch AHPasture amountOfGrass min: needs.
+
+	self patch grassCover removeAmountOfGrass: quantity.
+	self corporalCondition: (self class maxCorporalCondition min:
+			 self corporalCondition + (quantity / size))
+]
+
+{ #category : 'accessing' }
 AHCattleBatch >> dailyForrageNeed [
 
 	^ dailyForrageNeed
@@ -34,27 +51,50 @@ AHCattleBatch >> dailyForrageNeed: anObject [
 	dailyForrageNeed := anObject
 ]
 
+{ #category : 'accessing' }
+AHCattleBatch >> dailyStep [
+
+	self
+		dailyMove;
+		dailyConsume
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> heads [
+
+	^ heads
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> heads: anObject [
+
+	heads := anObject
+]
+
 { #category : 'initialization' }
-AHCattleBatch >> initialize [ 
+AHCattleBatch >> initialize [
+
 	super initialize.
 	"numberOfHeads := 15."
-	numberOfHeads := self randomIntegerBetween: 15 and: 150.
-	
-	
-		"self class minNumberOfHeads 
-		and: self class maxNumberOfHeads" 
+	heads := self randomIntegerBetween: 15 and: 150
+	"corporalCondition := self class maxCorporalCondition / 2."
+
+
+
+	"self class minNumberOfHeads 
+		and: self class maxNumberOfHeads"
 ]
 
 { #category : 'accessing' }
-AHCattleBatch >> numberOfHeads [
+AHCattleBatch >> owner [
 
-	^ numberOfHeads
+	^ owner
 ]
 
 { #category : 'accessing' }
-AHCattleBatch >> numberOfHeads: anObject [
+AHCattleBatch >> owner: anObject [
 
-	numberOfHeads := anObject
+	owner := anObject
 ]
 
 { #category : 'initialization' }
