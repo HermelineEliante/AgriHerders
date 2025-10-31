@@ -7,5 +7,6 @@ Class {
 
 { #category : 'pov' }
 AHFulaniCamp >> myColor [
-	^(Color fromHexString: '259EF0')
+
+	^ Color fromHexString: 'BFBFC4'
 ]

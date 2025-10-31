@@ -20,7 +20,17 @@ AHLandcover >> cell: anObject [
 	cell := anObject
 ]
 
+{ #category : 'control' }
+AHLandcover >> dryStep [
+
+	
+]
+
 { #category : 'pov' }
 AHLandcover >> myColor [
 	^Color white
+]
+
+{ #category : 'control' }
+AHLandcover >> rainyStep [
 ]

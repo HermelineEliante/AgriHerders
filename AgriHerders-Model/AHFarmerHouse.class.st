@@ -7,5 +7,6 @@ Class {
 
 { #category : 'pov' }
 AHFarmerHouse >> myColor [
-	^(Color fromHexString: 'F02572')
+
+	^ Color fromHexString: 'D7DFE0'
 ]

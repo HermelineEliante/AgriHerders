@@ -7,5 +7,6 @@ Class {
 
 { #category : 'pov' }
 AHBush >> myColor [
-	^(Color fromHexString: 'F2D6BE')
+
+	^ Color fromHexString: 'F0DFC6'
 ]

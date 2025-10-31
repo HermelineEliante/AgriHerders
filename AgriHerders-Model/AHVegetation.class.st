@@ -9,3 +9,13 @@ Class {
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
+
+{ #category : 'control' }
+AHVegetation >> dryStep [
+]
+
+{ #category : 'control' }
+AHVegetation >> ranyStep [
+
+	
+]

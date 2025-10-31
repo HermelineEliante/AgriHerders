@@ -2,7 +2,6 @@ Class {
 	#name : 'AHActor',
 	#superclass : 'CMAgent',
 	#instVars : [
-		'name',
 		'agreement',
 		'house',
 		'myFarm',
@@ -38,8 +37,9 @@ AHActor >> house: anObject [
 ]
 
 { #category : 'accessing' }
-AHActor >> initialize [ 
-	super initialize .
+AHActor >> initialize [
+
+	super initialize.
 	agreement := true.
 ]
 
@@ -64,13 +64,7 @@ AHActor >> myPlots [
 { #category : 'accessing' }
 AHActor >> name [
 
-	^ name
-]
-
-{ #category : 'accessing' }
-AHActor >> name: anObject [
-
-	name := anObject
+	^ self class name, '_', self id asString
 ]
 
 { #category : 'accessing' }

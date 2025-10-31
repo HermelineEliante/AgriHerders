@@ -7,7 +7,8 @@ Class {
 
 { #category : 'pov' }
 AHCashew >> myColor [
-	^(Color fromHexString: '9C4ABE')
+
+	^ Color fromHexString: 'F9C3C0'
 ]
 
 { #category : 'pov' }

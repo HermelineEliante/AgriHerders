@@ -60,7 +60,7 @@ AHModel >> createOneFarmFrom: aListOfIDs forAgent: aTypeOfAgent [
 	ag := self newEntity: aTypeOfAgent.
 	ag myFarm: aFarm.
 	aFarm owner: ag.
-	aTypeOfAgent = AHAgricultor
+	aTypeOfAgent = AHFarmer
 		ifTrue: [ag house: (self selectRandomlyFrom: self villagePlots) ]
 		ifFalse: [ag house: (aFarm components detect: [ :c | c cover class = AHFulaniCamp ]) ].
 	ag moveTo: ag house.
@@ -77,8 +77,8 @@ AHModel >> forestPlots [
 AHModel >> initFarmsAndAgents [
 
 	| farmCells |
-	self createOneFarmFrom: #( 17 18 25 26 27 33 ) forAgent: AHAgricultor.
-	self createOneFarmFrom: #( 35 36 37 43 44 ) forAgent: AHAgricultor.
+	self createOneFarmFrom: #( 17 18 25 26 27 33 ) forAgent: AHFarmer.
+	self createOneFarmFrom: #( 35 36 37 43 44 ) forAgent: AHFarmer.
 	self createOneFarmFrom: #( 32 40 ) forAgent: AHSedentary.
 	self createOneFarmFrom: #( 57 58 ) forAgent: AHSedentary.
 
@@ -92,7 +92,12 @@ AHModel >> initFarmsAndAgents [
 	farmCells := self thePlots select: [ :c |
 		             #( 45 51 52 60 61 ) includes: c id ].
 
-	self newEntity: AHTranshumant
+	self newEntity: AHTranshumant. "locatedAt: (self cellAt: 1 at: 1)"
+	"act, c'est l'acteur en question, self allEntities est une collection de mes cinq acteurs"
+	(self allTheEntities: AHActor) do: [ :act |
+			act territory: self thePlots.
+			act others: (self allTheEntities: AHActor).
+			act others remove: act ]
 ]
 
 { #category : 'initialization' }
@@ -103,12 +108,14 @@ AHModel >> initLandcover [
 		(self cellAt: i) setLandcover: AHPasture ].
 	#( 17 18 25 32 36 37 58 ) do: [ :i |
 		(self cellAt: i) setLandcover: AHMaize ].
+	#( 34 45 ) do: [ :i |
+		(self cellAt: i) setLandcover: AHSoja ].
 	#( 26 27 35 44 ) do: [ :i | (self cellAt: i) setLandcover: AHCotton ].
 	#( 33 43 ) do: [ :i | (self cellAt: i) setLandcover: AHCassava ].
 	#( 54 55 62 ) do: [ :i |
 		(self cellAt: i) setLandcover: AHFarmerHouse ].
 	#( 40 57 ) do: [ :i | (self cellAt: i) setLandcover: AHFulaniCamp ].
-	#( 29 30 45 46 47 51 52 60 61 ) do: [ :i |
+	#( 29 30 46 47 51 52 60 61 ) do: [ :i |
 		(self cellAt: i) setLandcover: AHCashew ].
 	#( 28 31 34 38 39 41 42 48 49 50 53 56 59 63 64 ) do: [ :i |
 		(self cellAt: i) setLandcover: AHBush ]
@@ -139,16 +146,21 @@ AHModel >> plotsCoveredBy: aTypeOfCover [
 ]
 
 { #category : 'control' }
-AHModel >> step [
+AHModel >> step: t [
+	"This method will be executed at every step of the simulation"
 
 	<control>
-	
+	t even "pair" ifTrue: [ self stepDrySeason ] ifFalse: [ self stepRainySeason ]
 ]
 
 { #category : 'control' }
-AHModel >> step: t [
-	<control>
-	"This method will be executed at every step of the simulation"
+AHModel >> stepDrySeason [
+]
+
+{ #category : 'control' }
+AHModel >> stepRainySeason [
+
+	self thePlots do: #stepRainySeason
 ]
 
 { #category : 'accessing' }

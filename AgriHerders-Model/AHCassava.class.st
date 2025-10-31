@@ -7,5 +7,6 @@ Class {
 
 { #category : 'pov' }
 AHCassava >> myColor [
-	^(Color fromHexString: '838585')
+
+	^ Color fromHexString: 'DCC603'
 ]
