@@ -83,7 +83,7 @@ AHActor >> others: anObject [
 AHActor >> pov [
 
 	<pov>
-	^ CMPointOfView color: Color purple size: 0.8
+	^ CMPointOfView color: Color purple size: 0.3
 ]
 
 { #category : 'accessing' }

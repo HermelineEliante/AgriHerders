@@ -5,6 +5,7 @@ Class {
 		'heads',
 		'corporalCondition',
 		'dailyForrageNeed',
+		'faeces',
 		'owner'
 	],
 	#category : 'AgriHerders-Model',
@@ -60,6 +61,18 @@ AHCattleBatch >> dailyStep [
 ]
 
 { #category : 'accessing' }
+AHCattleBatch >> faeces [
+
+	^ faeces
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> faeces: anObject [
+
+	faeces := anObject
+]
+
+{ #category : 'accessing' }
 AHCattleBatch >> heads [
 
 	^ heads
@@ -76,7 +89,7 @@ AHCattleBatch >> initialize [
 
 	super initialize.
 	"numberOfHeads := 15."
-	heads := self randomIntegerBetween: 15 and: 150
+	heads := self randomIntegerBetween: 10 and: 15
 	"corporalCondition := self class maxCorporalCondition / 2."
 
 
