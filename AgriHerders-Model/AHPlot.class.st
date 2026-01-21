@@ -172,6 +172,12 @@ AHPlot >> step [
 ]
 
 { #category : 'controlling' }
+AHPlot >> stepDrySeason [
+
+	self cover dryStep
+]
+
+{ #category : 'controlling' }
 AHPlot >> stepRainySeason [
  	self cover rainyStep
 ]

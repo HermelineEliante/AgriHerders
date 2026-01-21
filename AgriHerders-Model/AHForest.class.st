@@ -1,12 +1,20 @@
 Class {
 	#name : 'AHForest',
-	#superclass : 'AHVegetation',
+	#superclass : 'AHNaturalVegetation',
 	#instVars : [
 		'state'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
+
+{ #category : 'accessing' }
+AHForest >> initialize [
+
+	super initialize.
+	biomassMax := 80.
+	biomassDecreaseRate := 40
+]
 
 { #category : 'pov' }
 AHForest >> myColor [

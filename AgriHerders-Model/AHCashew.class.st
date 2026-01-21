@@ -1,6 +1,6 @@
 Class {
 	#name : 'AHCashew',
-	#superclass : 'AHVegetation',
+	#superclass : 'AHCultivatedVegetation',
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }

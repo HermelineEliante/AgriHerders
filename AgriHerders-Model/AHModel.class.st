@@ -155,6 +155,9 @@ AHModel >> step: t [
 
 { #category : 'control' }
 AHModel >> stepDrySeason [
+	self thePlots do: #stepDrySeason
+
+	
 ]
 
 { #category : 'control' }

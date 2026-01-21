@@ -1,19 +1,13 @@
 Class {
-	#name : 'AHBush',
+	#name : 'AHFallow',
 	#superclass : 'AHNaturalVegetation',
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
 
 { #category : 'accessing' }
-AHBush >> initialize [
+AHFallow >> initialize [
 
 	super initialize.
-	biomassMax := 40
-]
-
-{ #category : 'pov' }
-AHBush >> myColor [
-
-	^ Color fromHexString: 'F0DFC6'
+	biomassMax := 30
 ]

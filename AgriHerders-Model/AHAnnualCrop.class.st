@@ -1,6 +1,6 @@
 Class {
 	#name : 'AHAnnualCrop',
-	#superclass : 'AHCrop',
+	#superclass : 'AHCultivatedVegetation',
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
