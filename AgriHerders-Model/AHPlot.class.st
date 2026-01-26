@@ -69,10 +69,11 @@ AHPlot >> cowsCounter: anObject [
 ]
 
 { #category : 'initialize' }
-AHPlot >> initialize [ 
+AHPlot >> initialize [
+
 	super initialize.
-	soilFertility := 0.
-	cowsCounter := 0.
+	soilFertility := 1.
+	cowsCounter := 0
 ]
 
 { #category : 'initialize' }
