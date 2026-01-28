@@ -145,8 +145,10 @@ AHPlot >> povSoilFertility [
 
 { #category : 'initialize' }
 AHPlot >> setLandcover: aTypeOfLandcover [
- 	self cover: aTypeOfLandcover new.
-	self cover cell: self
+
+	self cover: (self cormasModel newEntity: aTypeOfLandcover).
+	self cover cell: self.
+	^cover 
 ]
 
 { #category : 'accessing' }

@@ -35,6 +35,8 @@ AHVegetation >> biomass: anObject [
 
 { #category : 'control' }
 AHVegetation >> dryStep [
+age := age + 0.5
+	
 ]
 
 { #category : 'accessing' }
@@ -47,5 +49,6 @@ biomass := 0
 { #category : 'control' }
 AHVegetation >> rainyStep [
 
+age := age + 0.5
 	
 ]

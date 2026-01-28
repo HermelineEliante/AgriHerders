@@ -12,7 +12,9 @@ Class {
 AHForest >> initialize [
 
 	super initialize.
+	age := self randomIntegerBetween: 50 and: 100. "years"
 	biomassMax := 80.
+	biomass := self randomIntegerBetween: 20 and: biomassMax. "kg/ha"
 	biomassDecreaseRate := 40
 ]
 

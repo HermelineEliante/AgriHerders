@@ -1,8 +1,9 @@
 Class {
 	#name : 'AHLandcover',
-	#superclass : 'Object',
+	#superclass : 'CMEntity',
 	#instVars : [
-		'cell'
+		'cell',
+		'isDead'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
@@ -24,6 +25,25 @@ AHLandcover >> cell: anObject [
 AHLandcover >> dryStep [
 
 	
+]
+
+{ #category : 'initialization' }
+AHLandcover >> initialize [
+
+	super initialize.
+	isDead := false
+]
+
+{ #category : 'accessing' }
+AHLandcover >> isDead [
+
+	^ isDead
+]
+
+{ #category : 'accessing' }
+AHLandcover >> isDead: anObject [
+
+	isDead := anObject
 ]
 
 { #category : 'pov' }

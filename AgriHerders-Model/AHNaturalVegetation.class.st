@@ -35,9 +35,9 @@ AHNaturalVegetation >> biomassMax: anObject [
 
 { #category : 'control' }
 AHNaturalVegetation >> dryStep [
-"la biomasse perd 90% (ou 40% si Foret)"
-
-	self biomass: self biomass * ((100 - self biomassDecreaseRate) / 100)
+	"la biomasse perd 90% (ou 40% si Foret)"
+	super dryStep.
+	self biomass: self biomass * (100 - self biomassDecreaseRate / 100)
 ]
 
 { #category : 'accessing' }
@@ -50,5 +50,6 @@ AHNaturalVegetation >> initialize [
 
 { #category : 'control' }
 AHNaturalVegetation >> rainyStep [
-self biomass: self biomassMax 
+	super rainyStep.
+	self biomass: self biomassMax
 ]

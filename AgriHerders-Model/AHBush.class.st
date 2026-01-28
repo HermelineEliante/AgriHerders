@@ -9,7 +9,10 @@ Class {
 AHBush >> initialize [
 
 	super initialize.
-	biomassMax := 40
+	age := self randomIntegerBetween: 50 and: 100. "years"
+	biomassMax := 40.
+	biomass := self randomIntegerBetween: 10 and: biomassMax. "kg/ha"
+
 ]
 
 { #category : 'pov' }

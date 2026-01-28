@@ -9,5 +9,7 @@ Class {
 AHFallow >> initialize [
 
 	super initialize.
-	biomassMax := 30
+	age := 0. "years"
+	biomassMax := 30.
+	biomass := self randomIntegerBetween: 3 and: biomassMax "kg/ha"
 ]

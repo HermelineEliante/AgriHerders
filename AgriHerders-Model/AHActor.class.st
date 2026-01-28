@@ -2,6 +2,7 @@ Class {
 	#name : 'AHActor',
 	#superclass : 'CMAgent',
 	#instVars : [
+		'name',
 		'agreement',
 		'house',
 		'myFarm',
@@ -22,6 +23,12 @@ AHActor >> agreement [
 AHActor >> agreement: anObject [
 
 	agreement := anObject
+]
+
+{ #category : 'control' }
+AHActor >> dryStep [
+
+	
 ]
 
 { #category : 'accessing' }
@@ -68,6 +75,18 @@ AHActor >> name [
 ]
 
 { #category : 'accessing' }
+AHActor >> name1 [
+
+	^ name
+]
+
+{ #category : 'accessing' }
+AHActor >> name: anObject [
+
+	name := anObject
+]
+
+{ #category : 'accessing' }
 AHActor >> others [
 
 	^ others
@@ -84,6 +103,10 @@ AHActor >> pov [
 
 	<pov>
 	^ CMPointOfView color: Color purple size: 0.3
+]
+
+{ #category : 'control' }
+AHActor >> rainyStep [
 ]
 
 { #category : 'accessing' }

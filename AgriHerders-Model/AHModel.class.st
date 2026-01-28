@@ -61,9 +61,12 @@ AHModel >> createOneFarmFrom: aListOfIDs forAgent: aTypeOfAgent [
 	ag myFarm: aFarm.
 	aFarm owner: ag.
 	aTypeOfAgent = AHFarmer
-		ifTrue: [ag house: (self selectRandomlyFrom: self villagePlots) ]
-		ifFalse: [ag house: (aFarm components detect: [ :c | c cover class = AHFulaniCamp ]) ].
+		ifTrue: [ ag house: (self selectRandomlyFrom: self villagePlots) ]
+		ifFalse: [
+				ag house:
+					(aFarm components detect: [ :c | c cover class = AHFulaniCamp ]) ].
 	ag moveTo: ag house.
+	(aFarm includesCell: ag house) ifFalse: [ aFarm addComponent: ag house ]
 ]
 
 { #category : 'accessing' }

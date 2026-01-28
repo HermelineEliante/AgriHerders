@@ -9,7 +9,9 @@ Class {
 AHPasture >> initialize [
 
 	super initialize.
-	biomassMax := 60
+	age := 0. "years"
+	biomassMax := 60.
+	biomass := self randomIntegerBetween: 10 and: biomassMax "kg/ha"
 ]
 
 { #category : 'pov' }
