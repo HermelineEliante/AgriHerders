@@ -72,7 +72,9 @@ AHPlot >> cowsCounter: anObject [
 AHPlot >> initialize [
 
 	super initialize.
-	soilFertility := 1.
+	soilFertility := 20.
+	"self initializeWithRandomfertilitylevel."
+	area := 0.25. "ha"
 	cowsCounter := 0
 ]
 
@@ -86,12 +88,10 @@ AHPlot >> initializeWithRandomfertilitylevel [
 
 ]
 
-{ #category : 'as yet unclassified' }
-AHPlot >> myProperty [
+{ #category : 'accessing' }
+AHPlot >> myFarm [
 
-	^ self aggregates
-		  detect: [ :a | a isKindOf: AHFarm ]
-		  ifNone: [ nil ]
+	^ self aggregates detect: [ :a | a isKindOf: AHFarm ] ifNone: [ nil ]
 ]
 
 { #category : 'accessing' }
@@ -103,7 +103,7 @@ AHPlot >> nextSoilFertility [
 
 { #category : 'accessing' }
 AHPlot >> possibleSoilFertilities [
-	^#('low' 'middle' 'good' 'high')
+^(Interval from: 0 to: 20) asArray.
 ]
 
 { #category : 'pov' }
@@ -134,13 +134,18 @@ AHPlot >> povLandcover [
 
 { #category : 'pov' }
 AHPlot >> povSoilFertility [
+	"	| aColor |
+	self soilFertility = 0 ifTrue: [ aColor := Color white ].
+	self soilFertility = 1 ifTrue: [ aColor := Color yellow ].
+	self soilFertility = 2 ifTrue: [ aColor := Color orange ].
+	self soilFertility = 3 ifTrue: [ aColor := Color green ]."
+
 	<pov>
-	| aColor |
-	self soilFertility = 'low' ifTrue: [ aColor := Color white ].
-	self soilFertility = 'middle' ifTrue: [ aColor := Color yellow ].
-	self soilFertility = 'good' ifTrue: [ aColor := Color orange ].
-	self soilFertility = 'high' ifTrue: [ aColor := Color green ].
-	^CMPointOfView color: aColor
+	^ CMPointOfView color: (self
+			   colorValue: self soilFertility
+			   min: 0
+			   max: 20
+			   color: Color orange)
 ]
 
 { #category : 'initialize' }
@@ -163,17 +168,6 @@ AHPlot >> soilFertility: anObject [
 	soilFertility := anObject
 ]
 
-{ #category : 'initialize' }
-AHPlot >> step [
-	
-	cowsCounter := cowsCounter + 1.
-	self soilFertility 
-
-
-
-
-]
-
 { #category : 'controlling' }
 AHPlot >> stepDrySeason [
 
@@ -191,5 +185,6 @@ AHPlot >> updateFertility [
 Si cowsCounter > O alors soilFerility passe à l'étape suivante: si c'était low, il devient middle, si c'était middle, il devient good. Si il est high, il reste high"
 
 	<action>
-	cowsCounter > 0 ifTrue: [ self soilFertility: self nextSoilFertility ]
+	cowsCounter > 0 ifTrue: [
+		self soilFertility: (self soilFertility + 1 min: (self possibleSoilFertilities size - 1)) ]
 ]

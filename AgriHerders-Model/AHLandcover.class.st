@@ -46,6 +46,11 @@ AHLandcover >> isDead: anObject [
 	isDead := anObject
 ]
 
+{ #category : 'testing' }
+AHLandcover >> isMature [
+	^false
+]
+
 { #category : 'pov' }
 AHLandcover >> myColor [
 	^Color white

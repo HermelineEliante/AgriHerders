@@ -150,7 +150,7 @@ AHModel >> plotsCoveredBy: aTypeOfCover [
 
 { #category : 'control' }
 AHModel >> step: t [
-	"This method will be executed at every step of the simulation"
+	"t = 1 => rainy saeson"
 
 	<control>
 	t even "pair" ifTrue: [ self stepDrySeason ] ifFalse: [ self stepRainySeason ]
@@ -158,14 +158,16 @@ AHModel >> step: t [
 
 { #category : 'control' }
 AHModel >> stepDrySeason [
-	self thePlots do: #stepDrySeason
 
-	
+	(self @@ AHFarmer) do: #harvest.
+	self thePlots do: #stepDrySeason.
+	"(self allTheEntities: AHActor) do: #dryStep"
 ]
 
 { #category : 'control' }
 AHModel >> stepRainySeason [
 
+	self @@ AHFarmer do: #harvestCasava.
 	self thePlots do: #stepRainySeason
 ]
 

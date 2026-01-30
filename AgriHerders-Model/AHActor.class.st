@@ -7,7 +7,8 @@ Class {
 		'house',
 		'myFarm',
 		'territory',
-		'others'
+		'others',
+		'money'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
@@ -48,6 +49,18 @@ AHActor >> initialize [
 
 	super initialize.
 	agreement := true.
+]
+
+{ #category : 'accessing' }
+AHActor >> money [
+
+	^ money
+]
+
+{ #category : 'accessing' }
+AHActor >> money: anObject [
+
+	money := anObject
 ]
 
 { #category : 'accessing' }
