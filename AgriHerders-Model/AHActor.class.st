@@ -32,6 +32,13 @@ AHActor >> dryStep [
 	
 ]
 
+{ #category : 'control' }
+AHActor >> harvest [
+
+
+	
+]
+
 { #category : 'accessing' }
 AHActor >> house [
 

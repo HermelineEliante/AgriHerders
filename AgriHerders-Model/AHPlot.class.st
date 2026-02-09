@@ -74,7 +74,7 @@ AHPlot >> initialize [
 	super initialize.
 	soilFertility := 20.
 	"self initializeWithRandomfertilitylevel."
-	area := 0.25. "ha"
+	area := 1. "ha"
 	cowsCounter := 0
 ]
 
@@ -127,9 +127,10 @@ AHPlot >> povFarm [
 
 { #category : 'pov' }
 AHPlot >> povLandcover [
+
 	<pov>
 	cover ifNil: [ ^ CMPointOfView color: Color black ].
-	^ CMPointOfView color: self cover myColor
+	^ CMPointOfView color: self cover class myColor
 ]
 
 { #category : 'pov' }
@@ -148,9 +149,9 @@ AHPlot >> povSoilFertility [
 			   color: Color orange)
 ]
 
-{ #category : 'initialize' }
+{ #category : 'controlling' }
 AHPlot >> setLandcover: aTypeOfLandcover [
-
+	self cover ifNotNil: [ self cover cell: nil. self cover delete ].
 	self cover: (self cormasModel newEntity: aTypeOfLandcover).
 	self cover cell: self.
 	^cover 

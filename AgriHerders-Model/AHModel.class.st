@@ -38,6 +38,21 @@ AHModel class >> prefix [
 	^ 'AH'
 ]
 
+{ #category : 'probes' }
+AHModel >> averageBiomass [
+
+	<probeNamed: 'averageBiomass' color: #green>
+	"^ (self @@ AHPlot collect: [ :p | p cover biomass ]) average"
+		^self totalResidue + self naturalBiomass 
+]
+
+{ #category : 'probes' }
+AHModel >> cottonSize [
+
+	<probeNamed: 'Cotton size' color: 'F4F2DA' >
+	^ (self @@ AHPlot select: [ :p | p cover class = AHCotton ]) size
+]
+
 { #category : 'initialization' }
 AHModel >> createCattles [
 	"Je crée 10 troupeax pour chaque éleveur"
@@ -74,6 +89,13 @@ AHModel >> forestPlots [
 	"return the cells in  forest"
 
 	^ self plotsCoveredBy: AHForest
+]
+
+{ #category : 'probes' }
+AHModel >> globalFertility [
+"moyenne de la fertilité de tous les plots : #(2 6 7) average"
+	<probeNamed: 'global fertility' color: #black>
+	^ (self @@ AHPlot collect: [ :p | p soilFertility ]) average
 ]
 
 { #category : 'initialization' }
@@ -141,6 +163,22 @@ AHModel >> initModel [
 	AHPlot activePovSelector: #povLandcover
 ]
 
+{ #category : 'probes' }
+AHModel >> maizeSize [
+
+	<probeNamed: 'Maize size' color: 'F1F10F'>
+	^ (self @@ AHPlot select: [ :p | p cover class = AHMaize ]) size
+]
+
+{ #category : 'probes' }
+AHModel >> naturalBiomass [
+
+	<probeNamed: 'naturalBiomass' color: '5A9186'>
+	^ ((self @@ AHPlot select: [ :p |
+		    p cover isKindOf: AHNaturalVegetation ]) collect: [ :p |
+		   p cover biomass ]) average
+]
+
 { #category : 'accessing' }
 AHModel >> plotsCoveredBy: aTypeOfCover [
 	"return the cells covered by aTypeOfCover"
@@ -148,27 +186,38 @@ AHModel >> plotsCoveredBy: aTypeOfCover [
 	^ self thePlots select: [ :c | c cover class = aTypeOfCover ]
 ]
 
+{ #category : 'probes' }
+AHModel >> sojaSize [
+
+	<probeNamed: 'Soja size' color: 'B29EBB'>
+	^ (self @@ AHPlot select: [ :p | p cover class = AHSoja ]) size
+]
+
 { #category : 'control' }
 AHModel >> step: t [
-	"t = 1 => rainy saeson"
+	"t = 1 => rainy saeson, si t est pair => dry season"
 
 	<control>
-	t even "pair" ifTrue: [ self stepDrySeason ] ifFalse: [ self stepRainySeason ]
+	t  even
+		ifTrue: [ self stepDrySeason ]
+		ifFalse: [ self stepRainySeason ] "pair"
 ]
 
 { #category : 'control' }
 AHModel >> stepDrySeason [
 
-	(self @@ AHFarmer) do: #harvest.
+	(self allTheEntities: AHActor) do: #harvest.
 	self thePlots do: #stepDrySeason.
 	"(self allTheEntities: AHActor) do: #dryStep"
+	self @@ AHFarmer do: #sow.
+	self @@ AHSedentary do: #sowMaize
 ]
 
 { #category : 'control' }
 AHModel >> stepRainySeason [
 
 	self @@ AHFarmer do: #harvestCasava.
-	self thePlots do: #stepRainySeason
+	self thePlots do: #stepRainySeason.
 ]
 
 { #category : 'accessing' }
@@ -181,6 +230,13 @@ AHModel >> theCattleBatches [
 AHModel >> thePlots [
 
 	^ self @@ AHPlot 
+]
+
+{ #category : 'probes' }
+AHModel >> totalResidue [
+
+	<probeNamed: 'totalResidue' color: '9CB553'>
+	^ ((self @@ AHPlot select: [ :p | p cover isKindOf: AHCultivatedVegetation ]) collect: [:p | p cover biomass]) average
 ]
 
 { #category : 'accessing' }

@@ -6,7 +6,10 @@ Class {
 		'corporalCondition',
 		'dailyForrageNeed',
 		'faeces',
-		'owner'
+		'owner',
+		'corporalConditionDecreaseRate',
+		'dailyForrageNeedCompensate',
+		'MinDailyForrageNeed'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
@@ -22,6 +25,18 @@ AHCattleBatch >> corporalCondition [
 AHCattleBatch >> corporalCondition: anObject [
 
 	corporalCondition := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> corporalConditionDecreaseRate [
+
+	^ corporalConditionDecreaseRate
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> corporalConditionDecreaseRate: anObject [
+
+	corporalConditionDecreaseRate := anObject
 ]
 
 { #category : 'accessing' }
@@ -53,11 +68,32 @@ AHCattleBatch >> dailyForrageNeed: anObject [
 ]
 
 { #category : 'accessing' }
+AHCattleBatch >> dailyForrageNeedCompensate [
+
+	^ dailyForrageNeedCompensate
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> dailyForrageNeedCompensate: anObject [
+
+	dailyForrageNeedCompensate := anObject
+]
+
+{ #category : 'accessing' }
 AHCattleBatch >> dailyStep [
 
 	self
 		dailyMove;
 		dailyConsume
+]
+
+{ #category : 'control' }
+AHCattleBatch >> dryStep [
+	"le troupeau est amené sur les cover de type NatVegetation où il prélève 6.25 * le nombre de tête"
+
+self cell 
+
+
 ]
 
 { #category : 'accessing' }
@@ -89,8 +125,16 @@ AHCattleBatch >> initialize [
 
 	super initialize.
 	"numberOfHeads := 15."
-	heads := self randomIntegerBetween: 10 and: 15
+	heads := self randomIntegerBetween: 10 and: 15.
 	"corporalCondition := self class maxCorporalCondition / 2."
+	corporalCondition := 10.
+	dailyForrageNeed := 6.25. "kgMS"
+	faeces := 2.8. "kg/day"
+	corporalConditionDecreaseRate := 0.
+	dailyForrageNeedCompensate := 0.
+	MinDailyForrageNeed:= 4.25 "kgMS"
+
+
 
 
 

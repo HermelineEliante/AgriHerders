@@ -9,6 +9,12 @@ Class {
 	#package : 'AgriHerders-Model'
 }
 
+{ #category : 'pov' }
+AHLandcover class >> myColor [
+
+	^ Color white
+]
+
 { #category : 'accessing' }
 AHLandcover >> cell [
 
@@ -49,11 +55,6 @@ AHLandcover >> isDead: anObject [
 { #category : 'testing' }
 AHLandcover >> isMature [
 	^false
-]
-
-{ #category : 'pov' }
-AHLandcover >> myColor [
-	^Color white
 ]
 
 { #category : 'control' }

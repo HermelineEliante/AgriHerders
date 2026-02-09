@@ -5,17 +5,25 @@ Class {
 	#package : 'AgriHerders-Model'
 }
 
+{ #category : 'accessing' }
+AHSoja class >> initializeParameters [
+
+	super initializeParameters.
+	maxSupplyFertility := 5
+]
+
+{ #category : 'pov' }
+AHSoja class >> myColor [
+
+	^ Color fromHexString: 'B29EBB'
+]
+
 { #category : 'control' }
 AHSoja >> initialize [
 
 	super initialize.
-	optimalFertility := 1.
+	optimalFertility := 0.9.
 	residue := 2.
-	expectedYield := 200
-]
-
-{ #category : 'pov' }
-AHSoja >> myColor [
-
-	^ Color fromHexString: 'AA9FAF'
+	expectedYield := 200. "kg/ha"
+	price := 275 "fcfa/kg"
 ]

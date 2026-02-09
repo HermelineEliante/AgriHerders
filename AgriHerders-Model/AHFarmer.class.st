@@ -49,11 +49,37 @@ AHFarmer >> initialize [
 ]
 
 { #category : 'control' }
-AHFarmer >> nextCrop [
-]
-
-{ #category : 'control' }
 AHFarmer >> ranyStep [
 
 	
+]
+
+{ #category : 'control' }
+AHFarmer >> sow [
+	"Si il n'y a pas de manioc dans mes parcelles, je choisis une de parclles en jachère, la moins fertile pour y implanter du manioc. Pour les autres cultures: Quand le niveau de fertilité des plots de ma propriété est supérieur à 6, et qu'il n'y pas de culture, il fait du coton. Lorsqu’il est supérieur à 4 il fait le maïs, dans le cas contraire il cultive le soja."
+
+	| collTriee cellCiblee |
+	(self myFarm components select: [ :p | p cover class = AHCassava ])
+		isEmpty ifTrue: [ "plotWithFallow := self myFarm components
+				                  detect: [ :p | p cover class = AHFallow ]
+				                  ifNone: [ nil ].
+			plotWithFallow ifNotNil: [plotWithFallow setLandcover: AHCassava ] "
+			collTriee := ((self myFarm components select: [ :p | p cover class = AHFallow ])
+				 sorted: [ :a :b | a soilFertility <= b soilFertility ]).
+			cellCiblee := collTriee first.
+			cellCiblee	setLandcover: AHCassava ].
+
+	"autres cultures"
+	(self myFarm components select: [ :p | p cover class = AHFallow ])
+		do: [ :plot | self sowOnPlot: plot ]
+]
+
+{ #category : 'control' }
+AHFarmer >> sowOnPlot: aPlot [
+	"Quand le niveau de fertilité des plots de ma propriété est supérieur à 6, et qu'il n'y pas de culture, il fait du coton. Lorsqu’il est supérieur à 4 il fait le maïs, dans le cas contraire il cultive le soja."
+
+
+			aPlot soilFertility >= 6 ifTrue: [ ^aPlot setLandcover: AHCotton ].
+			aPlot soilFertility >= 4 ifTrue: [ ^aPlot setLandcover: AHMaize ].
+			^aPlot setLandcover: AHSoja
 ]

@@ -5,12 +5,18 @@ Class {
 	#package : 'AgriHerders-Model'
 }
 
+{ #category : 'pov' }
+AHCassava class >> myColor [
+
+	^ Color fromHexString: 'DCC603'
+]
+
 { #category : 'control' }
 AHCassava >> initialize [
 
 	super initialize.
-	optimalFertility := 0.5.
-	expectedYield := 80.
+	optimalFertility := 1.
+	expectedYield := 80 . "kg/ha"
 	residue := 0
 ]
 
@@ -19,12 +25,6 @@ AHCassava >> isMature [
 	"mature si age >= 1 y"
 
 	^ self age > 1
-]
-
-{ #category : 'pov' }
-AHCassava >> myColor [
-
-	^ Color fromHexString: 'DCC603'
 ]
 
 { #category : 'control' }
