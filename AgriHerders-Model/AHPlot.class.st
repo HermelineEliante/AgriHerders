@@ -107,6 +107,16 @@ AHPlot >> possibleSoilFertilities [
 ]
 
 { #category : 'pov' }
+AHPlot >> povBiomass [
+
+	<pov>
+	cover ifNil: [ ^ CMPointOfView color: Color black ].
+	(self cover isKindOf: AHHabitation) ifTrue: [ ^ self povLandcover ].
+	^ CMPointOfView color: (self cover colorAttribute: #biomass min: 0 max: (self cover biomassMax ) color: self cover class myColor).
+	"^ CMPointOfView color: self cover class myColor"
+]
+
+{ #category : 'pov' }
 AHPlot >> povCowsCounter [
 	<pov>
 	^CMPointOfView color: (self

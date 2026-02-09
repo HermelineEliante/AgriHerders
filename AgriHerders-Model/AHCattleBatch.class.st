@@ -96,6 +96,39 @@ self cell
 
 ]
 
+{ #category : 'control' }
+AHCattleBatch >> eat [
+	"le troupeau prélève 6.25 * le nombre de tête de la biomasse du couvert. Retourne les besoins restants pour arriver à la sassiété"
+
+	| needs |
+	needs := self dailyForrageNeed * self heads * 183. "jours dans la saison"
+	self cell cover biomass >= needs
+		ifTrue: [
+				self cell cover biomass: self cell cover biomass - needs.
+				self corporalCondition: 10.
+				^ 0 ]
+		ifFalse: [needs := needs - self cell cover biomass.
+				self cell cover biomass: 0.
+				^ needs ]
+]
+
+{ #category : 'control' }
+AHCattleBatch >> eatForNeeds: needs [
+	"le troupeau prélève 6.25 * le nombre de tête de la biomasse du couvert. Retourne les besoins restants pour arriver à la sassiété"
+
+	| newNeeds |
+	self cell cover biomass = 0 ifTrue: [ ^ needs ].
+	self cell cover biomass >= needs
+		ifTrue: [
+				self cell cover biomass: self cell cover biomass - needs.
+				self corporalCondition: 10.
+				^ 0 ]
+		ifFalse: [
+				newNeeds := needs - self cell cover biomass.
+				self cell cover biomass: 0.
+				^ newNeeds ] 
+]
+
 { #category : 'accessing' }
 AHCattleBatch >> faeces [
 
@@ -125,14 +158,14 @@ AHCattleBatch >> initialize [
 
 	super initialize.
 	"numberOfHeads := 15."
-	heads := self randomIntegerBetween: 10 and: 15.
+	heads := self randomIntegerBetween: 1 and: 5.
 	"corporalCondition := self class maxCorporalCondition / 2."
 	corporalCondition := 10.
 	dailyForrageNeed := 6.25. "kgMS"
 	faeces := 2.8. "kg/day"
 	corporalConditionDecreaseRate := 0.
 	dailyForrageNeedCompensate := 0.
-	MinDailyForrageNeed:= 4.25 "kgMS"
+	MinDailyForrageNeed := 4.25 "kgMS"
 
 
 
@@ -173,4 +206,12 @@ AHCattleBatch >> povNumberOfHeads [
 		min: 15
 		max: 150
 		color: Color red)
+]
+
+{ #category : 'control' }
+AHCattleBatch >> rainyStep [
+	"le troupeau est amené sur les covers de type NatVegetation où il prélève 6.25 * le nombre de tête de la biomasse du couvert"
+
+	self cell cover class = AHNaturalVegetation ifTrue: [self eat.
+		self cell cover get: self dailyForrageNeed * self heads * 183 "jours dans la saison" ]
 ]

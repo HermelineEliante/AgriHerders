@@ -16,6 +16,11 @@ AHLandcover class >> myColor [
 ]
 
 { #category : 'accessing' }
+AHLandcover >> biomass [
+	^0
+]
+
+{ #category : 'accessing' }
 AHLandcover >> cell [
 
 	^ cell

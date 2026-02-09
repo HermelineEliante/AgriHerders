@@ -209,6 +209,7 @@ AHModel >> stepDrySeason [
 	(self allTheEntities: AHActor) do: #harvest.
 	self thePlots do: #stepDrySeason.
 	"(self allTheEntities: AHActor) do: #dryStep"
+	(self allTheEntities: AHHerder) do: #moveHerd.
 	self @@ AHFarmer do: #sow.
 	self @@ AHSedentary do: #sowMaize
 ]
@@ -218,6 +219,7 @@ AHModel >> stepRainySeason [
 
 	self @@ AHFarmer do: #harvestCasava.
 	self thePlots do: #stepRainySeason.
+	(self allTheEntities: AHHerder) do: #moveHerd.
 ]
 
 { #category : 'accessing' }

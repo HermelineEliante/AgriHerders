@@ -12,6 +12,11 @@ Class {
 }
 
 { #category : 'accessing' }
+AHCultivatedVegetation >> biomassMax [
+	^ self expectedYield + self residue.
+]
+
+{ #category : 'accessing' }
 AHCultivatedVegetation >> expectedYield [
 
 	^ expectedYield
