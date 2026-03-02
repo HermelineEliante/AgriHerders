@@ -10,6 +10,13 @@ Class {
 }
 
 { #category : 'code-critics' }
+ManifestAgriHerdersModel class >> ruleBadMessageRule2V1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#AHPlot #povBiomass #false)) #'2026-02-13T16:40:11.517+01:00') )
+]
+
+{ #category : 'code-critics' }
 ManifestAgriHerdersModel class >> ruleEndTrueFalseRuleV1FalsePositive [
 
 	<ignoreForCoverage>

@@ -11,9 +11,31 @@ Class {
 		'dailyForrageNeedCompensate',
 		'MinDailyForrageNeed'
 	],
+	#classInstVars : [
+		'heads'
+	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
+
+{ #category : 'accessing' }
+AHCattleBatch class >> heads [
+
+	^ heads
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> heads: aPositiveInteger [
+
+	heads := aPositiveInteger
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> initializeParameters [
+
+	super initializeParameters.
+	heads := 10
+]
 
 { #category : 'accessing' }
 AHCattleBatch >> corporalCondition [
@@ -37,22 +59,6 @@ AHCattleBatch >> corporalConditionDecreaseRate [
 AHCattleBatch >> corporalConditionDecreaseRate: anObject [
 
 	corporalConditionDecreaseRate := anObject
-]
-
-{ #category : 'accessing' }
-AHCattleBatch >> dailyConsume [
-
-	| quantity needs size |
-	(cell isNil or: [ size = 0 ]) ifTrue: [ ^ nil ].
-
-	self dailyBurnCorporalCondition.
-	needs := self class dailyNeedsPerHead * size.
-	needs := needs * 100 / (self corporalConditionPercent max: 0.1). "plus la vache est maigre, plus elle a faim"
-	quantity := self patch AHPasture amountOfGrass min: needs.
-
-	self patch grassCover removeAmountOfGrass: quantity.
-	self corporalCondition: (self class maxCorporalCondition min:
-			 self corporalCondition + (quantity / size))
 ]
 
 { #category : 'accessing' }
@@ -88,28 +94,21 @@ AHCattleBatch >> dailyStep [
 ]
 
 { #category : 'control' }
-AHCattleBatch >> dryStep [
-	"le troupeau est amené sur les cover de type NatVegetation où il prélève 6.25 * le nombre de tête"
+AHCattleBatch >> defecateOn: listOfPlots [
+	"Mise à jour de la fertilité des plots visités. Excreta deposits are proportional to the time spent by the animals on the plot GRILLOT, M., Guerrin, F., Gaudou, B., Masse, D., & Vayssières, J. (2018). Multi-level analysis of nutrient cycling within agro-sylvo-pastoral landscapes in West Africa using an agent-based model. Environmental Modelling & Software, 107, 267–280. [doi:10.1016/j.envsoft.2018.05.003].
+	le troupeau dépose ses faeces sur chaque plot en fonction de sa CC :
+	 il dépose 2.8 kg/jour * heads * CC/10 * 183j	"
+	"Calcul des fèces déposées par le troupeau sur les plots"
 
-self cell 
-
-
-]
-
-{ #category : 'control' }
-AHCattleBatch >> eat [
-	"le troupeau prélève 6.25 * le nombre de tête de la biomasse du couvert. Retourne les besoins restants pour arriver à la sassiété"
-
-	| needs |
-	needs := self dailyForrageNeed * self heads * 183. "jours dans la saison"
-	self cell cover biomass >= needs
-		ifTrue: [
-				self cell cover biomass: self cell cover biomass - needs.
-				self corporalCondition: 10.
-				^ 0 ]
-		ifFalse: [needs := needs - self cell cover biomass.
-				self cell cover biomass: 0.
-				^ needs ]
+	| faecesDepositedByPlot |
+	"2.8 * 4 * 183 /1000 = 2T/ha ce qui correspiond à une élévation de 1 de la fertilité.
+Une publication technique mentionne que pour nourrir des microorganismes du sol et améliorer certains aspects de fertilité, des apports de 2 à 4 t/ha de compost jeune de fumier peuvent déjà avoir un effet mesurable. https://techniloire.com/sites/default/files/dossier_viticulture_2019_atv_tech_sol_fertilite_des_sols.pdf?utm_source=chatgpt.com"
+	listOfPlots ifEmpty: [ ^ self ].
+	faecesDepositedByPlot := faeces * heads * (183 / listOfPlots size)
+	                         * (corporalCondition / 10) / 1000. "en Tonnes"
+	listOfPlots do: [ :p | "Mettre à jour la fertilité de chaque plot"
+			p soilFertility:
+				(p soilFertility + (faecesDepositedByPlot / 2) min: 20) ]
 ]
 
 { #category : 'control' }
@@ -117,7 +116,9 @@ AHCattleBatch >> eatForNeeds: needs [
 	"le troupeau prélève 6.25 * le nombre de tête de la biomasse du couvert. Retourne les besoins restants pour arriver à la sassiété"
 
 	| newNeeds |
-	self cell cover biomass = 0 ifTrue: [ ^ needs ].
+	self cell cover biomass = 0 ifTrue: [
+			self updateCorporalConditionWith: needs.
+			^ needs ].
 	self cell cover biomass >= needs
 		ifTrue: [
 				self cell cover biomass: self cell cover biomass - needs.
@@ -126,7 +127,8 @@ AHCattleBatch >> eatForNeeds: needs [
 		ifFalse: [
 				newNeeds := needs - self cell cover biomass.
 				self cell cover biomass: 0.
-				^ newNeeds ] 
+				self updateCorporalConditionWith: newNeeds.
+				^ newNeeds ]
 ]
 
 { #category : 'accessing' }
@@ -158,7 +160,7 @@ AHCattleBatch >> initialize [
 
 	super initialize.
 	"numberOfHeads := 15."
-	heads := self randomIntegerBetween: 1 and: 5.
+	heads := self class heads.  "self randomIntegerBetween: 1 and: 5."
 	"corporalCondition := self class maxCorporalCondition / 2."
 	corporalCondition := 10.
 	dailyForrageNeed := 6.25. "kgMS"
@@ -173,6 +175,12 @@ AHCattleBatch >> initialize [
 
 	"self class minNumberOfHeads 
 		and: self class maxNumberOfHeads"
+]
+
+{ #category : 'control' }
+AHCattleBatch >> moveTo: aSpatialEntity [
+	super moveTo: aSpatialEntity.
+	self cell cowsCounter: self cell cowsCounter + self heads.
 ]
 
 { #category : 'accessing' }
@@ -193,7 +201,7 @@ AHCattleBatch >> pov [
 	^ CMPointOfView
 		color: CMColor blue
 		shape: #star
-		size: 0.6
+		size: heads / 15
 		
 
 ]
@@ -202,16 +210,24 @@ AHCattleBatch >> pov [
 AHCattleBatch >> povNumberOfHeads [
 	<pov>
 	^ CMPointOfView color:(self
-		colorAttribute: #numberOfHeads  
-		min: 15
-		max: 150
+		colorAttribute: #heads  
+		min: 1
+		max: 15
 		color: Color red)
 ]
 
 { #category : 'control' }
-AHCattleBatch >> rainyStep [
-	"le troupeau est amené sur les covers de type NatVegetation où il prélève 6.25 * le nombre de tête de la biomasse du couvert"
+AHCattleBatch >> totalNeeds [
 
-	self cell cover class = AHNaturalVegetation ifTrue: [self eat.
-		self cell cover get: self dailyForrageNeed * self heads * 183 "jours dans la saison" ]
+	^self heads * self dailyForrageNeed * 183
+]
+
+{ #category : 'control' }
+AHCattleBatch >> updateCorporalConditionWith: needs [
+
+	needs > 0
+		ifTrue: [
+			self corporalCondition:
+				10 * (1 - (needs / self totalNeeds)) ]
+		ifFalse: [ self corporalCondition: 10 ]
 ]

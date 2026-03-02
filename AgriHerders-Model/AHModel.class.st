@@ -2,28 +2,17 @@ Class {
 	#name : 'AHModel',
 	#superclass : 'CMAbstractModel',
 	#classInstVars : [
-		'initialNumberOfPhdCattleBatch'
+		'time'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
 
-{ #category : 'accessing' }
-AHModel class >> initialNumberOfPhdCattleBatch [
-
-	^ initialNumberOfPhdCattleBatch
-]
-
-{ #category : 'accessing' }
-AHModel class >> initialNumberOfPhdCattleBatch: anObject [
-
-	initialNumberOfPhdCattleBatch := anObject
-]
-
 { #category : 'as yet unclassified' }
-AHModel class >> initializeParameters [ 
+AHModel class >> initializeParameters [
+
 	super initializeParameters.
-	initialNumberOfPhdCattleBatch := 10.
+	time := 0
 ]
 
 { #category : 'as yet unclassified' }
@@ -38,12 +27,36 @@ AHModel class >> prefix [
 	^ 'AH'
 ]
 
+{ #category : 'accessing' }
+AHModel class >> time [
+
+	^ time
+]
+
+{ #category : 'accessing' }
+AHModel class >> time: anObject [
+
+	time := anObject
+]
+
 { #category : 'probes' }
 AHModel >> averageBiomass [
-
-	<probeNamed: 'averageBiomass' color: #green>
 	"^ (self @@ AHPlot collect: [ :p | p cover biomass ]) average"
-		^self totalResidue + self naturalBiomass 
+
+	"<probeNamed: 'averageBiomass' color: #green>"
+	^ self totalResidue + self naturalBiomass
+]
+
+{ #category : 'probes' }
+AHModel >> corporalCondition [ 
+"evolution de CC moyen de tout le troupeau"
+
+	<probeNamed: 'Corporal condition' color: 'F39C12' >
+	| heads |
+	heads := (self @@ AHCattleBatch collect: [ :each | each heads ]) sum.
+	heads = 0 ifTrue: [ ^0 ].
+	 ^(self @@ AHCattleBatch collect: [ :each | each heads * each corporalCondition ]) sum / heads.
+	
 ]
 
 { #category : 'probes' }
@@ -173,17 +186,30 @@ AHModel >> maizeSize [
 { #category : 'probes' }
 AHModel >> naturalBiomass [
 
-	<probeNamed: 'naturalBiomass' color: '5A9186'>
+	"<probeNamed: 'naturalBiomass' color: '5A9186'>"
 	^ ((self @@ AHPlot select: [ :p |
 		    p cover isKindOf: AHNaturalVegetation ]) collect: [ :p |
 		   p cover biomass ]) average
+]
+
+{ #category : 'probes' }
+AHModel >> naturalZoneFertility [
+	"moyenne de la fertilité de tous les plots : #(2 6 7) average"
+
+	<probeNamed: 'naturalZone fertility' color: #black>
+	| coll |
+	coll := OrderedCollection new.
+	 coll addAll: (self plotsCoveredBy: AHForest).
+	 coll addAll: (self plotsCoveredBy: AHPasture).
+	^(coll collect: [ :p |
+		   p soilFertility ]) average
 ]
 
 { #category : 'accessing' }
 AHModel >> plotsCoveredBy: aTypeOfCover [
 	"return the cells covered by aTypeOfCover"
 
-	^ self thePlots select: [ :c | c cover class = aTypeOfCover ]
+	^ self thePlots select: [ :c | c cover isKindOf: aTypeOfCover ]
 ]
 
 { #category : 'probes' }
@@ -198,9 +224,12 @@ AHModel >> step: t [
 	"t = 1 => rainy saeson, si t est pair => dry season"
 
 	<control>
-	t  even
+	self class time: t.
+	"self @@ AHPlot do: [: p | p cowsCounter: 0]."
+	self @@ AHPlot do: #resetCowsCounter.
+	t even
 		ifTrue: [ self stepDrySeason ]
-		ifFalse: [ self stepRainySeason ] "pair"
+		ifFalse: [ "pair" self stepRainySeason ]
 ]
 
 { #category : 'control' }
@@ -209,7 +238,7 @@ AHModel >> stepDrySeason [
 	(self allTheEntities: AHActor) do: #harvest.
 	self thePlots do: #stepDrySeason.
 	"(self allTheEntities: AHActor) do: #dryStep"
-	(self allTheEntities: AHHerder) do: #moveHerd.
+	(self allTheEntities: AHHerder) shuffled do: #moveHerd.
 	self @@ AHFarmer do: #sow.
 	self @@ AHSedentary do: #sowMaize
 ]
@@ -219,7 +248,7 @@ AHModel >> stepRainySeason [
 
 	self @@ AHFarmer do: #harvestCasava.
 	self thePlots do: #stepRainySeason.
-	(self allTheEntities: AHHerder) do: #moveHerd.
+	(self allTheEntities: AHHerder) shuffled do: #moveHerd.
 ]
 
 { #category : 'accessing' }
@@ -237,8 +266,10 @@ AHModel >> thePlots [
 { #category : 'probes' }
 AHModel >> totalResidue [
 
-	<probeNamed: 'totalResidue' color: '9CB553'>
-	^ ((self @@ AHPlot select: [ :p | p cover isKindOf: AHCultivatedVegetation ]) collect: [:p | p cover biomass]) average
+	"<probeNamed: 'totalResidue' color: '9CB553'>"
+	^ ((self @@ AHPlot select: [ :p |
+		    p cover isKindOf: AHCultivatedVegetation ]) collect: [ :p |
+		   p cover biomass ]) average
 ]
 
 { #category : 'accessing' }

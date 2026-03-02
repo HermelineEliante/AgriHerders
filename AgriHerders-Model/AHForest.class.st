@@ -12,7 +12,9 @@ Class {
 AHForest class >> initializeParameters [
 
 	super initializeParameters.
-	maxSupplyFertility := 20
+	maxSupplyFertility := 20.
+	biomassMax := 18000.
+	biomassDecreaseRate := 40
 ]
 
 { #category : 'pov' }
@@ -26,7 +28,5 @@ AHForest >> initialize [
 
 	super initialize.
 	age := self randomIntegerBetween: 50 and: 100. "years"
-	biomassMax := 18000.
-	biomass := self randomIntegerBetween: 15000 and: biomassMax. "kg/ha"
-	biomassDecreaseRate := 40 "%"
+	biomass := self randomIntegerBetween: 15000 and: self class biomassMax. "kg/ha"
 ]

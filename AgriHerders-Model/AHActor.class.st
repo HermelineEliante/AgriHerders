@@ -26,6 +26,12 @@ AHActor >> agreement: anObject [
 	agreement := anObject
 ]
 
+{ #category : 'accessing' }
+AHActor >> currentTime [
+
+ ^AHModel time
+]
+
 { #category : 'control' }
 AHActor >> dryStep [
 
@@ -51,11 +57,18 @@ AHActor >> house: anObject [
 	house := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialize' }
 AHActor >> initialize [
 
 	super initialize.
 	agreement := true.
+	money := 1.
+]
+
+{ #category : 'testing' }
+AHActor >> isDrySeason [
+"répond si nous sommes en saison sêche, ou non"
+	^self currentTime even 
 ]
 
 { #category : 'accessing' }
@@ -104,6 +117,16 @@ AHActor >> name1 [
 AHActor >> name: anObject [
 
 	name := anObject
+]
+
+{ #category : 'control' }
+AHActor >> openedPlotsForCoralling [
+	"si agrement = true, alors retourne une list de plots déjà récoltés, sinon, retourne une liste vide "
+
+	self agreement
+		ifTrue: [
+		^ self myFarm components select: [ :p | p cover hasBeenHarvested and: [ p hasNoOccupants and: [ p cover biomass > 0 ] ]] ]
+		ifFalse: [ ^ OrderedCollection new ]
 ]
 
 { #category : 'accessing' }

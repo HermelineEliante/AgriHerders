@@ -38,6 +38,12 @@ AHLandcover >> dryStep [
 	
 ]
 
+{ #category : 'testing' }
+AHLandcover >> hasBeenHarvested [
+"Répond si le cover a été récolté ou non."
+^ false
+]
+
 { #category : 'initialization' }
 AHLandcover >> initialize [
 

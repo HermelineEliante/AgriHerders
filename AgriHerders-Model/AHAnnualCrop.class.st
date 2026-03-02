@@ -18,6 +18,12 @@ AHAnnualCrop >> dryStep [
 ]
 
 { #category : 'testing' }
+AHAnnualCrop >> hasBeenHarvested [
+
+	^ self biomass <= self residue 
+]
+
+{ #category : 'testing' }
 AHAnnualCrop >> isMature [
 	"mature si age >= 0.5 y"
 	^ self age >= 0.5 

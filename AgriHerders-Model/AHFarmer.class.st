@@ -39,16 +39,6 @@ AHFarmer >> harvestCasava [
 ]
 
 { #category : 'control' }
-AHFarmer >> initialize [
-
-	super initialize.
-	agreement := true.
-	money := 1.
-	
-	
-]
-
-{ #category : 'control' }
 AHFarmer >> ranyStep [
 
 	

@@ -9,7 +9,8 @@ Class {
 AHFallow class >> initializeParameters [
 
 	super initializeParameters.
-	maxSupplyFertility := 5
+	maxSupplyFertility := 5.
+	biomassMax := 1000.
 ]
 
 { #category : 'pov' }
@@ -23,6 +24,5 @@ AHFallow >> initialize [
 
 	super initialize.
 	age := 0. "years"
-	biomassMax := 1000.
-	biomass := self randomIntegerBetween: 700 and: biomassMax "kg/ha"
+	biomass := self randomIntegerBetween: 700 and: self class biomassMax "kg/ha"
 ]

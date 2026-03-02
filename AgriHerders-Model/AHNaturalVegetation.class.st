@@ -1,7 +1,7 @@
 Class {
 	#name : 'AHNaturalVegetation',
 	#superclass : 'AHVegetation',
-	#instVars : [
+	#classInstVars : [
 		'biomassMax',
 		'biomassDecreaseRate'
 	],
@@ -10,46 +10,51 @@ Class {
 }
 
 { #category : 'accessing' }
-AHNaturalVegetation >> biomassDecreaseRate [
+AHNaturalVegetation class >> biomassDecreaseRate [
 
 	^ biomassDecreaseRate
 ]
 
 { #category : 'accessing' }
-AHNaturalVegetation >> biomassDecreaseRate: anObject [
+AHNaturalVegetation class >> biomassDecreaseRate: anObject [
 
 	biomassDecreaseRate := anObject
 ]
 
 { #category : 'accessing' }
-AHNaturalVegetation >> biomassMax [
+AHNaturalVegetation class >> biomassMax [
 
 	^ biomassMax
 ]
 
 { #category : 'accessing' }
-AHNaturalVegetation >> biomassMax: anObject [
+AHNaturalVegetation class >> biomassMax: anObject [
 
 	biomassMax := anObject
+]
+
+{ #category : 'accessing' }
+AHNaturalVegetation class >> initializeParameters [
+	super initializeParameters.
+	biomassMax := 10.
+	biomassDecreaseRate := 90
 ]
 
 { #category : 'control' }
 AHNaturalVegetation >> dryStep [
 	"la biomasse perd 90% (ou 40% si Foret)"
 	super dryStep.
-	self biomass: self biomass * (100 - self biomassDecreaseRate / 100)
+	self biomass: self biomass * (100 - self class biomassDecreaseRate / 100)
 ]
 
-{ #category : 'accessing' }
-AHNaturalVegetation >> initialize [
+{ #category : 'testing' }
+AHNaturalVegetation >> hasBeenHarvested [
 
-	super initialize.
-	biomassMax := 10.
-	biomassDecreaseRate := 90
+	^ true 
 ]
 
 { #category : 'control' }
 AHNaturalVegetation >> rainyStep [
 	super rainyStep.
-	self biomass: self biomassMax
+	self biomass: self class biomassMax
 ]

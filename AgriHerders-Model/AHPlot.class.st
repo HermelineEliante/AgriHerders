@@ -72,7 +72,7 @@ AHPlot >> cowsCounter: anObject [
 AHPlot >> initialize [
 
 	super initialize.
-	soilFertility := 20.
+	soilFertility := 10.
 	"self initializeWithRandomfertilitylevel."
 	area := 1. "ha"
 	cowsCounter := 0
@@ -112,8 +112,9 @@ AHPlot >> povBiomass [
 	<pov>
 	cover ifNil: [ ^ CMPointOfView color: Color black ].
 	(self cover isKindOf: AHHabitation) ifTrue: [ ^ self povLandcover ].
-	^ CMPointOfView color: (self cover colorAttribute: #biomass min: 0 max: (self cover biomassMax ) color: self cover class myColor).
+	^ CMPointOfView color: (self cover colorValue: (self cover biomass) min: 0 color: #white max: (self cover class biomassMax ) color: self cover class myColor).
 	"^ CMPointOfView color: self cover class myColor"
+	
 ]
 
 { #category : 'pov' }
@@ -159,6 +160,11 @@ AHPlot >> povSoilFertility [
 			   color: Color orange)
 ]
 
+{ #category : 'initialize' }
+AHPlot >> resetCowsCounter [
+	self cowsCounter: 0
+]
+
 { #category : 'controlling' }
 AHPlot >> setLandcover: aTypeOfLandcover [
 	self cover ifNotNil: [ self cover cell: nil. self cover delete ].
@@ -175,7 +181,7 @@ AHPlot >> soilFertility [
 
 { #category : 'accessing' }
 AHPlot >> soilFertility: anObject [
-
+"(self cover isKindOf: AHNaturalVegetation) ifTrue: [ self halt ]."
 	soilFertility := anObject
 ]
 

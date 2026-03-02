@@ -27,10 +27,3 @@ AHCashew >> isMature [
 
 	^ self age >= 5 and: [ self age isInteger not]
 ]
-
-{ #category : 'pov' }
-AHCashew >> pov [
-
-	<pov>
-	^ CMPointOfView color: Color purple
-]

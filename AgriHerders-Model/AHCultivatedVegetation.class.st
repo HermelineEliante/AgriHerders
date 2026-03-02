@@ -7,9 +7,39 @@ Class {
 		'price',
 		'residue'
 	],
+	#classInstVars : [
+		'optimalFertility',
+		'residue',
+		'expectedYield',
+		'price'
+	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
+
+{ #category : 'accessing' }
+AHCultivatedVegetation class >> expectedYield [ 
+^ expectedYield
+
+
+
+
+]
+
+{ #category : 'accessing' }
+AHCultivatedVegetation class >> optimalFertility [
+
+	^ optimalFertility
+]
+
+{ #category : 'accessing' }
+AHCultivatedVegetation class >> residue [
+
+	^ residue
+	
+
+
+]
 
 { #category : 'accessing' }
 AHCultivatedVegetation >> biomassMax [

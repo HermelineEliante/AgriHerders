@@ -5,6 +5,13 @@ Class {
 	#package : 'AgriHerders-Model'
 }
 
+{ #category : 'accessing' }
+AHPasture class >> initializeParameters [
+
+	super initializeParameters.
+	biomassMax := 15000. 
+]
+
 { #category : 'pov' }
 AHPasture class >> myColor [
 
@@ -16,6 +23,5 @@ AHPasture >> initialize [
 
 	super initialize.
 	age := 0. "years"
-	biomassMax := 15000.
-	biomass := self randomIntegerBetween: 13000 and: biomassMax "kg/ha"
+	biomass := self randomIntegerBetween: 13000 and: self class biomassMax "kg/ha"
 ]
