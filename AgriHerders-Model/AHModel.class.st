@@ -236,11 +236,12 @@ AHModel >> step: t [
 AHModel >> stepDrySeason [
 
 	(self allTheEntities: AHActor) do: #harvest.
-	self thePlots do: #stepDrySeason.
+	self thePlots do: #stepDrySeason. "Evolution naturelle des couverts"
 	"(self allTheEntities: AHActor) do: #dryStep"
 	(self allTheEntities: AHHerder) shuffled do: #moveHerd.
 	self @@ AHFarmer do: #sow.
-	self @@ AHSedentary do: #sowMaize
+	self @@ AHSedentary do: #sowMaize.
+	self @@ AHCattleBatch do: #naturalMortality
 ]
 
 { #category : 'control' }
@@ -249,6 +250,7 @@ AHModel >> stepRainySeason [
 	self @@ AHFarmer do: #harvestCasava.
 	self thePlots do: #stepRainySeason.
 	(self allTheEntities: AHHerder) shuffled do: #moveHerd.
+	self @@ AHCattleBatch do: #reproduce  
 ]
 
 { #category : 'accessing' }

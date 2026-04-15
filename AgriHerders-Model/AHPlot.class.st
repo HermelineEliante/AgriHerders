@@ -195,13 +195,3 @@ AHPlot >> stepDrySeason [
 AHPlot >> stepRainySeason [
  	self cover rainyStep
 ]
-
-{ #category : 'controlling' }
-AHPlot >> updateFertility [
-	"Augmentation du niveau de fertilité en fonction du passage des troupeaux (cowsCounter).
-Si cowsCounter > O alors soilFerility passe à l'étape suivante: si c'était low, il devient middle, si c'était middle, il devient good. Si il est high, il reste high"
-
-	<action>
-	cowsCounter > 0 ifTrue: [
-		self soilFertility: (self soilFertility + 1 min: (self possibleSoilFertilities size - 1)) ]
-]

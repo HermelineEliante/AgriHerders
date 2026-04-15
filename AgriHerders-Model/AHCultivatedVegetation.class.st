@@ -33,6 +33,12 @@ AHCultivatedVegetation class >> optimalFertility [
 ]
 
 { #category : 'accessing' }
+AHCultivatedVegetation class >> price [
+
+	^ price
+]
+
+{ #category : 'accessing' }
 AHCultivatedVegetation class >> residue [
 
 	^ residue
