@@ -192,11 +192,11 @@ AHCattleBatch >> owner: anObject [
 	owner := anObject
 ]
 
-{ #category : 'initialization' }
+{ #category : 'pov' }
 AHCattleBatch >> pov [
 
 	<pov>
-	^ CMPointOfView color: CMColor blue shape: #star size: heads / 15
+	^ CMPointOfView color: CMColor blue shape: #star size: heads / 100
 ]
 
 { #category : 'initialization' }
@@ -230,6 +230,20 @@ self corporalCondition > 5 ifTrue: [^ self heads: (heads * 0.15) rounded + heads
 self corporalCondition > 3 ifTrue: [^ self heads: (heads * 0.05) rounded + heads ]
 
  
+]
+
+{ #category : 'pov' }
+AHCattleBatch >> splitInTwo [
+	"Si la taille du troupeau est > 30, alors je crée un nouveau troupeau de la taille totale du troupeau actuel moins 30.Et j'affecte ce nouveau troupeau à mon éleveur."
+
+	| newBatch |
+	self heads > 30 ifFalse: [ ^ nil ].
+	newBatch := self cormasModel newEntity: self class.
+	newBatch heads: self heads - 30.
+	self heads: 30.
+	newBatch owner: self owner.
+	owner herd add: newBatch.
+	newBatch moveTo: self cell  
 ]
 
 { #category : 'control' }

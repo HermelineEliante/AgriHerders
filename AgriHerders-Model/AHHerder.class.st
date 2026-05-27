@@ -169,7 +169,13 @@ AHHerder >> initialize [
 AHHerder >> moveHerd [
 	" Si le besoin des animaux est supérieur à 0, je les envoie sur les meilleurs pâturages sinon, je les envoie sur d'autres plots pour satisfaire leur besoin restant."
 
-	self herd do: [ :aBatch | self isDrySeason ifFalse: [ self rainy_MoveOneCattleBatch: aBatch ] ifTrue: [ self dry_MoveOneCattleBatch: aBatch ] ]
+	self herd do: [ :aBatch |
+		aBatch heads > 30 ifTrue: [ aBatch splitInTwo ]].
+	self herd do: [ :aBatch |
+		
+			self isDrySeason
+				ifFalse: [ self rainy_MoveOneCattleBatch: aBatch ]
+				ifTrue: [ self dry_MoveOneCattleBatch: aBatch ] ]
 ]
 
 { #category : 'accessing' }

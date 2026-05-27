@@ -48,6 +48,14 @@ AHModel >> averageBiomass [
 ]
 
 { #category : 'probes' }
+AHModel >> cattleSize [ 
+"retourne le nombre total de vaches, pour suivre l'evolution de tout le troupeau"
+
+	<probeNamed: 'Cattle size' color: 'E74C3C' >
+	^(self @@ AHCattleBatch collect: [ :each | each heads ]) sum.
+]
+
+{ #category : 'probes' }
 AHModel >> corporalCondition [ 
 "evolution de CC moyen de tout le troupeau"
 
