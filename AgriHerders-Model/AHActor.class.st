@@ -61,8 +61,8 @@ AHActor >> house: anObject [
 AHActor >> initialize [
 
 	super initialize.
-	agreement := true.
-	money := 1.
+	agreement := false.
+	money := 1
 ]
 
 { #category : 'testing' }

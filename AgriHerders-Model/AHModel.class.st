@@ -237,8 +237,8 @@ AHModel >> step: t [
 	self @@ AHPlot do: #resetCowsCounter.
 	t even
 		ifTrue: [ self stepDrySeason ]
-		ifFalse: [ "pair" self stepRainySeason .
-			(t / 10) isInteger ifTrue: [  self  @@ AHFarmer do: #expandFarm ]]
+		ifFalse: [ "pair"
+				self stepRainySeason]
 ]
 
 { #category : 'control' }

@@ -58,7 +58,8 @@ AHFarmer >> harvestCasava [
 { #category : 'control' }
 AHFarmer >> rainyStep [
 self harvestCasava.
-	(AHModel time / 10) isInteger ifTrue: [ self expandFarm ]
+"comme AHModel time est toujours impair en rainyStep, je rajoute 1"
+	((AHModel time + 1) / 10) isInteger ifTrue: [ self expandFarm ]
 ]
 
 { #category : 'control' }
@@ -78,7 +79,7 @@ AHFarmer >> sow [
 			cellCiblee setLandcover: AHCassava ].
 
 	"autres cultures"
-	(self myFarm components select: [ :p | p cover class = AHFallow ])
+	(self myFarm components select: [ :p | "p cover class = AHFallow " p cover isKindOf: AHNaturalVegetation])
 		do: [ :plot | self sowOnPlot: plot ]
 ]
 
