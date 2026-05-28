@@ -170,7 +170,7 @@ AHHerder >> moveHerd [
 	" Si le besoin des animaux est supérieur à 0, je les envoie sur les meilleurs pâturages sinon, je les envoie sur d'autres plots pour satisfaire leur besoin restant."
 
 	self herd do: [ :aBatch |
-		aBatch heads > 30 ifTrue: [ aBatch splitInTwo ]].
+		aBatch heads > 50 ifTrue: [ aBatch splitInTwo ]].
 	self herd do: [ :aBatch |
 		
 			self isDrySeason

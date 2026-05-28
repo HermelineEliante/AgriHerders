@@ -89,6 +89,13 @@ AHCattleBatch >> defecateOn: visitedPlots [
 		plot soilFertility: (plot soilFertility + (qtyFaecesOnPlot / 2) min: 20) ]
 ]
 
+{ #category : 'controlling' }
+AHCattleBatch >> delete [ 
+self owner ifNotNil: [ owner herd remove: self ifAbsent: [nil] ].
+super delete.
+
+]
+
 { #category : 'control' }
 AHCattleBatch >> eatForNeeds: needs [
 	"le troupeau prélève 6.25 * le nombre de tête de la biomasse du couvert. Retourne les besoins restants pour arriver à la sassiété"
@@ -119,6 +126,11 @@ AHCattleBatch >> faeces [
 AHCattleBatch >> faeces: anObject [
 
 	faeces := anObject
+]
+
+{ #category : 'control' }
+AHCattleBatch >> goHome [ 
+self moveTo: (self owner house )
 ]
 
 { #category : 'accessing' }
@@ -162,22 +174,22 @@ AHCattleBatch >> moveTo: arg1 [
 
 { #category : 'control' }
 AHCattleBatch >> naturalMortality [
-
-"Les animaux peuvent mourir de vieillesse ou de faiblesse. Le taux de mortalité augmente si la condition corporelle moyenne annuelle est mauvaise :
+	"Les animaux peuvent mourir de vieillesse ou de faiblesse. Le taux de mortalité augmente si la condition corporelle moyenne annuelle est mauvaise :
 Taux_mortalité_base = 0,02 (2 % par an)
 Si Condition_moyenne_annuelle < 4 :
     Taux_mortalité = 0,10 (10 %)
 Si Condition_moyenne_annuelle < 2 :
     Taux_mortalité = 0,20 (20 %)
 Morts_naturelles = heads × Taux_mortalité"
-| taux_mortalité |
-taux_mortalité := 0.02.
-(self corporalCondition between: 2 and:  4) ifTrue: [ taux_mortalité := taux_mortalité + 0.1  ].
-self corporalCondition < 2 ifTrue: [ taux_mortalité := taux_mortalité + 0.2  ].
-self heads: heads - (heads * taux_mortalité ) rounded 
 
-
-
+	| taux_mortalité |
+	taux_mortalité := 0.02.
+	(self corporalCondition between: 2 and: 4) ifTrue: [
+		taux_mortalité := taux_mortalité + 0.1 ].
+	self corporalCondition < 2 ifTrue: [
+		taux_mortalité := taux_mortalité + 0.2 ].
+	self heads: heads - (heads * taux_mortalité) rounded.
+	self heads < 1 ifTrue: [ self delete ]
 ]
 
 { #category : 'accessing' }

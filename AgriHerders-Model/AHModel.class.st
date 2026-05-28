@@ -237,7 +237,8 @@ AHModel >> step: t [
 	self @@ AHPlot do: #resetCowsCounter.
 	t even
 		ifTrue: [ self stepDrySeason ]
-		ifFalse: [ "pair" self stepRainySeason ]
+		ifFalse: [ "pair" self stepRainySeason .
+			(t / 10) isInteger ifTrue: [  self  @@ AHFarmer do: #expandFarm ]]
 ]
 
 { #category : 'control' }
@@ -255,10 +256,10 @@ AHModel >> stepDrySeason [
 { #category : 'control' }
 AHModel >> stepRainySeason [
 
-	self @@ AHFarmer do: #harvestCasava.
+	self @@ AHFarmer do:  #rainyStep .
 	self thePlots do: #stepRainySeason.
 	(self allTheEntities: AHHerder) shuffled do: #moveHerd.
-	self @@ AHCattleBatch do: #reproduce  
+	self @@ AHCattleBatch do: #reproduce
 ]
 
 { #category : 'accessing' }
