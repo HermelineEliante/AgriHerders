@@ -26,6 +26,11 @@ AHActor >> agreement: anObject [
 	agreement := anObject
 ]
 
+{ #category : 'pov' }
+AHActor >> color [
+	^ self class colorOfNumber: 100
+]
+
 { #category : 'accessing' }
 AHActor >> currentTime [
 
@@ -145,11 +150,18 @@ AHActor >> others: anObject [
 AHActor >> pov [
 
 	<pov>
-	^ CMPointOfView color: Color purple size: 0.3
+	^ CMPointOfView
+		  color: self color
+		  shape: self shape 
 ]
 
 { #category : 'control' }
 AHActor >> rainyStep [
+]
+
+{ #category : 'pov' }
+AHActor >> shape [ 
+^#circle
 ]
 
 { #category : 'accessing' }

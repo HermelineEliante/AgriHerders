@@ -22,3 +22,10 @@ ManifestAgriHerdersModel class >> ruleEndTrueFalseRuleV1FalsePositive [
 	<ignoreForCoverage>
 	^ #(#(#(#RGMethodDefinition #(#AHHerder #moveHerd #false)) #'2026-02-09T17:02:16.376+01:00') )
 ]
+
+{ #category : 'code-critics' }
+ManifestAgriHerdersModel class >> ruleTempsReadBeforeWrittenRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#AHHerder #dry_MoveOneCattleBatch: #false)) #'2026-06-02T10:31:03.804175+02:00') )
+]

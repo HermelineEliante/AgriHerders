@@ -5,6 +5,11 @@ Class {
 	#package : 'AgriHerders-Model'
 }
 
+{ #category : 'pov' }
+AHSedentary >> color [
+^(self class colorOfNumber: self id)
+]
+
 { #category : 'control' }
 AHSedentary >> harvest [
 	"je ne récolte que le mais"
@@ -21,6 +26,11 @@ AHSedentary >> initialize [
 	super initialize.
 	agreement := true.
 	money := 1
+]
+
+{ #category : 'pov' }
+AHSedentary >> shape [ 
+^#diamond
 ]
 
 { #category : 'control' }

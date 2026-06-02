@@ -98,7 +98,7 @@ super delete.
 
 { #category : 'control' }
 AHCattleBatch >> eatForNeeds: needs [
-	"le troupeau prélève 6.25 * le nombre de tête de la biomasse du couvert. Retourne les besoins restants pour arriver à la sassiété"
+	"le troupeau prélève 6.25 * le nombre de têtes de la biomasse du couvert. Retourne les besoins restants pour arriver à la sassiété"
 
 	| newNeeds |
 	self cell cover biomass = 0 ifTrue: [
@@ -166,9 +166,9 @@ AHCattleBatch >> initialize [
 ]
 
 { #category : 'control' }
-AHCattleBatch >> moveTo: arg1 [
-
-	super moveTo: arg1.
+AHCattleBatch >> moveTo: aPlot [
+"(aPlot hasOccupantsOfClass: AHCattleBatch) ifTrue: [ self halt ]."
+	super moveTo: aPlot.
 	self cell cowsCounter: self cell cowsCounter + self heads
 ]
 
@@ -188,7 +188,7 @@ Morts_naturelles = heads × Taux_mortalité"
 		taux_mortalité := taux_mortalité + 0.1 ].
 	self corporalCondition < 2 ifTrue: [
 		taux_mortalité := taux_mortalité + 0.2 ].
-	self heads: heads - (heads * taux_mortalité) rounded.
+	self heads: (heads - (heads * taux_mortalité)) "rounded".
 	self heads < 1 ifTrue: [ self delete ]
 ]
 
@@ -208,10 +208,13 @@ AHCattleBatch >> owner: anObject [
 AHCattleBatch >> pov [
 
 	<pov>
-	^ CMPointOfView color: CMColor blue shape: #star size: heads / 100
+	^ CMPointOfView
+		  color: self owner color
+		  shape: #star
+		  size: heads / 70
 ]
 
-{ #category : 'initialization' }
+{ #category : 'pov' }
 AHCattleBatch >> povNumberOfHeads [
 
 	<pov>
@@ -228,7 +231,7 @@ AHCattleBatch >> reproduce [
 On calcule d’abord la condition moyenne du troupeau sur toute la saison pluvieuse :
 AverageRainySeasonCondition = mean(DailyRainySeasonCondition)
 Ensuite, on applique le taux de reproduction correspondant :
-AverageRainySeasonCondition	Taux de reproduction	Explication
+AverageRainySeasonCondition	Taux de reproduction	Explication:
 > 7 => 	25 %	Bonne santé → beaucoup de naissances
 5 à 7	=> 15 %	Santé moyenne ; naissances modérées
 3 à 5 =>	5 %	Santé fragile ; très peu de naissances
@@ -237,31 +240,33 @@ AverageRainySeasonCondition	Taux de reproduction	Explication
 Naissances = heads × Taux_reproduction
 "
 
-self corporalCondition > 7 ifTrue: [^ self heads: (heads * 0.25) rounded + heads ].
-self corporalCondition > 5 ifTrue: [^ self heads: (heads * 0.15) rounded + heads ].
-self corporalCondition > 3 ifTrue: [^ self heads: (heads * 0.05) rounded + heads ]
-
- 
+	self corporalCondition > 7 ifTrue: [
+		^ self heads: (heads * 0.25) "rounded" + heads ].
+	self corporalCondition > 5 ifTrue: [
+		^ self heads: (heads * 0.15) "rounded" + heads ].
+	self corporalCondition > 3 ifTrue: [
+		^ self heads: (heads * 0.05) "rounded" + heads ]
 ]
 
-{ #category : 'pov' }
+{ #category : 'control' }
 AHCattleBatch >> splitInTwo [
 	"Si la taille du troupeau est > 30, alors je crée un nouveau troupeau de la taille totale du troupeau actuel moins 30.Et j'affecte ce nouveau troupeau à mon éleveur."
 
 	| newBatch |
-	self heads > 30 ifFalse: [ ^ nil ].
+	self heads > 50 ifFalse: [ ^ nil ].
 	newBatch := self cormasModel newEntity: self class.
-	newBatch heads: self heads - 30.
+	newBatch heads: self heads - 50.
 	self heads: 30.
 	newBatch owner: self owner.
 	owner herd add: newBatch.
-	newBatch moveTo: self cell  
+	newBatch goHome
 ]
 
 { #category : 'control' }
 AHCattleBatch >> totalNeeds [
-
-	^self heads * self dailyForrageNeed * 183
+"Ex : heads = 10 => 10 * 6.25 * 183 = 11437 kg/semestre.
+dailyForrageNeed := 6.25 kgMS, 183 jours dans un semestre"
+	^ self heads * self dailyForrageNeed * 183 
 ]
 
 { #category : 'control' }
@@ -269,8 +274,7 @@ AHCattleBatch >> updateCorporalConditionWith: needs [
 
 	needs > 0
 		ifTrue: [
-		self corporalCondition: 10 * (1 - (needs / self totalNeeds)) ]
-		ifFalse: [ self corporalCondition: 10 ]
-		
-	"Ratio = Daily-ing / dailyForrageNeeds"
+			self corporalCondition: 10 * (1 - (needs / self totalNeeds)) ]
+		ifFalse: [ "Ratio = Daily-ing / dailyForrageNeeds"
+			self corporalCondition: 10 ]
 ]

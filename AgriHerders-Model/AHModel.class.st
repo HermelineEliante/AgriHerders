@@ -48,23 +48,33 @@ AHModel >> averageBiomass [
 ]
 
 { #category : 'probes' }
+AHModel >> batchNumber [ 
+"retourne le nombre total de vaches, pour suivre l'evolution de tout le troupeau"
+
+	<probeNamed: 'Cattle batchs' color: 'E74C3C' >
+	^(self @@ AHCattleBatch) size.
+]
+
+{ #category : 'probes' }
 AHModel >> cattleSize [ 
 "retourne le nombre total de vaches, pour suivre l'evolution de tout le troupeau"
 
 	<probeNamed: 'Cattle size' color: 'E74C3C' >
+	self @@ AHCattleBatch ifEmpty: [ ^0 ].
 	^(self @@ AHCattleBatch collect: [ :each | each heads ]) sum.
 ]
 
 { #category : 'probes' }
-AHModel >> corporalCondition [ 
-"evolution de CC moyen de tout le troupeau"
+AHModel >> corporalCondition [
+	"evolution de CC moyen de tout le troupeau (moyenne pondérée) "
 
-	<probeNamed: 'Corporal condition' color: 'F39C12' >
+	<probeNamed: 'Corporal condition' color: 'F39C12'>
 	| heads |
+	self @@ AHCattleBatch ifEmpty: [ ^ 0 ].
 	heads := (self @@ AHCattleBatch collect: [ :each | each heads ]) sum.
-	heads = 0 ifTrue: [ ^0 ].
-	 ^(self @@ AHCattleBatch collect: [ :each | each heads * each corporalCondition ]) sum / heads.
-	
+	heads = 0 ifTrue: [ ^ 0 ].
+	^ (self @@ AHCattleBatch collect: [ :each |
+		   each heads * each corporalCondition ]) sum / heads
 ]
 
 { #category : 'probes' }
@@ -96,13 +106,15 @@ AHModel >> createOneFarmFrom: aListOfIDs forAgent: aTypeOfAgent [
 	ag := self newEntity: aTypeOfAgent.
 	ag myFarm: aFarm.
 	aFarm owner: ag.
-	aTypeOfAgent = AHFarmer
-		ifTrue: [ ag house: (self selectRandomlyFrom: self villagePlots) ]
-		ifFalse: [
+	(aTypeOfAgent inheritsFrom: AHHerder)
+		ifFalse: [ ag house: (self villagePlots at: ag id) ]
+		ifTrue: [
 				ag house:
 					(aFarm components detect: [ :c | c cover class = AHFulaniCamp ]) ].
-	ag moveTo: ag house.
-	(aFarm includesCell: ag house) ifFalse: [ aFarm addComponent: ag house ]
+	ag class = AHExternalProprietary ifFalse: [
+			ag moveTo: ag house.
+			(aFarm includesCell: ag house) ifFalse: [
+				aFarm addComponent: ag house ] ]
 ]
 
 { #category : 'accessing' }
@@ -128,12 +140,15 @@ AHModel >> initFarmsAndAgents [
 	self createOneFarmFrom: #( 32 40 ) forAgent: AHSedentary.
 	self createOneFarmFrom: #( 57 58 ) forAgent: AHSedentary.
 
-	"Ferme de cajou, sans proprietaire"
-	farmCells := self thePlots select: [ :c | #( 29 30 ) includes: c id ].
+	"Ferme de cajou, proprietaires externes"
+	"	farmCells := self thePlots select: [ :c | #( 29 30 ) includes: c id ].
 	self createAggregate: AHFarm from: farmCells.
 
 	farmCells := self thePlots select: [ :c | #( 46 47 ) includes: c id ].
-	self createAggregate: AHFarm from: farmCells.
+	self createAggregate: AHFarm from: farmCells."
+
+	self createOneFarmFrom: #( 29 30  ) forAgent: AHExternalProprietary.
+	self createOneFarmFrom: #( 46 47 ) forAgent: AHExternalProprietary.
 
 	farmCells := self thePlots select: [ :c |
 		             #( 45 51 52 60 61 ) includes: c id ].
@@ -181,7 +196,11 @@ AHModel >> initModel [
 	self initFarmsAndAgents.
 	self createCattles.
 
+	self @@ AHFarmer do: #setNobodysPlots.
+	self makeAgentsScatteredInCells.
+	
 	AHPlot activePovSelector: #povLandcover
+	"(self @@ AHFarm select: [ : f | f owner isNil ]) inspect"
 ]
 
 { #category : 'probes' }
@@ -209,6 +228,7 @@ AHModel >> naturalZoneFertility [
 	coll := OrderedCollection new.
 	 coll addAll: (self plotsCoveredBy: AHForest).
 	 coll addAll: (self plotsCoveredBy: AHPasture).
+	coll isEmpty ifTrue: [^0].
 	^(coll collect: [ :p |
 		   p soilFertility ]) average
 ]
@@ -250,7 +270,7 @@ AHModel >> stepDrySeason [
 	(self allTheEntities: AHHerder) shuffled do: #moveHerd.
 	self @@ AHFarmer do: #sow.
 	self @@ AHSedentary do: #sowMaize.
-	self @@ AHCattleBatch do: #naturalMortality
+	self @@ AHCattleBatch reverseDo: #naturalMortality
 ]
 
 { #category : 'control' }

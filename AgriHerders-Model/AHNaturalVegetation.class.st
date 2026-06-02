@@ -40,6 +40,11 @@ AHNaturalVegetation class >> initializeParameters [
 	biomassDecreaseRate := 90
 ]
 
+{ #category : 'accessing' }
+AHNaturalVegetation >> biomassMax [
+	^self class biomassMax
+]
+
 { #category : 'control' }
 AHNaturalVegetation >> dryStep [
 	"la biomasse perd 90% (ou 40% si Foret)"

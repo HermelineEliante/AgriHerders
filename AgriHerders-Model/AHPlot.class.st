@@ -112,19 +112,21 @@ AHPlot >> povBiomass [
 	<pov>
 	cover ifNil: [ ^ CMPointOfView color: Color black ].
 	(self cover isKindOf: AHHabitation) ifTrue: [ ^ self povLandcover ].
-	^ CMPointOfView color: (self cover colorValue: (self cover biomass) min: 0 color: #white max: (self cover class biomassMax ) color: self cover class myColor).
+	^ CMPointOfView color: (self cover colorValue: (self cover biomass) min: 0 color: #white max: (self cover biomassMax ) color: self cover class myColor).
 	"^ CMPointOfView color: self cover class myColor"
 	
 ]
 
 { #category : 'pov' }
 AHPlot >> povCowsCounter [
+
 	<pov>
-	^CMPointOfView color: (self
-		colorAttribute: #cowsCounter  
-		min: 0
-		max: 100
-		color: Color brown)
+	cowsCounter = 0 ifTrue: [ ^ CMPointOfView color: #white ].
+	^ CMPointOfView color: (self
+			   colorAttribute: #cowsCounter
+			   min: 0
+			   max: 100
+			   color: Color brown)
 ]
 
 { #category : 'pov' }
@@ -133,7 +135,7 @@ AHPlot >> povFarm [
 	<pov>
 	(self getAggregateType: AHFarm)
 		ifNil: [ ^ CMPointOfView color: Color white ]
-		ifNotNil: [ ^ (self getAggregateType: AHFarm) povId ]
+		ifNotNil: [ ^ CMPointOfView color:  ((self getAggregateType: AHFarm) owner color) ]
 ]
 
 { #category : 'pov' }
