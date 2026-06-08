@@ -72,7 +72,7 @@ AHPlot >> cowsCounter: anObject [
 AHPlot >> initialize [
 
 	super initialize.
-	soilFertility := 10.
+	soilFertility := 5.
 	"self initializeWithRandomfertilitylevel."
 	area := 1. "ha"
 	cowsCounter := 0

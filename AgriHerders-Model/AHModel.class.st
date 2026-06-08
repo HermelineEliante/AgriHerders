@@ -197,7 +197,7 @@ AHModel >> initModel [
 	self createCattles.
 
 	self @@ AHFarmer do: #setNobodysPlots.
-	self makeAgentsScatteredInCells.
+	"self makeAgentsScatteredInCells."
 	
 	AHPlot activePovSelector: #povLandcover
 	"(self @@ AHFarm select: [ : f | f owner isNil ]) inspect"
@@ -221,16 +221,18 @@ AHModel >> naturalBiomass [
 
 { #category : 'probes' }
 AHModel >> naturalZoneFertility [
-	"moyenne de la fertilité de tous les plots : #(2 6 7) average"
+	"moyenne de la fertilité des plots en natural fertility : #(2 6 7) average"
 
 	<probeNamed: 'naturalZone fertility' color: #black>
 	| coll |
-	coll := OrderedCollection new.
-	 coll addAll: (self plotsCoveredBy: AHForest).
-	 coll addAll: (self plotsCoveredBy: AHPasture).
-	coll isEmpty ifTrue: [^0].
-	^(coll collect: [ :p |
-		   p soilFertility ]) average
+	"coll := OrderedCollection new.
+	coll addAll: (self plotsCoveredBy: AHForest).
+	coll addAll: (self plotsCoveredBy: AHPasture).
+	coll addAll: (self plotsCoveredBy: AHBush ).
+	coll addAll: (self plotsCoveredBy: AHFallow )."
+	coll := self plotsCoveredBy: AHNaturalVegetation.
+	coll isEmpty ifTrue: [ ^ 0 ].
+	^ (coll collect: [ :p | p soilFertility ]) average
 ]
 
 { #category : 'accessing' }
@@ -292,6 +294,14 @@ AHModel >> theCattleBatches [
 AHModel >> thePlots [
 
 	^ self @@ AHPlot 
+]
+
+{ #category : 'probes' }
+AHModel >> totalFertility [
+	"Somme de la fertilité de tous les plots "
+
+	<probeNamed: 'total fertility' color: #pink >
+	^ (self @@ AHPlot collect: [ :p | p soilFertility ]) sum
 ]
 
 { #category : 'probes' }

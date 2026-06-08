@@ -80,13 +80,18 @@ AHCattleBatch >> dailyStep [
 
 { #category : 'control' }
 AHCattleBatch >> defecateOn: visitedPlots [
-"On répartit le nombre de fècès total sur tous les plots visités"
+	"On répartit le nombre de fècès total sur tous les plots visités. 
+	Ainsi, on note une Mise à jour de la fertilité des plots visités par les animaux. Excreta deposits are proportional to the time spent by the animals on the plot. ""2.8 * 4 * 183 /1000 = 2T/ha ce qui correspiond à une élévation de 1 de la fertilité (Une publication technique mentionne que pour nourrir des microorganismes du sol et améliorer certains aspects de fertilité, des apports de 2 à 4 t/ha de compost jeune de fumier peuvent déjà avoir un effet mesurable. D’où je garde 4 dans ce calcul « ""2.8 * 4 * 183 /1000 = 2T/ha ») .
+""le troupeau prélève 6.25 * le nombre de tête de la biomasse du couvert. Si il n’est pas rassasié et qu’il y a de plot ouvert où il peut manger, il va sur ces plots.
+"
+
 	| qtyFaecesOnPlot |
 	visitedPlots ifEmpty: [ ^ self ].
-	qtyFaecesOnPlot := faeces * heads * (183 / visitedPlots size) * (corporalCondition / 10)
-	        / 1000.
+	qtyFaecesOnPlot := faeces * heads * (183 / visitedPlots size)
+	                   * (corporalCondition / 10) / 1000.
 	visitedPlots do: [ :plot |
-		plot soilFertility: (plot soilFertility + (qtyFaecesOnPlot / 2) min: 20) ]
+			plot soilFertility:
+				(plot soilFertility + (qtyFaecesOnPlot / 2) "min: 20") ]
 ]
 
 { #category : 'controlling' }
