@@ -300,7 +300,7 @@ AHModel >> thePlots [
 AHModel >> totalFertility [
 	"Somme de la fertilité de tous les plots "
 
-	<probeNamed: 'total fertility' color: #pink >
+	<probeNamed: 'total fertility' color: '2E4F70'>
 	^ (self @@ AHPlot collect: [ :p | p soilFertility ]) sum
 ]
 
