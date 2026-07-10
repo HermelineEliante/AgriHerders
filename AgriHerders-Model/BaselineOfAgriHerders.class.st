@@ -13,7 +13,11 @@ BaselineOfAgriHerders >> baseline: spec [
       "Définir le package principal du projet"
       spec
         package: 'AgriHerders-Model'
-        with: [ spec requires: #() ].
+        with: [
+          spec
+            repository: 'github://HermelineEliante/AgriHerders/AgriHerders-Model';
+            requires: #()
+        ].
 
       "Définir des groupes pour faciliter le chargement"
       spec
