@@ -6,10 +6,10 @@ Class {
 }
 
 { #category : 'accessing' }
-AHSoja class >> initializeParameters [
+AHSoja class >> maxSupplyFertility [
 
-	super initializeParameters.
-	maxSupplyFertility := 5
+	<parameterFloatDefault: 5>
+	^ maxSupplyFertility
 ]
 
 { #category : 'pov' }

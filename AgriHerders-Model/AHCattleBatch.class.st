@@ -8,22 +8,15 @@ Class {
 		'faeces',
 		'owner',
 		'corporalConditionDecreaseRate',
-		'dailyForrageNeedCompensate',
 		'MinDailyForrageNeed'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
 
-{ #category : 'accessing' }
-AHCattleBatch class >> initializeParameters [
-
-	super initializeParameters.
-	
-]
-
-{ #category : 'accessing' }
+{ #category : 'accessing parameters' }
 AHCattleBatch >> corporalCondition [
+	<parameterIntegerDefault: 10>
 
 	^ corporalCondition
 ]
@@ -34,9 +27,10 @@ AHCattleBatch >> corporalCondition: anObject [
 	corporalCondition := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing parameters' }
 AHCattleBatch >> corporalConditionDecreaseRate [
 
+	<parameterFloatDefault: 0>
 	^ corporalConditionDecreaseRate
 ]
 
@@ -46,9 +40,10 @@ AHCattleBatch >> corporalConditionDecreaseRate: anObject [
 	corporalConditionDecreaseRate := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing parameters' }
 AHCattleBatch >> dailyForrageNeed [
-
+"6.25 kgMS"
+	<parameterFloatDefault: 6.25>
 	^ dailyForrageNeed
 ]
 
@@ -56,26 +51,6 @@ AHCattleBatch >> dailyForrageNeed [
 AHCattleBatch >> dailyForrageNeed: anObject [
 
 	dailyForrageNeed := anObject
-]
-
-{ #category : 'accessing' }
-AHCattleBatch >> dailyForrageNeedCompensate [
-
-	^ dailyForrageNeedCompensate
-]
-
-{ #category : 'accessing' }
-AHCattleBatch >> dailyForrageNeedCompensate: anObject [
-
-	dailyForrageNeedCompensate := anObject
-]
-
-{ #category : 'accessing' }
-AHCattleBatch >> dailyStep [
-
-	self
-		dailyMove;
-		dailyConsume
 ]
 
 { #category : 'control' }
@@ -121,9 +96,10 @@ AHCattleBatch >> eatForNeeds: needs [
 				^ newNeeds ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing parameters' }
 AHCattleBatch >> faeces [
-
+"2.8. kg/day"
+	<parameterFloatDefault: 2.8>
 	^ faeces
 ]
 
@@ -138,9 +114,10 @@ AHCattleBatch >> goHome [
 self moveTo: (self owner house )
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing parameters' }
 AHCattleBatch >> heads [
 
+	<parameterIntegerDefault: 10>
 	^ heads
 ]
 
@@ -154,20 +131,12 @@ AHCattleBatch >> heads: anObject [
 AHCattleBatch >> initialize [
 
 	super initialize.
-	"numberOfHeads := 15."
-	heads := 10.  "self randomIntegerBetween: 1 and: 5."
-	"corporalCondition := self class maxCorporalCondition / 2."
-	corporalCondition := 10.
-	dailyForrageNeed := 6.25. "kgMS"
-	faeces := 2.8. "kg/day"
+	"heads := 10. ""self randomIntegerBetween: 1 and: 5."
+"	corporalCondition := 10.
+	dailyForrageNeed := 6.25. 
+	faeces := 2.8. 
 	corporalConditionDecreaseRate := 0.
-	dailyForrageNeedCompensate := 0.
-	MinDailyForrageNeed := 4.25 "kgMS"
-
-
-
-
-
+	MinDailyForrageNeed := 4.25 "
 ]
 
 { #category : 'control' }
@@ -213,21 +182,21 @@ AHCattleBatch >> owner: anObject [
 AHCattleBatch >> pov [
 
 	<pov>
-	^ CMPointOfView
-		  color: self owner color
-		  shape: #star
-		  size: heads / 70
+	| size |
+	"self heads > 40 ifTrue: [ size := 1 ] ifFalse: [size := 0.7].
+	self heads < 10 ifTrue: [ size := 0.2 ]."
+	size := 0.3 + (self heads / 50) .
+	self owner id = 1
+		ifTrue: [ ^ CMPointOfView tile: AHTilesSet cowPink size: size ]
+		ifFalse: [ ^ CMPointOfView tile: AHTilesSet cowBlue size: size ]
 ]
 
 { #category : 'pov' }
 AHCattleBatch >> povNumberOfHeads [
 
 	<pov>
-	^ CMPointOfView color: (self
-			   colorAttribute: #heads
-			   min: 1
-			   max: 15
-			   color: Color red)
+
+	^ CMPointOfView color: self owner color shape: #star size: heads / 70
 ]
 
 { #category : 'control' }

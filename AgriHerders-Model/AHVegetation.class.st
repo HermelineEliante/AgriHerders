@@ -13,16 +13,9 @@ Class {
 }
 
 { #category : 'accessing' }
-AHVegetation class >> initializeParameters [
-
-	super initializeParameters.
-	maxSupplyFertility := 0
-]
-
-{ #category : 'accessing' }
 AHVegetation class >> maxSupplyFertility [
-
-	^maxSupplyFertility 
+	<parameterFloatDefault: 0>
+	^ maxSupplyFertility
 ]
 
 { #category : 'accessing' }
@@ -34,6 +27,7 @@ AHVegetation class >> maxSupplyFertility: anObject [
 { #category : 'accessing' }
 AHVegetation >> age [
 
+	<parameterIntegerDefault: 0>
 	^ age
 ]
 
@@ -46,6 +40,7 @@ AHVegetation >> age: anObject [
 { #category : 'accessing' }
 AHVegetation >> biomass [
 
+	<parameterFloatDefault: 0>
 	^ biomass
 ]
 
@@ -65,13 +60,6 @@ AHVegetation >> dryStep [
 	self class maxSupplyFertility > 0 ifTrue: [
 			self cell soilFertility < self class maxSupplyFertility ifTrue: [
 				self cell soilFertility: self cell soilFertility + 0.5 ] ]
-]
-
-{ #category : 'accessing' }
-AHVegetation >> initialize [
-super initialize. 
-age := 0.
-biomass := 0
 ]
 
 { #category : 'control' }

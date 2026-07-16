@@ -12,6 +12,7 @@ Class {
 { #category : 'accessing' }
 AHNaturalVegetation class >> biomassDecreaseRate [
 
+	<parameterFloatDefault: 90>
 	^ biomassDecreaseRate
 ]
 
@@ -24,6 +25,7 @@ AHNaturalVegetation class >> biomassDecreaseRate: anObject [
 { #category : 'accessing' }
 AHNaturalVegetation class >> biomassMax [
 
+	<parameterIntegerDefault: 10>
 	^ biomassMax
 ]
 
@@ -31,13 +33,6 @@ AHNaturalVegetation class >> biomassMax [
 AHNaturalVegetation class >> biomassMax: anObject [
 
 	biomassMax := anObject
-]
-
-{ #category : 'accessing' }
-AHNaturalVegetation class >> initializeParameters [
-	super initializeParameters.
-	biomassMax := 10.
-	biomassDecreaseRate := 90
 ]
 
 { #category : 'accessing' }

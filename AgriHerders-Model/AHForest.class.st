@@ -9,12 +9,16 @@ Class {
 }
 
 { #category : 'accessing' }
-AHForest class >> initializeParameters [
+AHForest class >> biomassDecreaseRate [
+	<parameterFloatDefault: 40>
+	^biomassDecreaseRate
+]
 
-	super initializeParameters.
-	maxSupplyFertility := 20.
-	biomassMax := 18000.
-	biomassDecreaseRate := 40
+{ #category : 'accessing' }
+AHForest class >> biomassMax [
+
+	<parameterFloatDefault: 18000>
+	^ biomassMax
 ]
 
 { #category : 'pov' }

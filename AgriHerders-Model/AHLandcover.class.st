@@ -34,7 +34,6 @@ AHLandcover >> cell: anObject [
 
 { #category : 'control' }
 AHLandcover >> dryStep [
-
 	
 ]
 

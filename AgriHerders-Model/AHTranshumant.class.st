@@ -7,7 +7,7 @@ Class {
 
 { #category : 'pov' }
 AHTranshumant >> color [
-^self class colorOfNumber: self id + 33
+^CMColor colorOfNumber: self id + 33
 ]
 
 { #category : 'control' }

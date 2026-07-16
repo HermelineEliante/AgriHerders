@@ -9,7 +9,6 @@ Class {
 	],
 	#classInstVars : [
 		'optimalFertility',
-		'residue',
 		'expectedYield',
 		'price'
 	],
@@ -39,15 +38,6 @@ AHCultivatedVegetation class >> price [
 ]
 
 { #category : 'accessing' }
-AHCultivatedVegetation class >> residue [
-
-	^ residue
-	
-
-
-]
-
-{ #category : 'accessing' }
 AHCultivatedVegetation >> biomassMax [
 	^ self expectedYield + self residue.
 ]
@@ -55,6 +45,7 @@ AHCultivatedVegetation >> biomassMax [
 { #category : 'accessing' }
 AHCultivatedVegetation >> expectedYield [
 
+	<parameterFloatDefault: 60>
 	^ expectedYield
 ]
 
@@ -64,18 +55,10 @@ AHCultivatedVegetation >> expectedYield: anObject [
 	expectedYield := anObject
 ]
 
-{ #category : 'control' }
-AHCultivatedVegetation >> initialize [
-
-	super initialize.
-	optimalFertility := 1.
-	expectedYield:= 60.
-	price := 1
-]
-
 { #category : 'accessing' }
 AHCultivatedVegetation >> optimalFertility [
 
+	<parameterFloatDefault: 1>
 	^ optimalFertility
 ]
 
@@ -88,6 +71,7 @@ AHCultivatedVegetation >> optimalFertility: anObject [
 { #category : 'accessing' }
 AHCultivatedVegetation >> price [
 
+	<parameterFloatDefault: 1>
 	^ price
 ]
 
@@ -113,6 +97,7 @@ La quantité de résidus produite par le maïs et de 7 kg MS/ha, 1 kg MS/ha pour
 
 { #category : 'accessing' }
 AHCultivatedVegetation >> residue [
+	<parameterFloatDefault: 0>
 
 	^ residue
 ]

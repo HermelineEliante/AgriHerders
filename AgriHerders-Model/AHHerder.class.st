@@ -107,7 +107,7 @@ AHHerder >> existFreeNaturalPlotsWithBiomass [
 		  ifNone: [ false ]
 ]
 
-{ #category : 'controlling' }
+{ #category : 'testing' }
 AHHerder >> existOpenedPlots [
 	"Réponds si mes d'autres acteurs ouvrent leur champ"
 

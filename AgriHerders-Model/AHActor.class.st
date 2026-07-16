@@ -2,7 +2,6 @@ Class {
 	#name : 'AHActor',
 	#superclass : 'CMAgent',
 	#instVars : [
-		'name',
 		'agreement',
 		'house',
 		'myFarm',
@@ -17,6 +16,7 @@ Class {
 { #category : 'accessing' }
 AHActor >> agreement [
 
+	<parameterBooleanDefault: false>
 	^ agreement
 ]
 
@@ -28,7 +28,7 @@ AHActor >> agreement: anObject [
 
 { #category : 'pov' }
 AHActor >> color [
-	^ self class colorOfNumber: 100
+	^ CMColor colorOfNumber: 100
 ]
 
 { #category : 'accessing' }
@@ -79,6 +79,7 @@ AHActor >> isDrySeason [
 { #category : 'accessing' }
 AHActor >> money [
 
+	<parameterFloatDefault: 1>
 	^ money
 ]
 
@@ -110,18 +111,6 @@ AHActor >> myPlots [
 AHActor >> name [
 
 	^ self class name, '_', self id asString
-]
-
-{ #category : 'accessing' }
-AHActor >> name1 [
-
-	^ name
-]
-
-{ #category : 'accessing' }
-AHActor >> name: anObject [
-
-	name := anObject
 ]
 
 { #category : 'control' }

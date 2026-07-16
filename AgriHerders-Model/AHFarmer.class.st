@@ -10,7 +10,7 @@ Class {
 
 { #category : 'pov' }
 AHFarmer >> color [
-	^ (self class colorOfNumber: self id + 2)
+	^ (CMColor colorOfNumber: self id + 2)
 ]
 
 { #category : 'control' }
@@ -60,6 +60,16 @@ AHFarmer >> harvestCasava [
 					plot cover biomass: plot cover residue ] ]
 ]
 
+{ #category : 'pov' }
+AHFarmer >> pov [
+
+	<pov>
+		
+	^ CMPointOfView
+		tile: AHTilesSet farmer
+		size: 0.7
+]
+
 { #category : 'control' }
 AHFarmer >> rainyStep [
 self harvestCasava.
@@ -74,8 +84,8 @@ AHFarmer >> setNobodysPlots [
 
 	nobodysPlots := self territory select: [ :p | p myFarm isNil ].
 	nobodysPlots := nobodysPlots asSortedCollection: [ :p1 :p2 |
-		             (p1 distanceCell: self house)
-		             < (p2 distanceCell: self house) ].
+		             (p1 distanceTo: self house)
+		             < (p2 distanceTo: self house) ].
 ]
 
 { #category : 'pov' }

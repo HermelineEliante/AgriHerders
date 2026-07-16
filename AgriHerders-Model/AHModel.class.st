@@ -1,19 +1,12 @@
 Class {
 	#name : 'AHModel',
-	#superclass : 'CMAbstractModel',
+	#superclass : 'CMModel',
 	#classInstVars : [
 		'time'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
-
-{ #category : 'as yet unclassified' }
-AHModel class >> initializeParameters [
-
-	super initializeParameters.
-	time := 0
-]
 
 { #category : 'as yet unclassified' }
 AHModel class >> modelName [
@@ -29,7 +22,7 @@ AHModel class >> prefix [
 
 { #category : 'accessing' }
 AHModel class >> time [
-
+	<parameterIntegerDefault: 0>
 	^ time
 ]
 
@@ -132,6 +125,27 @@ AHModel >> globalFertility [
 ]
 
 { #category : 'initialization' }
+AHModel >> init [
+
+	<init>
+	self
+		createGridNumberOfRows: 8
+		numberOfColumns: 8
+		neighbourhood: 6
+		closed: true.
+	self initLandcover.
+
+	self initFarmsAndAgents.
+	self createCattles.
+
+	self @@ AHFarmer do: #setNobodysPlots.
+	self makeAgentsScatteredInCells.
+
+	AHPlot activePovSelector: #povLandcover
+	"(self @@ AHFarm select: [ : f | f owner isNil ]) inspect"
+]
+
+{ #category : 'initialization' }
 AHModel >> initFarmsAndAgents [
 
 	| farmCells |
@@ -155,9 +169,9 @@ AHModel >> initFarmsAndAgents [
 
 	self newEntity: AHTranshumant. "locatedAt: (self cellAt: 1 at: 1)"
 	"act, c'est l'acteur en question, self allEntities est une collection de mes cinq acteurs"
-	(self allTheEntities: AHActor) do: [ :act |
+	(self allEntitiesOfClass: AHActor) do: [ :act |
 			act territory: self thePlots.
-			act others: (self allTheEntities: AHActor).
+			act others: (self allEntitiesOfClass: AHActor).
 			act others remove: act ]
 ]
 
@@ -180,27 +194,6 @@ AHModel >> initLandcover [
 		(self cellAt: i) setLandcover: AHCashew ].
 	#( 28 31 34 38 39 41 42 48 49 50 53 56 59 63 64 ) do: [ :i |
 		(self cellAt: i) setLandcover: AHBush ]
-]
-
-{ #category : 'initialization' }
-AHModel >> initModel [
-
-	<init>
-	self
-		createGridNumberOfRows: 8
-		numberOfColumns: 8
-		neighbourhood: 6
-		closed: true.
-	self initLandcover.
-
-	self initFarmsAndAgents.
-	self createCattles.
-
-	self @@ AHFarmer do: #setNobodysPlots.
-	"self makeAgentsScatteredInCells."
-	
-	AHPlot activePovSelector: #povLandcover
-	"(self @@ AHFarm select: [ : f | f owner isNil ]) inspect"
 ]
 
 { #category : 'probes' }
@@ -255,21 +248,19 @@ AHModel >> step: t [
 
 	<control>
 	self class time: t.
-	"self @@ AHPlot do: [: p | p cowsCounter: 0]."
 	self @@ AHPlot do: #resetCowsCounter.
 	t even
 		ifTrue: [ self stepDrySeason ]
-		ifFalse: [ "pair"
-				self stepRainySeason]
+		ifFalse: [ "pair" self stepRainySeason ]
 ]
 
 { #category : 'control' }
 AHModel >> stepDrySeason [
 
-	(self allTheEntities: AHActor) do: #harvest.
+	(self allEntitiesOfClass: AHActor) do: #harvest.
 	self thePlots do: #stepDrySeason. "Evolution naturelle des couverts"
-	"(self allTheEntities: AHActor) do: #dryStep"
-	(self allTheEntities: AHHerder) shuffled do: #moveHerd.
+	"(self allEntitiesOfClass: AHActor) do: #dryStep"
+	(self allEntitiesOfClass: AHHerder) shuffled do: #moveHerd.
 	self @@ AHFarmer do: #sow.
 	self @@ AHSedentary do: #sowMaize.
 	self @@ AHCattleBatch reverseDo: #naturalMortality
@@ -280,8 +271,20 @@ AHModel >> stepRainySeason [
 
 	self @@ AHFarmer do:  #rainyStep .
 	self thePlots do: #stepRainySeason.
-	(self allTheEntities: AHHerder) shuffled do: #moveHerd.
+	(self allEntitiesOfClass: AHHerder) shuffled do: #moveHerd.
 	self @@ AHCattleBatch do: #reproduce
+]
+
+{ #category : 'control' }
+AHModel >> stepSemester [
+	"t = 1 => rainy saeson, si t est pair => dry season"
+
+	<control>
+	self class time: self currentTimeStep .
+	self @@ AHPlot do: #resetCowsCounter.
+	self currentTimeStep even
+		ifTrue: [ self stepDrySeason ]
+		ifFalse: [ "pair" self stepRainySeason ]
 ]
 
 { #category : 'accessing' }
