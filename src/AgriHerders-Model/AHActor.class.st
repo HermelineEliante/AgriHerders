@@ -1,0 +1,166 @@
+Class {
+	#name : 'AHActor',
+	#superclass : 'CMAgent',
+	#instVars : [
+		'agreement',
+		'house',
+		'myFarm',
+		'territory',
+		'others',
+		'money'
+	],
+	#category : 'AgriHerders-Model',
+	#package : 'AgriHerders-Model'
+}
+
+{ #category : 'accessing' }
+AHActor >> agreement [
+
+	<parameterBooleanDefault: false>
+	^ agreement
+]
+
+{ #category : 'accessing' }
+AHActor >> agreement: anObject [
+
+	agreement := anObject
+]
+
+{ #category : 'pov' }
+AHActor >> color [
+	^ CMColor colorOfNumber: 100
+]
+
+{ #category : 'accessing' }
+AHActor >> currentTime [
+
+ ^AHModel time
+]
+
+{ #category : 'control' }
+AHActor >> dryStep [
+
+	
+]
+
+{ #category : 'control' }
+AHActor >> harvest [
+
+
+	
+]
+
+{ #category : 'accessing' }
+AHActor >> house [
+
+	^ house
+]
+
+{ #category : 'accessing' }
+AHActor >> house: anObject [
+
+	house := anObject
+]
+
+{ #category : 'initialize' }
+AHActor >> initialize [
+
+	super initialize.
+	agreement := false.
+	money := 1
+]
+
+{ #category : 'testing' }
+AHActor >> isDrySeason [
+"répond si nous sommes en saison sêche, ou non"
+	^self currentTime even 
+]
+
+{ #category : 'accessing' }
+AHActor >> money [
+
+	<parameterFloatDefault: 1>
+	^ money
+]
+
+{ #category : 'accessing' }
+AHActor >> money: anObject [
+
+	money := anObject
+]
+
+{ #category : 'accessing' }
+AHActor >> myFarm [
+
+	^ myFarm
+]
+
+{ #category : 'accessing' }
+AHActor >> myFarm: anObject [
+
+	myFarm := anObject
+]
+
+{ #category : 'accessing' }
+AHActor >> myPlots [
+
+	^ self myFarm components
+]
+
+{ #category : 'accessing' }
+AHActor >> name [
+
+	^ self class name, '_', self id asString
+]
+
+{ #category : 'control' }
+AHActor >> openedPlotsForCoralling [
+	"si agrement = true, alors retourne une list de plots déjà récoltés, sinon, retourne une liste vide "
+
+	self agreement
+		ifTrue: [
+		^ self myFarm components select: [ :p | p cover hasBeenHarvested and: [ p hasNoOccupants and: [ p cover biomass > 0 ] ]] ]
+		ifFalse: [ ^ OrderedCollection new ]
+]
+
+{ #category : 'accessing' }
+AHActor >> others [
+
+	^ others
+]
+
+{ #category : 'accessing' }
+AHActor >> others: anObject [
+
+	others := anObject
+]
+
+{ #category : 'pov' }
+AHActor >> pov [
+
+	<pov>
+	^ CMPointOfView
+		  color: self color
+		  shape: self shape 
+]
+
+{ #category : 'control' }
+AHActor >> rainyStep [
+]
+
+{ #category : 'pov' }
+AHActor >> shape [ 
+^#circle
+]
+
+{ #category : 'accessing' }
+AHActor >> territory [
+
+	^ territory
+]
+
+{ #category : 'accessing' }
+AHActor >> territory: anObject [
+
+	territory := anObject
+]
