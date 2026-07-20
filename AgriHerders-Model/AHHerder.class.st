@@ -41,11 +41,11 @@ AHHerder >> bestForestPlot [
 AHHerder >> bestOpenedPlot [
 	"répond NIL ou un plot ouvert non occupé et avec de la biommasse"
 
-	| freePlots |
-	freePlots := OrderedCollection new.
-	self others do: [ :a | freePlots addAll: a openedPlotsForCoralling ].
-	
-	^self bestPlotInto: (freePlots).
+	| openedPlots |
+	openedPlots := OrderedCollection new.
+	self others do: [ :a | openedPlots addAll: a openedPlotsForCoralling ].
+
+	^ self bestPlotInto: openedPlots
 ]
 
 { #category : 'accessing' }

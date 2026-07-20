@@ -113,7 +113,7 @@ AHPlot >> povBiomass [
 	<pov>
 	cover ifNil: [ ^ CMPointOfView color: Color black ].
 	(self cover isKindOf: AHHabitation) ifTrue: [ ^ self povLandcover ].
-	^ CMPointOfView color: (self cover colorValue: (self cover biomass) min: 0 color: #white max: (self cover biomassMax ) color: self cover class myColor).
+	^ CMPointOfView color: (CMColor colorValue: (self cover biomass) min: 0 color: #white max: (self cover biomassMax ) color: self cover class myColor).
 	"^ CMPointOfView color: self cover class myColor"
 	
 ]
@@ -123,10 +123,10 @@ AHPlot >> povCowsCounter [
 
 	<pov>
 	cowsCounter = 0 ifTrue: [ ^ CMPointOfView color: #white ].
-	^ CMPointOfView color: (self
-			   colorAttribute: #cowsCounter
+	^ CMPointOfView color: (CMColor
+			   colorValue: self cowsCounter
 			   min: 0
-			   max: 100
+			   max: 60
 			   color: Color brown)
 ]
 
@@ -156,7 +156,7 @@ AHPlot >> povSoilFertility [
 	self soilFertility = 3 ifTrue: [ aColor := Color green ]."
 
 	<pov>
-	^ CMPointOfView color: (self
+	^ CMPointOfView color: (CMColor
 			   colorValue: self soilFertility
 			   min: 0
 			   max: 20

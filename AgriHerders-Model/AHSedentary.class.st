@@ -7,7 +7,11 @@ Class {
 
 { #category : 'pov' }
 AHSedentary >> color [
-^(CMColor colorOfNumber: self id)
+
+	id = 1 ifTrue: [ ^ CMColor pink ].
+	id = 2 ifTrue: [ ^ CMColor lightBlue ].
+
+	^ CMColor colorOfNumber: id 
 ]
 
 { #category : 'control' }
@@ -18,14 +22,6 @@ AHSedentary >> harvest [
 				plot cover isMature ifTrue: [
 						self money: self money + (plot cover yield * plot cover price).
 						plot cover biomass: plot cover residue ] ]
-]
-
-{ #category : 'control' }
-AHSedentary >> initialize [
-
-	super initialize.
-	agreement := true.
-	money := 1
 ]
 
 { #category : 'pov' }

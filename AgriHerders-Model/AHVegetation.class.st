@@ -53,10 +53,7 @@ AHVegetation >> biomass: anObject [
 { #category : 'control' }
 AHVegetation >> dryStep [
 
-	age := age + 0.5. "
-	self class maxSupplyFertility > 0 ifTrue: [
-			self cell soilFertility:
-				(self class maxSupplyFertility min: self cell soilFertility + 1) ]"
+	age := age + 0.5. 
 	self class maxSupplyFertility > 0 ifTrue: [
 			self cell soilFertility < self class maxSupplyFertility ifTrue: [
 				self cell soilFertility: self cell soilFertility + 0.5 ] ]

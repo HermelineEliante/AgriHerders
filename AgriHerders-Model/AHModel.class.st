@@ -1,6 +1,9 @@
 Class {
 	#name : 'AHModel',
 	#superclass : 'CMModel',
+	#instVars : [
+		'doesPopulationGrow'
+	],
 	#classInstVars : [
 		'time'
 	],
@@ -111,6 +114,19 @@ AHModel >> createOneFarmFrom: aListOfIDs forAgent: aTypeOfAgent [
 ]
 
 { #category : 'accessing' }
+AHModel >> doesPopulationGrow [
+
+	<parameterBooleanDefault: true>
+	^ doesPopulationGrow
+]
+
+{ #category : 'accessing' }
+AHModel >> doesPopulationGrow: anObject [
+
+	doesPopulationGrow := anObject
+]
+
+{ #category : 'accessing' }
 AHModel >> forestPlots [
 	"return the cells in  forest"
 
@@ -140,6 +156,7 @@ AHModel >> init [
 
 	self @@ AHFarmer do: #setNobodysPlots.
 	self makeAgentsScatteredInCells.
+	context currentTimeStep: 0.
 
 	AHPlot activePovSelector: #povLandcover
 	"(self @@ AHFarm select: [ : f | f owner isNil ]) inspect"
@@ -161,7 +178,7 @@ AHModel >> initFarmsAndAgents [
 	farmCells := self thePlots select: [ :c | #( 46 47 ) includes: c id ].
 	self createAggregate: AHFarm from: farmCells."
 
-	self createOneFarmFrom: #( 29 30  ) forAgent: AHExternalProprietary.
+	self createOneFarmFrom: #( 29 30 ) forAgent: AHExternalProprietary.
 	self createOneFarmFrom: #( 46 47 ) forAgent: AHExternalProprietary.
 
 	farmCells := self thePlots select: [ :c |
@@ -172,7 +189,7 @@ AHModel >> initFarmsAndAgents [
 	(self allEntitiesOfClass: AHActor) do: [ :act |
 			act territory: self thePlots.
 			act others: (self allEntitiesOfClass: AHActor).
-			act others remove: act ]
+			"act others remove: act" ]
 ]
 
 { #category : 'initialization' }
@@ -194,6 +211,14 @@ AHModel >> initLandcover [
 		(self cellAt: i) setLandcover: AHCashew ].
 	#( 28 31 34 38 39 41 42 48 49 50 53 56 59 63 64 ) do: [ :i |
 		(self cellAt: i) setLandcover: AHBush ]
+]
+
+{ #category : 'initialization' }
+AHModel >> initNoGrowth [
+
+	<init>
+	self init.
+	self doesPopulationGrow: false
 ]
 
 { #category : 'probes' }
@@ -243,23 +268,10 @@ AHModel >> sojaSize [
 ]
 
 { #category : 'control' }
-AHModel >> step: t [
-	"t = 1 => rainy saeson, si t est pair => dry season"
-
-	<control>
-	self class time: t.
-	self @@ AHPlot do: #resetCowsCounter.
-	t even
-		ifTrue: [ self stepDrySeason ]
-		ifFalse: [ "pair" self stepRainySeason ]
-]
-
-{ #category : 'control' }
 AHModel >> stepDrySeason [
 
 	(self allEntitiesOfClass: AHActor) do: #harvest.
 	self thePlots do: #stepDrySeason. "Evolution naturelle des couverts"
-	"(self allEntitiesOfClass: AHActor) do: #dryStep"
 	(self allEntitiesOfClass: AHHerder) shuffled do: #moveHerd.
 	self @@ AHFarmer do: #sow.
 	self @@ AHSedentary do: #sowMaize.
@@ -269,10 +281,14 @@ AHModel >> stepDrySeason [
 { #category : 'control' }
 AHModel >> stepRainySeason [
 
-	self @@ AHFarmer do:  #rainyStep .
+	self @@ AHFarmer do: #rainyStep.
 	self thePlots do: #stepRainySeason.
 	(self allEntitiesOfClass: AHHerder) shuffled do: #moveHerd.
-	self @@ AHCattleBatch do: #reproduce
+	self @@ AHCattleBatch do: #reproduce.
+	"comme AHModel time est toujours impair en rainyStep, il faut rajouter 1"
+	doesPopulationGrow ifTrue: [  
+	(AHModel time + 1 / 10) isInteger ifTrue: [
+		self @@ AHFarmer do: #expandFarm ]]
 ]
 
 { #category : 'control' }
@@ -299,11 +315,23 @@ AHModel >> thePlots [
 	^ self @@ AHPlot 
 ]
 
+{ #category : 'accessing' }
+AHModel >> time [
+
+	^ self class time
+]
+
+{ #category : 'accessing' }
+AHModel >> time: n [
+
+	
+]
+
 { #category : 'probes' }
 AHModel >> totalFertility [
 	"Somme de la fertilité de tous les plots "
 
-	<probeNamed: 'total fertility' color: '2E4F70'>
+	"<probeNamed: 'total fertility' color: '2E4F70'>"
 	^ (self @@ AHPlot collect: [ :p | p soilFertility ]) sum
 ]
 

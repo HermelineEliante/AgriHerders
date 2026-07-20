@@ -10,7 +10,10 @@ Class {
 
 { #category : 'pov' }
 AHFarmer >> color [
-	^ (CMColor colorOfNumber: self id + 2)
+
+	id = 1 ifTrue: [ ^ CMColor yellow ].
+	id = 2 ifTrue: [ ^ CMColor blue ].
+	^ CMColor colorOfNumber: self id + 2
 ]
 
 { #category : 'control' }
@@ -64,17 +67,15 @@ AHFarmer >> harvestCasava [
 AHFarmer >> pov [
 
 	<pov>
-		
-	^ CMPointOfView
-		tile: AHTilesSet farmer
-		size: 0.7
+	id = 1
+		ifTrue: [ ^CMPointOfView tile: AHTilesSet farmer size: 0.7 ]
+		ifFalse: [ ^ CMPointOfView tile: AHTilesSet farmerColored size: 0.7 ]
 ]
 
 { #category : 'control' }
 AHFarmer >> rainyStep [
-self harvestCasava.
-"comme AHModel time est toujours impair en rainyStep, je rajoute 1"
-	((AHModel time + 1) / 10) isInteger ifTrue: [ self expandFarm ]
+
+	self harvestCasava.
 ]
 
 { #category : 'initialization' }
