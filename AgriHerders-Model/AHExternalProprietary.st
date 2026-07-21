@@ -1,1 +1,0 @@
-'From Pharo13.1.0SNAPSHOT of 15 June 2026 [Build information: Pharo-13.1.0+SNAPSHOT.build.734.sha.45e803df96aa5e64d0ba54450f49a879af08f6ac (64 Bit)] on 8 July 2026 at 2:51:25.020015 pm'!AHActor subclass: #AHExternalProprietary	instanceVariableNames: ''	classVariableNames: ''	package: 'AgriHerders-Model'!
