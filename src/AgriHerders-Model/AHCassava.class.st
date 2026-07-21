@@ -29,11 +29,13 @@ AHCassava >> isMature [
 
 { #category : 'control' }
 AHCassava >> rainyStep [
+	"A la fin de la saison pluvieuse, le manioc devient Fallow"
 
-	| fallow |
+	| fallow resid |
 	super rainyStep.
 	self isMature ifTrue: [
+			resid := self residue.
 			fallow := self cell setLandcover: AHFallow.
-			fallow biomass: self residue.
+			fallow biomass: fallow biomass + resid.
 			isDead := true ]
 ]

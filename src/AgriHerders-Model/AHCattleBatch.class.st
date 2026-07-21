@@ -8,7 +8,8 @@ Class {
 		'faeces',
 		'owner',
 		'corporalConditionDecreaseRate',
-		'MinDailyForrageNeed'
+		'MinDailyForrageNeed',
+		'needs'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
@@ -56,17 +57,16 @@ AHCattleBatch >> dailyForrageNeed: anObject [
 { #category : 'control' }
 AHCattleBatch >> defecateOn: visitedPlots [
 	"On répartit le nombre de fècès total sur tous les plots visités. 
-	Ainsi, on note une Mise à jour de la fertilité des plots visités par les animaux. Excreta deposits are proportional to the time spent by the animals on the plot. ""2.8 * 4 * 183 /1000 = 2T/ha ce qui correspiond à une élévation de 1 de la fertilité (Une publication technique mentionne que pour nourrir des microorganismes du sol et améliorer certains aspects de fertilité, des apports de 2 à 4 t/ha de compost jeune de fumier peuvent déjà avoir un effet mesurable. D’où je garde 4 dans ce calcul « ""2.8 * 4 * 183 /1000 = 2T/ha ») .
+	Ainsi, on note une Mise à jour de la fertilité des plots visités par les animaux. Excreta deposits are proportional to the time spent by the animals on the plot. ""2.8 * 4 * 183 /1000 = 2T/ha ce qui correspond à une élévation de 1 de la fertilité (Une publication technique mentionne que pour nourrir des microorganismes du sol et améliorer certains aspects de fertilité, des apports de 2 à 4 t/ha de compost jeune de fumier peuvent déjà avoir un effet mesurable. D’où je garde 4 dans ce calcul « ""2.8 * 4 * 183 /1000 = 2T/ha ») .
 ""le troupeau prélève 6.25 * le nombre de tête de la biomasse du couvert. Si il n’est pas rassasié et qu’il y a de plot ouvert où il peut manger, il va sur ces plots.
 "
 
-	| qtyFaecesOnPlot |
+	| qtyFaecesPerPlot |
 	visitedPlots ifEmpty: [ ^ self ].
-	qtyFaecesOnPlot := faeces * heads * (183 / visitedPlots size)
+	qtyFaecesPerPlot "Tonnes":= faeces * heads * (183 / visitedPlots size)
 	                   * (corporalCondition / 10) / 1000.
 	visitedPlots do: [ :plot |
-			plot soilFertility:
-				(plot soilFertility + (qtyFaecesOnPlot / 2) "min: 20") ]
+		plot soilFertility: plot soilFertility + (qtyFaecesPerPlot / 2)] "on divise par 2 car 2T/ha correspond à une élévation de 1"
 ]
 
 { #category : 'controlling' }
@@ -74,26 +74,6 @@ AHCattleBatch >> delete [
 self owner ifNotNil: [ owner herd remove: self ifAbsent: [nil] ].
 super delete.
 
-]
-
-{ #category : 'control' }
-AHCattleBatch >> eatForNeeds: needs [
-	"le troupeau prélève 6.25 * le nombre de têtes de la biomasse du couvert. Retourne les besoins restants pour arriver à la sassiété"
-
-	| newNeeds |
-	self cell cover biomass = 0 ifTrue: [
-			self updateCorporalConditionWith: needs.
-			^ needs ].
-	self cell cover biomass >= needs
-		ifTrue: [
-				self cell cover biomass: self cell cover biomass - needs.
-				self corporalCondition: 10.
-				^ 0 ]
-		ifFalse: [
-				newNeeds := needs - self cell cover biomass.
-				self cell cover biomass: 0.
-				self updateCorporalConditionWith: newNeeds.
-				^ newNeeds ]
 ]
 
 { #category : 'accessing parameters' }
@@ -107,6 +87,22 @@ AHCattleBatch >> faeces [
 AHCattleBatch >> faeces: anObject [
 
 	faeces := anObject
+]
+
+{ #category : 'control' }
+AHCattleBatch >> feedOnPlot [
+	"le troupeau prélève 6.25 * le nombre de têtes de la biomasse du couvert (si possible). Met à jour sa Condition Corporelle"
+	self cell cover biomass = 0 ifTrue: [ ^self updateCorporalCondition ].
+				
+	self cell cover biomass >= needs
+		ifTrue: [
+				self cell cover biomass: (self cell cover biomass - needs).
+				needs := 0.
+				self corporalCondition: 10]
+		ifFalse: [
+				needs := needs - self cell cover biomass.
+				self cell cover biomass: 0.
+				self updateCorporalCondition]
 ]
 
 { #category : 'control' }
@@ -131,12 +127,25 @@ AHCattleBatch >> heads: anObject [
 AHCattleBatch >> initialize [
 
 	super initialize.
+	needs := 0.
 	"heads := 10. ""self randomIntegerBetween: 1 and: 5."
-"	corporalCondition := 10.
+	"	corporalCondition := 10.
 	dailyForrageNeed := 6.25. 
 	faeces := 2.8. 
 	corporalConditionDecreaseRate := 0.
 	MinDailyForrageNeed := 4.25 "
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> minDailyForrageNeed [
+
+	^ MinDailyForrageNeed
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> minDailyForrageNeed: anObject [
+
+	MinDailyForrageNeed := anObject
 ]
 
 { #category : 'control' }
@@ -164,6 +173,18 @@ Morts_naturelles = heads × Taux_mortalité"
 		taux_mortalité := taux_mortalité + 0.2 ].
 	self heads: (heads - (heads * taux_mortalité)) "rounded".
 	self heads < 1 ifTrue: [ self delete ]
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> needs [
+
+	^ needs
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> needs: anObject [
+
+	needs := anObject
 ]
 
 { #category : 'accessing' }
@@ -244,11 +265,11 @@ dailyForrageNeed := 6.25 kgMS, 183 jours dans un semestre"
 ]
 
 { #category : 'control' }
-AHCattleBatch >> updateCorporalConditionWith: needs [
+AHCattleBatch >> updateCorporalCondition [
 
 	needs > 0
 		ifTrue: [
-			self corporalCondition: 10 * (1 - (needs / self totalNeeds)) ]
+		self corporalCondition: 10 * (1 - (needs / self totalNeeds)) ]
 		ifFalse: [ "Ratio = Daily-ing / dailyForrageNeeds"
-			self corporalCondition: 10 ]
+		self corporalCondition: 10 ]
 ]

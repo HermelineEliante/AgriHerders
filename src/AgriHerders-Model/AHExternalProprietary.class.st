@@ -4,3 +4,9 @@ Class {
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
+
+{ #category : 'pov' }
+AHExternalProprietary >> color [
+
+	^ CMColor gray
+]

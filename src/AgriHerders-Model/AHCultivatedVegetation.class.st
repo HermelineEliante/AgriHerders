@@ -97,8 +97,8 @@ La quantité de résidus produite par le maïs et de 7 kg MS/ha, 1 kg MS/ha pour
 
 { #category : 'accessing' }
 AHCultivatedVegetation >> residue [
-	<parameterFloatDefault: 0>
 
+	<parameterFloatDefault: 1>
 	^ residue
 ]
 

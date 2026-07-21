@@ -4,9 +4,6 @@ Class {
 	#instVars : [
 		'doesPopulationGrow'
 	],
-	#classInstVars : [
-		'time'
-	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
@@ -23,23 +20,12 @@ AHModel class >> prefix [
 	^ 'AH'
 ]
 
-{ #category : 'accessing' }
-AHModel class >> time [
-	<parameterIntegerDefault: 0>
-	^ time
-]
-
-{ #category : 'accessing' }
-AHModel class >> time: anObject [
-
-	time := anObject
-]
-
 { #category : 'probes' }
 AHModel >> averageBiomass [
 	"^ (self @@ AHPlot collect: [ :p | p cover biomass ]) average"
 
-	"<probeNamed: 'averageBiomass' color: #green>"
+	<probeNamed: 'Average biomass' color: #green>
+
 	^ self totalResidue + self naturalBiomass
 ]
 
@@ -76,7 +62,7 @@ AHModel >> corporalCondition [
 { #category : 'probes' }
 AHModel >> cottonSize [
 
-	<probeNamed: 'Cotton size' color: 'F4F2DA' >
+	<probeNamed: 'Cotton size' color: 'CBDCB7'>
 	^ (self @@ AHPlot select: [ :p | p cover class = AHCotton ]) size
 ]
 
@@ -163,9 +149,16 @@ AHModel >> init [
 ]
 
 { #category : 'initialization' }
+AHModel >> initAgreement [
+
+	<init>
+	self init.
+	self @@ AHActor do: [ :act | act agreement: true ]
+]
+
+{ #category : 'initialization' }
 AHModel >> initFarmsAndAgents [
 
-	| farmCells |
 	self createOneFarmFrom: #( 17 18 25 26 27 33 ) forAgent: AHFarmer.
 	self createOneFarmFrom: #( 35 36 37 43 44 ) forAgent: AHFarmer.
 	self createOneFarmFrom: #( 32 40 ) forAgent: AHSedentary.
@@ -179,17 +172,16 @@ AHModel >> initFarmsAndAgents [
 	self createAggregate: AHFarm from: farmCells."
 
 	self createOneFarmFrom: #( 29 30 ) forAgent: AHExternalProprietary.
-	self createOneFarmFrom: #( 46 47 ) forAgent: AHExternalProprietary.
-
-	farmCells := self thePlots select: [ :c |
-		             #( 45 51 52 60 61 ) includes: c id ].
+	self
+		createOneFarmFrom: #( 46 47 51 52 60 61 )
+		forAgent: AHExternalProprietary.
 
 	self newEntity: AHTranshumant. "locatedAt: (self cellAt: 1 at: 1)"
 	"act, c'est l'acteur en question, self allEntities est une collection de mes cinq acteurs"
 	(self allEntitiesOfClass: AHActor) do: [ :act |
 			act territory: self thePlots.
 			act others: (self allEntitiesOfClass: AHActor).
-			"act others remove: act" ]
+			act others remove: act ]
 ]
 
 { #category : 'initialization' }
@@ -214,11 +206,18 @@ AHModel >> initLandcover [
 ]
 
 { #category : 'initialization' }
-AHModel >> initNoGrowth [
+AHModel >> initNoAgreement [
 
 	<init>
 	self init.
-	self doesPopulationGrow: false
+	self @@ AHActor do: [ :act | act agreement: false ]
+]
+
+{ #category : 'testing' }
+AHModel >> isDrySeason [
+	"répond si nous sommes en saison sêche, ou non (t = even (pair)) "
+
+	^ self currentTimeStep even
 ]
 
 { #category : 'probes' }
@@ -229,12 +228,28 @@ AHModel >> maizeSize [
 ]
 
 { #category : 'probes' }
-AHModel >> naturalBiomass [
+AHModel >> moneyFarmers [
 
-	"<probeNamed: 'naturalBiomass' color: '5A9186'>"
-	^ ((self @@ AHPlot select: [ :p |
-		    p cover isKindOf: AHNaturalVegetation ]) collect: [ :p |
-		   p cover biomass ]) average
+"	<probeNamed: 'Money farmers' color: '526C85'> moneyFarmers écrase tout"
+	^ self @@ AHFarmer sum: [ :p | p money ]
+]
+
+{ #category : 'probes' }
+AHModel >> moneyHerders [
+"
+	<probeNamed: 'Money herders' color: '97350C'>"
+	^ self @@ AHHerder sum: [ :p | p money ]
+]
+
+{ #category : 'probes' }
+AHModel >> naturalBiomass [
+	<probeNamed: 'naturalBiomass' color: '5A9186'>
+
+	| vegetations |
+	vegetations := self @@ AHPlot select: [ :p |
+		    p cover isKindOf: AHNaturalVegetation ]. 
+	vegetations ifEmpty: [ ^0 ] ifNotEmpty: [ ^(vegetations collect: [ :p |
+		   p cover biomass ]) average]
 ]
 
 { #category : 'probes' }
@@ -269,6 +284,7 @@ AHModel >> sojaSize [
 
 { #category : 'control' }
 AHModel >> stepDrySeason [
+"t = pair (even) => dry season"
 
 	(self allEntitiesOfClass: AHActor) do: #harvest.
 	self thePlots do: #stepDrySeason. "Evolution naturelle des couverts"
@@ -280,27 +296,26 @@ AHModel >> stepDrySeason [
 
 { #category : 'control' }
 AHModel >> stepRainySeason [
-
+"t = impair (odd) => rainy season"
 	self @@ AHFarmer do: #rainyStep.
 	self thePlots do: #stepRainySeason.
 	(self allEntitiesOfClass: AHHerder) shuffled do: #moveHerd.
 	self @@ AHCattleBatch do: #reproduce.
-	"comme AHModel time est toujours impair en rainyStep, il faut rajouter 1"
-	doesPopulationGrow ifTrue: [  
-	(AHModel time + 1 / 10) isInteger ifTrue: [
-		self @@ AHFarmer do: #expandFarm ]]
+	"comme currentTime est toujours impair en rainyStep, il faut rajouter 1"
+	doesPopulationGrow ifTrue: [
+			(self currentTimeStep + 1 / 10) isInteger ifTrue: [
+				(self @@ AHFarmer) shuffled do: #expandFarm ] ]
 ]
 
 { #category : 'control' }
 AHModel >> stepSemester [
-	"t = 1 => rainy saeson, si t est pair => dry season"
+	"t = 1 => rainy season, si t est pair => dry season"
 
 	<control>
-	self class time: self currentTimeStep .
 	self @@ AHPlot do: #resetCowsCounter.
-	self currentTimeStep even
-		ifTrue: [ self stepDrySeason ]
-		ifFalse: [ "pair" self stepRainySeason ]
+	self isDrySeason
+		ifTrue: [ self stepDrySeason "pair"]
+		ifFalse: [ self stepRainySeason ] 
 ]
 
 { #category : 'accessing' }
@@ -315,18 +330,6 @@ AHModel >> thePlots [
 	^ self @@ AHPlot 
 ]
 
-{ #category : 'accessing' }
-AHModel >> time [
-
-	^ self class time
-]
-
-{ #category : 'accessing' }
-AHModel >> time: n [
-
-	
-]
-
 { #category : 'probes' }
 AHModel >> totalFertility [
 	"Somme de la fertilité de tous les plots "
@@ -337,8 +340,8 @@ AHModel >> totalFertility [
 
 { #category : 'probes' }
 AHModel >> totalResidue [
+	<probeNamed: 'totalResidue' color: '9CB553'>
 
-	"<probeNamed: 'totalResidue' color: '9CB553'>"
 	^ ((self @@ AHPlot select: [ :p |
 		    p cover isKindOf: AHCultivatedVegetation ]) collect: [ :p |
 		   p cover biomass ]) average

@@ -11,10 +11,10 @@ AHAnnualCrop >> dryStep [
 
 	| fallow |
 	super dryStep.
-	self isMature ifTrue: [  
-	fallow := self cell setLandcover: AHFallow.
-	fallow biomass: self residue.
-	isDead := true]
+	self isMature ifTrue: [
+			fallow := self cell setLandcover: AHFallow.
+			fallow biomass: fallow biomass + self residue.
+			isDead := true ]
 ]
 
 { #category : 'testing' }

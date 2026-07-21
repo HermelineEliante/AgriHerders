@@ -16,7 +16,7 @@ Class {
 { #category : 'accessing' }
 AHActor >> agreement [
 
-	<parameterBooleanDefault: false>
+	<parameterBooleanDefault: true>
 	^ agreement
 ]
 
@@ -29,12 +29,6 @@ AHActor >> agreement: anObject [
 { #category : 'pov' }
 AHActor >> color [
 	^ CMColor colorOfNumber: 100
-]
-
-{ #category : 'accessing' }
-AHActor >> currentTime [
-
- ^AHModel time
 ]
 
 { #category : 'control' }
@@ -72,8 +66,9 @@ AHActor >> initialize [
 
 { #category : 'testing' }
 AHActor >> isDrySeason [
-"répond si nous sommes en saison sêche, ou non"
-	^self currentTime even 
+	"répond si nous sommes en saison sêche, ou non"
+
+	^ self currentTimeStep even
 ]
 
 { #category : 'accessing' }
@@ -101,6 +96,15 @@ AHActor >> myFarm: anObject [
 	myFarm := anObject
 ]
 
+{ #category : 'control' }
+AHActor >> myOwnPlotsForCoralling [
+	"retourne une list de mes plots déjà récoltés, sinon, retourne une liste vide "
+
+	^ self myFarm components select: [ :p |
+			  p cover hasBeenHarvested and: [
+				  p hasNoOccupants] ]
+]
+
 { #category : 'accessing' }
 AHActor >> myPlots [
 
@@ -119,7 +123,7 @@ AHActor >> openedPlotsForCoralling [
 
 	self agreement
 		ifTrue: [
-		^ self myFarm components select: [ :p | p cover hasBeenHarvested and: [ p hasNoOccupants and: [ p cover biomass > 0 ] ]] ]
+		^ self myFarm components select: [ :p | p cover hasBeenHarvested and: [ p hasNoOccupants "and: [ p cover biomass > 0 ]" ]] ]
 		ifFalse: [ ^ OrderedCollection new ]
 ]
 

@@ -40,7 +40,7 @@ AHVegetation >> age: anObject [
 { #category : 'accessing' }
 AHVegetation >> biomass [
 
-	<parameterFloatDefault: 0>
+	<parameterFloatDefault: 0.01>
 	^ biomass
 ]
 

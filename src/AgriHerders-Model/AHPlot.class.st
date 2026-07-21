@@ -45,6 +45,11 @@ AHPlot >> area: anObject [
 	area := anObject
 ]
 
+{ #category : 'testing' }
+AHPlot >> belongsToOwner: anAgent [
+	^ self belongsToAggregate: anAgent myFarm
+]
+
 { #category : 'accessing' }
 AHPlot >> cover [
 
@@ -122,8 +127,22 @@ AHPlot >> povBiomass [
 AHPlot >> povCowsCounter [
 
 	<pov>
-	cowsCounter = 0 ifTrue: [ ^ CMPointOfView color: #white ].
-	^ CMPointOfView color: (CMColor
+	| pov owner borderColor borderWidth |
+	pov := CMPointOfView new
+		       borderWidth: 0.0;
+		       "borderColor: CMColor darkGray;"
+		       yourself.
+	(self getAggregateType: AHFarm) ifNotNil: [
+			owner := (self getAggregateType: AHFarm) owner.
+			borderColor := owner color.
+			borderWidth := 0.01.
+			pov color: owner color;
+				borderWidth: borderWidth;
+				borderColor: borderColor ].
+	cover ifNil: [ ^ pov color: Color black ].
+	
+	cowsCounter = 0 ifTrue: [ ^ pov color: #white ].
+	^ pov color: (CMColor
 			   colorValue: self cowsCounter
 			   min: 0
 			   max: 60
@@ -134,17 +153,37 @@ AHPlot >> povCowsCounter [
 AHPlot >> povFarm [
 
 	<pov>
+	| owner borderColor borderWidth |
 	(self getAggregateType: AHFarm)
 		ifNil: [ ^ CMPointOfView color: Color white ]
-		ifNotNil: [ ^ CMPointOfView color:  ((self getAggregateType: AHFarm) owner color) ]
+		ifNotNil: [
+			owner := (self getAggregateType: AHFarm) owner.
+
+			borderColor := owner color.
+			borderWidth := 0.05 .
+		^ CMPointOfView new color: owner color;
+		  borderWidth: borderWidth;
+		  borderColor: borderColor yourself ]
 ]
 
 { #category : 'pov' }
 AHPlot >> povLandcover [
 
 	<pov>
-	cover ifNil: [ ^ CMPointOfView color: Color black ].
-	^ CMPointOfView color: self cover class myColor
+	| pov owner borderColor borderWidth |
+	pov := CMPointOfView new
+		       borderWidth: 0.0;
+		       "borderColor: CMColor darkGray;"
+		       yourself.
+	(self getAggregateType: AHFarm) ifNotNil: [
+			owner := (self getAggregateType: AHFarm) owner.
+			borderColor := owner color.
+			borderWidth := 0.01.
+			pov color: owner color;
+				borderWidth: borderWidth;
+				borderColor: borderColor ].
+	cover ifNil: [ ^ pov color: Color black ].
+	^ pov color: self cover class myColor
 ]
 
 { #category : 'pov' }

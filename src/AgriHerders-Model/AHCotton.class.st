@@ -8,7 +8,7 @@ Class {
 { #category : 'pov' }
 AHCotton class >> myColor [
 
-	^ Color fromHexString: 'F4F2DA'
+	^ Color fromHexString: 'EEEEC8'
 ]
 
 { #category : 'control' }

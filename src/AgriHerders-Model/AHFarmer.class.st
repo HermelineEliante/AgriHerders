@@ -11,8 +11,8 @@ Class {
 { #category : 'pov' }
 AHFarmer >> color [
 
-	id = 1 ifTrue: [ ^ CMColor yellow ].
-	id = 2 ifTrue: [ ^ CMColor blue ].
+	id = 1 ifTrue: [ ^ CMColor orange ].
+	id = 2 ifTrue: [ ^ CMColor olympic ].
 	^ CMColor colorOfNumber: self id + 2
 ]
 
@@ -96,7 +96,8 @@ AHFarmer >> shape [
 
 { #category : 'control' }
 AHFarmer >> sow [
-	"Si il n'y a pas de manioc dans mes parcelles, je choisis une de parcelles en jachère, la moins fertile pour y implanter du manioc. Pour les autres cultures: Quand le niveau de fertilité des plots de ma propriété est supérieur à 6, et qu'il n'y pas de culture, il fait du coton. Lorsqu’il est supérieur à 4 il fait le maïs, dans le cas contraire il cultive le soja."
+	"Si il n'y a pas de manioc dans mes parcelles, je choisis une des parcelles en jachère, la moins fertile pour y implanter du manioc. 
+	Pour les autres cultures: Quand le niveau de fertilité des plots de ma propriété est supérieur à 6, et qu'il n'y pas de culture, il fait du coton. Lorsqu’il est supérieur à 4 il fait le maïs, dans le cas contraire il cultive le soja."
 
 	| collTriee cellCiblee |
 	(self myFarm components select: [ :p | p cover class = AHCassava ])
@@ -111,8 +112,9 @@ AHFarmer >> sow [
 			cellCiblee setLandcover: AHCassava ].
 
 	"autres cultures"
-	(self myFarm components select: [ :p | "p cover class = AHFallow " p cover isKindOf: AHNaturalVegetation])
-		do: [ :plot | self sowOnPlot: plot ]
+	(self myFarm components select: [ :p | "p cover class = AHFallow "
+		 p cover isKindOf: AHNaturalVegetation ]) do: [ :plot |
+		self sowOnPlot: plot ]
 ]
 
 { #category : 'control' }
