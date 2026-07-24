@@ -94,6 +94,13 @@ AHPlot >> initializeWithRandomfertilitylevel [
 
 ]
 
+{ #category : 'testing' }
+AHPlot >> isOpenForCorraling [
+	| agg |
+	agg := self getAggregateType: AHFarm.
+	agg ifNil: [^ true ] ifNotNil: [ ^agg owner agreement ]
+]
+
 { #category : 'accessing' }
 AHPlot >> myFarm [
 

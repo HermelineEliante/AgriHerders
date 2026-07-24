@@ -24,6 +24,20 @@ AHHerder >> aggregateHerds [
 ]
 
 { #category : 'accessing' }
+AHHerder >> authorizedfallowAndBushPlots [
+	"retourne toutes les plots en Pasture"
+
+	^ self fallowAndBushPlots select: [ :c | c isOpenForCorraling]
+]
+
+{ #category : 'accessing' }
+AHHerder >> authorizedfallowAndBushPlotsWithBiomass [
+	"retourne toutes les plots en fallow & bush avec biomasse"
+
+	^ self authorizedfallowAndBushPlots select: [ :c | c cover biomass > 0 ]
+]
+
+{ #category : 'accessing' }
 AHHerder >> bestFallowAndBushPlot [
 	"retourne le plot en Pasture, non paturé et avec la biomasse max, ou nil"
 
@@ -201,7 +215,7 @@ AHHerder >> moveToNaturalPlotsOneCattleBatch: aBatch [
 		(self moveBatch: aBatch to: self pasturePlotsWithBiomass)].
 	aBatch needs > 0 ifTrue: [  
 	visitedPlots addAll:
-		(self moveBatch: aBatch to: self fallowAndBushPlotsWithBiomass)].
+		(self moveBatch: aBatch to: self authorizedfallowAndBushPlotsWithBiomass)].
 	aBatch needs > 0 ifTrue: [  
 	visitedPlots addAll:
 		(self moveBatch: aBatch to: self forestPlotsWithBiomass)].

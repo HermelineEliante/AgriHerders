@@ -24,7 +24,7 @@ AHModel class >> prefix [
 AHModel >> averageBiomass [
 	"^ (self @@ AHPlot collect: [ :p | p cover biomass ]) average"
 
-	<probeNamed: 'Average biomass' color: #green>
+	"<probeNamed: 'Average biomass' color: #green>"
 
 	^ self totalResidue + self naturalBiomass
 ]
@@ -33,7 +33,7 @@ AHModel >> averageBiomass [
 AHModel >> batchNumber [ 
 "retourne le nombre total de vaches, pour suivre l'evolution de tout le troupeau"
 
-	<probeNamed: 'Cattle batchs' color: 'E74C3C' >
+	"<probeNamed: 'Cattle batchs' color: 'E74C3C' >"
 	^(self @@ AHCattleBatch) size.
 ]
 
@@ -243,7 +243,7 @@ AHModel >> moneyHerders [
 
 { #category : 'probes' }
 AHModel >> naturalBiomass [
-	<probeNamed: 'naturalBiomass' color: '5A9186'>
+	"<probeNamed: 'naturalBiomass' color: '5A9186'>"
 
 	| vegetations |
 	vegetations := self @@ AHPlot select: [ :p |
