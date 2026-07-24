@@ -129,7 +129,7 @@ AHModel >> globalFertility [
 { #category : 'initialization' }
 AHModel >> init [
 
-	<init>
+
 	self
 		createGridNumberOfRows: 8
 		numberOfColumns: 8
