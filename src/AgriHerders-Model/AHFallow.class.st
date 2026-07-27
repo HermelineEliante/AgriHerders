@@ -18,11 +18,3 @@ AHFallow class >> myColor [
 
 	^ Color fromHexString: 'A6B58A'
 ]
-
-{ #category : 'accessing' }
-AHFallow >> initialize [
-
-	super initialize.
-	age := 0. "years"
-	biomass := self randomIntegerBetween: 700 and: self class biomassMax "kg/ha"
-]

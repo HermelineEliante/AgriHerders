@@ -53,6 +53,14 @@ AHNaturalVegetation >> hasBeenHarvested [
 	^ true 
 ]
 
+{ #category : 'initialization' }
+AHNaturalVegetation >> initialize [
+
+	super initialize.
+	age := 0. "years"
+	biomass := self randomIntegerBetween: (self class biomassMax / 2) and: self class biomassMax "kg/ha"
+]
+
 { #category : 'control' }
 AHNaturalVegetation >> rainyStep [
 	super rainyStep.

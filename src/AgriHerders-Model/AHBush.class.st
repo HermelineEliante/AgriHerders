@@ -24,5 +24,4 @@ AHBush >> initialize [
 
 	super initialize.
 	age := self randomIntegerBetween: 50 and: 100. "years"
-	biomass := self randomIntegerBetween: 10000 and: self class biomassMax "kg/ha"
 ]

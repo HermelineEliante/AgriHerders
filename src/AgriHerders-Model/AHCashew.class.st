@@ -5,20 +5,30 @@ Class {
 	#package : 'AgriHerders-Model'
 }
 
+{ #category : 'accessing' }
+AHCashew class >> expectedYield [
+	<parameterFloatDefault: 450>
+	^ expectedYield
+]
+
 { #category : 'pov' }
 AHCashew class >> myColor [
 
 	^ Color fromHexString: 'F9C3C0'
 ]
 
-{ #category : 'control' }
-AHCashew >> initialize [
+{ #category : 'accessing' }
+AHCashew class >> price [
 
-	super initialize.
-	optimalFertility := 1.
-	expectedYield := 450. "kg/ha"
-	residue := 5.
-	price := 350 "fcfa/kg"
+	<parameterFloatDefault: 350>
+	^ price
+]
+
+{ #category : 'accessing' }
+AHCashew class >> residue [
+
+	<parameterFloatDefault: 400>
+	^ residue
 ]
 
 { #category : 'testing' }
@@ -26,4 +36,15 @@ AHCashew >> isMature [
 	"mature si age >= 5 y ET si age finit par 0.5 Ex: 11.5. => et si l'age n'est pas un nombre entier"
 
 	^ self age >= 5 and: [ self age isInteger not]
+]
+
+{ #category : 'accessing' }
+AHCashew >> price [
+	^ self class price
+]
+
+{ #category : 'accessing' }
+AHCashew >> residue [
+
+	^ self class residue
 ]

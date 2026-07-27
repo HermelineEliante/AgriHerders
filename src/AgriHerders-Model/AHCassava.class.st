@@ -5,19 +5,29 @@ Class {
 	#package : 'AgriHerders-Model'
 }
 
+{ #category : 'accessing' }
+AHCassava class >> expectedYield [
+	<parameterIntegerDefault: 80>
+	^expectedYield
+]
+
 { #category : 'pov' }
 AHCassava class >> myColor [
 
 	^ Color fromHexString: 'DCC603'
 ]
 
-{ #category : 'control' }
-AHCassava >> initialize [
+{ #category : 'accessing' }
+AHCassava class >> price [
 
-	super initialize.
-	optimalFertility := 1.
-	expectedYield := 80 . "kg/ha"
-	residue := 0
+	<parameterFloatDefault: 200>
+	^ price
+]
+
+{ #category : 'accessing' }
+AHCassava class >> residue [
+	<parameterIntegerDefault: 500>
+	^residue
 ]
 
 { #category : 'testing' }

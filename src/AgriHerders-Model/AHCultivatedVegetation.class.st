@@ -1,40 +1,70 @@
 Class {
 	#name : 'AHCultivatedVegetation',
 	#superclass : 'AHVegetation',
-	#instVars : [
+	#classInstVars : [
 		'optimalFertility',
 		'expectedYield',
 		'price',
 		'residue'
-	],
-	#classInstVars : [
-		'optimalFertility',
-		'expectedYield',
-		'price'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
 
 { #category : 'accessing' }
-AHCultivatedVegetation class >> expectedYield [ 
-^ expectedYield
+AHCultivatedVegetation class >> expectedYield [
+
+	<parameterFloatDefault: 60>
+	^ expectedYield
 
 
 
 
+]
+
+{ #category : 'accessing' }
+AHCultivatedVegetation class >> expectedYield: anObject [
+
+	expectedYield := anObject
 ]
 
 { #category : 'accessing' }
 AHCultivatedVegetation class >> optimalFertility [
 
+	<parameterFloatDefault: 1>
 	^ optimalFertility
+]
+
+{ #category : 'accessing' }
+AHCultivatedVegetation class >> optimalFertility: anObject [
+
+	optimalFertility := anObject
 ]
 
 { #category : 'accessing' }
 AHCultivatedVegetation class >> price [
 
+	<parameterFloatDefault: 1>
 	^ price
+]
+
+{ #category : 'accessing' }
+AHCultivatedVegetation class >> price: anObject [
+
+	price := anObject
+]
+
+{ #category : 'accessing' }
+AHCultivatedVegetation class >> residue [
+
+	<parameterFloatDefault: 1>
+	^ residue
+]
+
+{ #category : 'accessing' }
+AHCultivatedVegetation class >> residue: anObject [
+
+	residue := anObject
 ]
 
 { #category : 'accessing' }
@@ -44,41 +74,19 @@ AHCultivatedVegetation >> biomassMax [
 
 { #category : 'accessing' }
 AHCultivatedVegetation >> expectedYield [
-
-	<parameterFloatDefault: 60>
-	^ expectedYield
-]
-
-{ #category : 'accessing' }
-AHCultivatedVegetation >> expectedYield: anObject [
-
-	expectedYield := anObject
+	^ self class  expectedYield
 ]
 
 { #category : 'accessing' }
 AHCultivatedVegetation >> optimalFertility [
 
-	<parameterFloatDefault: 1>
-	^ optimalFertility
-]
-
-{ #category : 'accessing' }
-AHCultivatedVegetation >> optimalFertility: anObject [
-
-	optimalFertility := anObject
+	^ self class optimalFertility
 ]
 
 { #category : 'accessing' }
 AHCultivatedVegetation >> price [
 
-	<parameterFloatDefault: 1>
-	^ price
-]
-
-{ #category : 'accessing' }
-AHCultivatedVegetation >> price: anObject [
-
-	price := anObject
+	^ self class price
 ]
 
 { #category : 'control' }
@@ -98,14 +106,7 @@ La quantité de résidus produite par le maïs et de 7 kg MS/ha, 1 kg MS/ha pour
 { #category : 'accessing' }
 AHCultivatedVegetation >> residue [
 
-	<parameterFloatDefault: 1>
-	^ residue
-]
-
-{ #category : 'accessing' }
-AHCultivatedVegetation >> residue: anObject [
-
-	residue := anObject
+	^ self class residue
 ]
 
 { #category : 'control' }

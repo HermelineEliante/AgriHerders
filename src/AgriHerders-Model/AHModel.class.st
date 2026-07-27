@@ -2,7 +2,9 @@ Class {
 	#name : 'AHModel',
 	#superclass : 'CMModel',
 	#instVars : [
-		'doesPopulationGrow'
+		'doesPopulationGrow',
+		'extinctionTime',
+		'cattleSizeMax'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
@@ -18,6 +20,13 @@ AHModel class >> modelName [
 AHModel class >> prefix [
 
 	^ 'AH'
+]
+
+{ #category : 'testing' }
+AHModel >> areCowsExtinguished [
+	"répond si il n'y a plus de vaches "
+
+	^ (self cattleSize) <= 4
 ]
 
 { #category : 'probes' }
@@ -43,7 +52,16 @@ AHModel >> cattleSize [
 
 	<probeNamed: 'Cattle size' color: 'E74C3C' >
 	self @@ AHCattleBatch ifEmpty: [ ^0 ].
-	^(self @@ AHCattleBatch collect: [ :each | each heads ]) sum.
+	^(self @@ AHCattleBatch collect: [ :each | each heads ]) sum rounded.
+]
+
+{ #category : 'probes' }
+AHModel >> cattleSizeMax [ 
+"retourne le plus grand nombre total de vaches,"
+
+	<probeNamed: 'Cattle size max' color: 'E74C3C' >
+	cattleSizeMax := self cattleSize max: cattleSizeMax .
+	^cattleSizeMax
 ]
 
 { #category : 'probes' }
@@ -112,6 +130,19 @@ AHModel >> doesPopulationGrow: anObject [
 	doesPopulationGrow := anObject
 ]
 
+{ #category : 'probes' }
+AHModel >> extinctionTime [
+	
+	<probeNamed: 'Extinction time' color: '2C3E50'>
+	^ extinctionTime
+]
+
+{ #category : 'accessing' }
+AHModel >> extinctionTime: anObject [
+
+	extinctionTime := anObject
+]
+
 { #category : 'accessing' }
 AHModel >> forestPlots [
 	"return the cells in  forest"
@@ -128,8 +159,10 @@ AHModel >> globalFertility [
 
 { #category : 'initialization' }
 AHModel >> init [
+	<init>
 
-
+	extinctionTime := 0.
+	cattleSizeMax := 0.
 	self
 		createGridNumberOfRows: 8
 		numberOfColumns: 8
@@ -315,7 +348,8 @@ AHModel >> stepSemester [
 	self @@ AHPlot do: #resetCowsCounter.
 	self isDrySeason
 		ifTrue: [ self stepDrySeason "pair"]
-		ifFalse: [ self stepRainySeason ] 
+		ifFalse: [ self stepRainySeason ].
+	self areCowsExtinguished ifTrue: [extinctionTime = 0 ifTrue: [ extinctionTime := self currentTimeStep ]  ]
 ]
 
 { #category : 'accessing' }

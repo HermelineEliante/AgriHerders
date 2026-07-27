@@ -5,18 +5,36 @@ Class {
 	#package : 'AgriHerders-Model'
 }
 
+{ #category : 'accessing' }
+AHCotton class >> expectedYield [
+
+	<parameterFloatDefault: 750>
+	^ expectedYield
+]
+
 { #category : 'pov' }
 AHCotton class >> myColor [
 
 	^ Color fromHexString: 'EEEEC8'
 ]
 
-{ #category : 'control' }
-AHCotton >> initialize [
+{ #category : 'accessing' }
+AHCotton class >> optimalFertility [
 
-	super initialize.
-	optimalFertility := 10.
-	residue := 1.
-	expectedYield := 750. "kg/ha"
-	price := 350 "fcfa/kg"
+	<parameterFloatDefault: 10>
+	^ optimalFertility
+]
+
+{ #category : 'accessing' }
+AHCotton class >> price [
+
+	<parameterFloatDefault: 350>
+	^ price
+]
+
+{ #category : 'accessing' }
+AHCotton class >> residue [
+
+	<parameterFloatDefault: 700>
+	^ residue
 ]

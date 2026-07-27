@@ -5,18 +5,36 @@ Class {
 	#package : 'AgriHerders-Model'
 }
 
+{ #category : 'accessing' }
+AHMaize class >> expectedYield [
+
+	<parameterFloatDefault: 300>
+	^ expectedYield
+]
+
 { #category : 'pov' }
 AHMaize class >> myColor [
 
 	^ Color fromHexString: 'F1F10F'
 ]
 
-{ #category : 'control' }
-AHMaize >> initialize [
+{ #category : 'accessing' }
+AHMaize class >> optimalFertility [
 
-	super initialize.
-	optimalFertility := 5.
-	residue := 7.
-	expectedYield := 300. "kg/ha"
-	price := 215 "fcfa/kg"
+	<parameterFloatDefault: 5>
+	^ optimalFertility
+]
+
+{ #category : 'accessing' }
+AHMaize class >> price [
+
+	<parameterFloatDefault: 215>
+	^ price
+]
+
+{ #category : 'accessing' }
+AHMaize class >> residue [
+
+	<parameterFloatDefault: 4000>
+	^ residue
 ]

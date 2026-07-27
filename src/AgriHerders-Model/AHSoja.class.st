@@ -6,6 +6,13 @@ Class {
 }
 
 { #category : 'accessing' }
+AHSoja class >> expectedYield [
+
+	<parameterFloatDefault: 200>
+	^ expectedYield
+]
+
+{ #category : 'accessing' }
 AHSoja class >> maxSupplyFertility [
 
 	<parameterFloatDefault: 5>
@@ -18,12 +25,23 @@ AHSoja class >> myColor [
 	^ Color fromHexString: 'B29EBB'
 ]
 
-{ #category : 'control' }
-AHSoja >> initialize [
+{ #category : 'accessing' }
+AHSoja class >> optimalFertility [
 
-	super initialize.
-	optimalFertility := 0.9.
-	residue := 2.
-	expectedYield := 200. "kg/ha"
-	price := 275 "fcfa/kg"
+	<parameterFloatDefault: 0.9>
+	^ optimalFertility
+]
+
+{ #category : 'accessing' }
+AHSoja class >> price [
+
+	<parameterFloatDefault: 275>
+	^ price
+]
+
+{ #category : 'accessing' }
+AHSoja class >> residue [
+
+	<parameterFloatDefault: 1200>
+	^ residue
 ]
