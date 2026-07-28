@@ -301,6 +301,12 @@ AHModel >> naturalZoneFertility [
 	^ (coll collect: [ :p | p soilFertility ]) average
 ]
 
+{ #category : 'as yet unclassified' }
+AHModel >> notEnoughCattle [
+	<boolean>
+	^ self cattleSize <= 4
+]
+
 { #category : 'accessing' }
 AHModel >> plotsCoveredBy: aTypeOfCover [
 	"return the cells covered by aTypeOfCover"
