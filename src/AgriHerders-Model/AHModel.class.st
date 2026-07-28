@@ -25,8 +25,9 @@ AHModel class >> prefix [
 { #category : 'testing' }
 AHModel >> areCowsExtinguished [
 	"répond si il n'y a plus de vaches "
+	<boolean>
 
-	^ (self cattleSize) <= 4
+	^ self cattleSize <= 4
 ]
 
 { #category : 'probes' }
@@ -299,12 +300,6 @@ AHModel >> naturalZoneFertility [
 	coll := self plotsCoveredBy: AHNaturalVegetation.
 	coll isEmpty ifTrue: [ ^ 0 ].
 	^ (coll collect: [ :p | p soilFertility ]) average
-]
-
-{ #category : 'as yet unclassified' }
-AHModel >> notEnoughCattle [
-	<boolean>
-	^ self cattleSize <= 4
 ]
 
 { #category : 'accessing' }
