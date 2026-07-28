@@ -3,7 +3,6 @@ Class {
 	#superclass : 'CMModel',
 	#instVars : [
 		'doesPopulationGrow',
-		'extinctionTime',
 		'cattleSizeMax'
 	],
 	#category : 'AgriHerders-Model',
@@ -131,19 +130,6 @@ AHModel >> doesPopulationGrow: anObject [
 	doesPopulationGrow := anObject
 ]
 
-{ #category : 'probes' }
-AHModel >> extinctionTime [
-	
-	<probeNamed: 'Extinction time' color: '2C3E50'>
-	^ extinctionTime
-]
-
-{ #category : 'accessing' }
-AHModel >> extinctionTime: anObject [
-
-	extinctionTime := anObject
-]
-
 { #category : 'accessing' }
 AHModel >> forestPlots [
 	"return the cells in  forest"
@@ -160,9 +146,8 @@ AHModel >> globalFertility [
 
 { #category : 'initialization' }
 AHModel >> init [
-	<init>
 
-	extinctionTime := 0.
+	<init>
 	cattleSizeMax := 0.
 	self
 		createGridNumberOfRows: 8
@@ -348,9 +333,8 @@ AHModel >> stepSemester [
 	<control>
 	self @@ AHPlot do: #resetCowsCounter.
 	self isDrySeason
-		ifTrue: [ self stepDrySeason "pair"]
-		ifFalse: [ self stepRainySeason ].
-	self areCowsExtinguished ifTrue: [extinctionTime = 0 ifTrue: [ extinctionTime := self currentTimeStep ]  ]
+		ifTrue: [ self stepDrySeason "pair" ]
+		ifFalse: [ self stepRainySeason ]
 ]
 
 { #category : 'accessing' }
