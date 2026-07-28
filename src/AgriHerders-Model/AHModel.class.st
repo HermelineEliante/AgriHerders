@@ -303,11 +303,11 @@ AHModel >> sojaSize [
 
 { #category : 'control' }
 AHModel >> stepDrySeason [
-"t = pair (even) => dry season"
+	"t = pair (even) => dry season"
 
 	(self allEntitiesOfClass: AHActor) do: #harvest.
 	self thePlots do: #stepDrySeason. "Evolution naturelle des couverts"
-	(self allEntitiesOfClass: AHHerder) shuffled do: #moveHerd.
+	(self shuffled: (self allEntitiesOfClass: AHHerder)) do: #moveHerd.
 	self @@ AHFarmer do: #sow.
 	self @@ AHSedentary do: #sowMaize.
 	self @@ AHCattleBatch reverseDo: #naturalMortality
@@ -315,15 +315,16 @@ AHModel >> stepDrySeason [
 
 { #category : 'control' }
 AHModel >> stepRainySeason [
-"t = impair (odd) => rainy season"
+	"t = impair (odd) => rainy season"
+
 	self @@ AHFarmer do: #rainyStep.
 	self thePlots do: #stepRainySeason.
-	(self allEntitiesOfClass: AHHerder) shuffled do: #moveHerd.
+	(self shuffled: (self allEntitiesOfClass: AHHerder)) do: #moveHerd.
 	self @@ AHCattleBatch do: #reproduce.
 	"comme currentTime est toujours impair en rainyStep, il faut rajouter 1"
 	doesPopulationGrow ifTrue: [
 			(self currentTimeStep + 1 / 10) isInteger ifTrue: [
-				(self @@ AHFarmer) shuffled do: #expandFarm ] ]
+				(self shuffled: (self @@ AHFarmer)) do: #expandFarm ] ]
 ]
 
 { #category : 'control' }
