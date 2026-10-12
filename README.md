@@ -9,7 +9,7 @@ Although they have mutual interests, the actions of farmers and herders contribu
 
 ```st
 Metacello new
-    repository: 'github://cormas/cormas';
+    repository: 'github://cormas/cormas:v0.98';
     baseline: 'Cormas';
     load.
 
