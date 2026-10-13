@@ -1,8 +1,8 @@
 Class {
 	#name : 'AHTilesSet',
 	#superclass : 'CMTileset',
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Tiles',
+	#package : 'AgriHerders-Tiles'
 }
 
 { #category : 'as yet unclassified' }

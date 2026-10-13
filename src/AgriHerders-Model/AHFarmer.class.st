@@ -63,15 +63,6 @@ AHFarmer >> harvestCasava [
 					plot cover biomass: plot cover residue ] ]
 ]
 
-{ #category : 'pov' }
-AHFarmer >> pov [
-
-	<pov>
-	id = 1
-		ifTrue: [ ^CMPointOfView tile: AHTilesSet farmer size: 0.7 ]
-		ifFalse: [ ^ CMPointOfView tile: AHTilesSet farmerColored size: 0.7 ]
-]
-
 { #category : 'control' }
 AHFarmer >> rainyStep [
 
