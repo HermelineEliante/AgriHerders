@@ -329,8 +329,7 @@ AHModel >> stepDrySeason [
 	(self allEntitiesOfClass: AHActor) do: #harvest.
 	self thePlots do: #stepDrySeason. "Evolution naturelle des couverts"
 	(self shuffled: (self allEntitiesOfClass: AHHerder)) do: #moveHerd.
-	self @@ AHFarmer do: #sow.
-	self @@ AHSedentary do: #sowMaize.
+	self @@ AHActor do: #sow.
 	self @@ AHCattleBatch reverseDo: #naturalMortality
 ]
 
@@ -338,12 +337,12 @@ AHModel >> stepDrySeason [
 AHModel >> stepRainySeason [
 	"t = semester. t impair (odd) => rainy season"
 
-	self @@ AHFarmer do: #rainyStep.
+	self @@ AHFarmer do: #harvestCasava.
 	self thePlots do: #stepRainySeason.
 	(self shuffled: (self allEntitiesOfClass: AHHerder)) do: #moveHerd.
 	self @@ AHCattleBatch do: #reproduce.
-	"comme currentTime est toujours impair en rainyStep, il faut rajouter 1"
-	doesPopulationGrow ifTrue: [
+	"Farms expansion"
+	doesPopulationGrow ifTrue: ["comme currentTime est toujours impair en rainyStep, il faut rajouter 1"
 			(self currentTimeStep + 1 / (self expansionFrequency * 2)) isInteger ifTrue: [
 				(self shuffled: (self @@ AHFarmer)) do: #expandFarm ] ]
 ]
