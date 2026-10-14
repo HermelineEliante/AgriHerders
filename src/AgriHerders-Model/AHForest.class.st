@@ -21,6 +21,13 @@ AHForest class >> biomassMax [
 	^ biomassMax
 ]
 
+{ #category : 'accessing' }
+AHForest class >> maxSupplyFertility [
+
+	<parameterFloatMin: 0 max: 20 default: 20>
+	^ maxSupplyFertility
+]
+
 { #category : 'pov' }
 AHForest class >> myColor [
 

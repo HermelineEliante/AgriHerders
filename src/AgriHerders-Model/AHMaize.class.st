@@ -7,8 +7,7 @@ Class {
 
 { #category : 'accessing' }
 AHMaize class >> expectedYield [
-
-	<parameterFloatDefault: 300>
+	<parameterFloatMin: 0 max: 1000 default: 300>
 	^ expectedYield
 ]
 

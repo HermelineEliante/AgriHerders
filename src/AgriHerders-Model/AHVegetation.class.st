@@ -53,17 +53,19 @@ AHVegetation >> biomass: anObject [
 { #category : 'control' }
 AHVegetation >> dryStep [
 
-	age := age + 0.5. 
-	self class maxSupplyFertility > 0 ifTrue: [
-			self cell soilFertility < self class maxSupplyFertility ifTrue: [
-				self cell soilFertility: self cell soilFertility + 0.5 ] ]
+	^self semesterStep
 ]
 
 { #category : 'control' }
 AHVegetation >> rainyStep [
 
-	age := age + 0.5. 
-	self class maxSupplyFertility > 0 ifTrue: [
-			self cell soilFertility < self class maxSupplyFertility ifTrue: [
-				self cell soilFertility: self cell soilFertility + 0.5 ] ]
+	^self semesterStep
+]
+
+{ #category : 'control' }
+AHVegetation >> semesterStep [
+
+	age := age + 0.5.
+	self cell soilFertility < self class maxSupplyFertility ifTrue: [
+		self cell soilFertility: self cell soilFertility + 0.5 ]
 ]

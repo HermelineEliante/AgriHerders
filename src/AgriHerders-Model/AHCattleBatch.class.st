@@ -4,20 +4,184 @@ Class {
 	#instVars : [
 		'heads',
 		'corporalCondition',
-		'dailyForrageNeed',
-		'faeces',
 		'owner',
-		'corporalConditionDecreaseRate',
-		'MinDailyForrageNeed',
 		'needs'
+	],
+	#classInstVars : [
+		'faecesPerDay',
+		'initialHeads',
+		'initialCorporalCondition',
+		'dailyForrageNeed',
+		'naturalMortalityRate',
+		'reproductionRate_good',
+		'reproductionRate_low',
+		'reproductionRate_bad',
+		'thresholdGoodCC',
+		'thresholdLowCC',
+		'thresholdBadCC',
+		'maximumSize'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
 }
 
 { #category : 'accessing parameters' }
-AHCattleBatch >> corporalCondition [
+AHCattleBatch class >> dailyForrageNeed [
+	"6.25 kgMS"
+	
+	<parameterFloatMin: 0 max: 10 default: 6.25>
+	^ dailyForrageNeed
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> dailyForrageNeed: anObject [
+
+	dailyForrageNeed := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> faecesPerDay [ 
+	<parameterFloatMin: 0 max: 10 default: 2.8>
+	^ faecesPerDay 
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> faecesPerDay: anObject [
+
+	faecesPerDay := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> initialCorporalCondition [
+	<parameterFloatMin: 0 max: 10 default: 10>
+
+	^ initialCorporalCondition
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> initialCorporalCondition: anObject [
+
+	initialCorporalCondition := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> initialHeads [
+
 	<parameterIntegerDefault: 10>
+	^ initialHeads
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> initialHeads: aNumber [
+
+	initialHeads := aNumber
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> maximumSize [
+	<parameterFloatMin: 0 max: 1000 default: 50>
+	^ maximumSize
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> maximumSize: anObject [
+
+	maximumSize := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> naturalMortalityRate [
+	<parameterFloatMin: 0 max: 1 default: 0.02>
+	^ naturalMortalityRate
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> naturalMortalityRate: anObject [
+
+	naturalMortalityRate := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> reproductionRate_bad [
+
+	<parameterFloatMin: 0 max: 1 default: 0.05>
+	^ reproductionRate_bad
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> reproductionRate_bad: anObject [
+
+	reproductionRate_bad := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> reproductionRate_good [
+
+	<parameterFloatMin: 0 max: 1 default: 0.25>
+	^ reproductionRate_good
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> reproductionRate_good: anObject [
+
+	reproductionRate_good := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> reproductionRate_low [
+
+	<parameterFloatMin: 0 max: 1 default: 0.15>
+	^ reproductionRate_low
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> reproductionRate_low: anObject [
+
+	reproductionRate_low := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> thresholdBadCC [
+
+	<parameterFloatMin: 0 max: 10 default: 3>
+	^ thresholdBadCC
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> thresholdBadCC: anObject [
+
+	thresholdBadCC := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> thresholdGoodCC [
+
+	<parameterFloatMin: 0 max: 10 default: 7>
+	^ thresholdGoodCC
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> thresholdGoodCC: anObject [
+
+	thresholdGoodCC := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> thresholdLowCC [
+
+	<parameterFloatMin: 0 max: 10 default: 5>
+	^ thresholdLowCC
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> thresholdLowCC: anObject [
+
+	thresholdLowCC := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> corporalCondition [
+	"<parameterIntegerDefault: 10>"
 
 	^ corporalCondition
 ]
@@ -29,29 +193,8 @@ AHCattleBatch >> corporalCondition: anObject [
 ]
 
 { #category : 'accessing parameters' }
-AHCattleBatch >> corporalConditionDecreaseRate [
-
-	<parameterFloatDefault: 0>
-	^ corporalConditionDecreaseRate
-]
-
-{ #category : 'accessing' }
-AHCattleBatch >> corporalConditionDecreaseRate: anObject [
-
-	corporalConditionDecreaseRate := anObject
-]
-
-{ #category : 'accessing parameters' }
 AHCattleBatch >> dailyForrageNeed [
-"6.25 kgMS"
-	<parameterFloatDefault: 6.25>
-	^ dailyForrageNeed
-]
-
-{ #category : 'accessing' }
-AHCattleBatch >> dailyForrageNeed: anObject [
-
-	dailyForrageNeed := anObject
+	^ self class dailyForrageNeed
 ]
 
 { #category : 'control' }
@@ -63,8 +206,8 @@ AHCattleBatch >> defecateOn: visitedPlots [
 
 	| qtyFaecesPerPlot |
 	visitedPlots ifEmpty: [ ^ self ].
-	qtyFaecesPerPlot "Tonnes":= faeces * heads * (183 / visitedPlots size)
-	                   * (corporalCondition / 10) / 1000.
+	qtyFaecesPerPlot "Tonnes":= self faecesPerDay * self heads * (183 / visitedPlots size)
+	                   * (self corporalCondition / 10) / 1000.
 	visitedPlots do: [ :plot |
 		plot soilFertility: plot soilFertility + (qtyFaecesPerPlot / 2)] "on divise par 2 car 2T/ha correspond à une élévation de 1"
 ]
@@ -77,16 +220,9 @@ super delete.
 ]
 
 { #category : 'accessing parameters' }
-AHCattleBatch >> faeces [
+AHCattleBatch >> faecesPerDay [
 "2.8. kg/day"
-	<parameterFloatDefault: 2.8>
-	^ faeces
-]
-
-{ #category : 'accessing' }
-AHCattleBatch >> faeces: anObject [
-
-	faeces := anObject
+	^ self class faecesPerDay
 ]
 
 { #category : 'control' }
@@ -110,10 +246,31 @@ AHCattleBatch >> goHome [
 self moveTo: (self owner house )
 ]
 
-{ #category : 'accessing parameters' }
+{ #category : 'testing' }
+AHCattleBatch >> hasBadCorporalCondition [
+	" CC > 3 "
+
+	^self corporalCondition > self class thresholdBadCC 
+]
+
+{ #category : 'testing' }
+AHCattleBatch >> hasGoodCorporalCondition [
+	" CC > 7 "
+
+	^self corporalCondition > self class thresholdGoodCC 
+]
+
+{ #category : 'testing' }
+AHCattleBatch >> hasLowCorporalCondition [
+	" CC > 5 "
+
+	^self corporalCondition > self class thresholdLowCC 
+]
+
+{ #category : 'accessing' }
 AHCattleBatch >> heads [
 
-	<parameterIntegerDefault: 10>
+"	<parameterIntegerDefault: 10>"
 	^ heads
 ]
 
@@ -128,24 +285,8 @@ AHCattleBatch >> initialize [
 
 	super initialize.
 	needs := 0.
-	"heads := 10. ""self randomIntegerBetween: 1 and: 5."
-	"	corporalCondition := 10.
-	dailyForrageNeed := 6.25. 
-	faeces := 2.8. 
-	corporalConditionDecreaseRate := 0.
-	MinDailyForrageNeed := 4.25 "
-]
-
-{ #category : 'accessing' }
-AHCattleBatch >> minDailyForrageNeed [
-
-	^ MinDailyForrageNeed
-]
-
-{ #category : 'accessing' }
-AHCattleBatch >> minDailyForrageNeed: anObject [
-
-	MinDailyForrageNeed := anObject
+	heads := self class initialHeads.
+	corporalCondition := self class initialCorporalCondition.
 ]
 
 { #category : 'control' }
@@ -166,7 +307,7 @@ Si Condition_moyenne_annuelle < 2 :
 Morts_naturelles = heads × Taux_mortalité"
 
 	| taux_mortalité |
-	taux_mortalité := 0.02.
+	taux_mortalité := self class naturalMortalityRate "0.02".
 	(self corporalCondition between: 2 and: 4) ifTrue: [
 		taux_mortalité := taux_mortalité + 0.1 ].
 	self corporalCondition < 2 ifTrue: [
@@ -235,23 +376,24 @@ AverageRainySeasonCondition	Taux de reproduction	Explication:
 Naissances = heads × Taux_reproduction
 "
 
-	self corporalCondition > 7 ifTrue: [
-		^ self heads: (heads * 0.25) "rounded" + heads ].
-	self corporalCondition > 5 ifTrue: [
-		^ self heads: (heads * 0.15) "rounded" + heads ].
-	self corporalCondition > 3 ifTrue: [
-		^ self heads: (heads * 0.05) "rounded" + heads ]
+	self hasGoodCorporalCondition ifTrue: [
+		^ self heads: (heads * self class reproductionRate_good "0.25") + heads ].
+	self hasLowCorporalCondition ifTrue: [
+		^ self heads: (heads * self class reproductionRate_low "0.15") + heads ].
+	self hasBadCorporalCondition ifTrue: [
+		^ self heads: (heads * self class reproductionRate_bad "0.05") + heads ].
+	nil "otherwise, no reproduction"
 ]
 
 { #category : 'control' }
 AHCattleBatch >> splitInTwo [
-	"Si la taille du troupeau est > 30, alors je crée un nouveau troupeau de la taille totale du troupeau actuel moins 30.Et j'affecte ce nouveau troupeau à mon éleveur."
+	"Si la taille du troupeau est > 50, alors je crée un nouveau troupeau de la taille totale du troupeau actuel divisée par 2.Et j'affecte ce nouveau troupeau à mon éleveur."
 
 	| newBatch |
-	self heads > 50 ifFalse: [ ^ nil ].
+	self heads > self class maximumSize ifFalse: [ ^ nil ].
 	newBatch := self cormasModel newEntity: self class.
-	newBatch heads: self heads - 50.
-	self heads: 30.
+	newBatch heads: (self heads / 2) rounded.
+	self heads: self heads - newBatch heads.
 	newBatch owner: self owner.
 	owner herd add: newBatch.
 	newBatch goHome
@@ -261,7 +403,7 @@ AHCattleBatch >> splitInTwo [
 AHCattleBatch >> totalNeeds [
 "Ex : heads = 10 => 10 * 6.25 * 183 = 11437 kg/semestre.
 dailyForrageNeed := 6.25 kgMS, 183 jours dans un semestre"
-	^ self heads * self dailyForrageNeed * 183 
+	^ self heads * self class dailyForrageNeed * 183 
 ]
 
 { #category : 'control' }

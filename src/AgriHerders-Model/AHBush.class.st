@@ -6,11 +6,19 @@ Class {
 }
 
 { #category : 'accessing' }
-AHBush class >> initializeParameters [
+AHBush class >> biomassMax [
 
-	super initializeParameters.
-	maxSupplyFertility := 20.
-	biomassMax := 13000.
+	<parameterFloatMin: 0 max: 50000 default: 13000>
+	^ biomassMax
+	
+	
+]
+
+{ #category : 'accessing' }
+AHBush class >> maxSupplyFertility [
+
+	<parameterFloatMin: 0 max: 20 default: 10>
+	^ maxSupplyFertility
 ]
 
 { #category : 'pov' }

@@ -100,7 +100,7 @@ La quantité de résidus produite par le maïs et de 7 kg MS/ha, 1 kg MS/ha pour
 	self biomass: self residue + self yield. "kg MS/plot"
 	"reduction de la fertilité"
 	self cell soilFertility:
-		(self cell soilFertility - self optimalFertility max: 0)
+		((self cell soilFertility - self optimalFertility) max: 0)
 ]
 
 { #category : 'accessing' }
@@ -114,7 +114,7 @@ AHCultivatedVegetation >> yield [
 	"Le rendement de chaque culture (kg/plot) dépend du niveau optimal de fertilité demandé par la plante. Quand le niveau de fertilité est optimal ou plus, le rendement de la culture est égal au rendement espéré. Si le niveau de fertilité est inférieur, le rendement sera proportionnel à la différence entre optimal fertility et fertility effective.
 Yield= Expected yield*(soilFertility/optimalFertility) avec un maximum = expected yield "
 
-	^ (self expectedYield
-	  * (self cell soilFertility / self optimalFertility) min:
-		  self expectedYield)  * self cell area "kg/plot"
+	^ ((self expectedYield
+	   * (self cell soilFertility / self optimalFertility)) min:
+		   self expectedYield) * self cell area "kg/plot"
 ]

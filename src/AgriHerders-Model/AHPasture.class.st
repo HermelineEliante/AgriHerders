@@ -6,10 +6,17 @@ Class {
 }
 
 { #category : 'accessing' }
-AHPasture class >> initializeParameters [
+AHPasture class >> biomassMax [
 
-	super initializeParameters.
-	biomassMax := 15000. 
+	<parameterFloatMin: 0 max: 50000 default: 15000>
+	^ biomassMax
+]
+
+{ #category : 'accessing' }
+AHPasture class >> maxSupplyFertility [
+
+	<parameterFloatMin: 0 max: 20 default: 6>
+	^ maxSupplyFertility
 ]
 
 { #category : 'pov' }

@@ -8,7 +8,7 @@ Class {
 { #category : 'accessing' }
 AHCotton class >> expectedYield [
 
-	<parameterFloatDefault: 750>
+	<parameterFloatMin: 0 max: 1000 default: 750>
 	^ expectedYield
 ]
 

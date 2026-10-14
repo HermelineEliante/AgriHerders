@@ -7,7 +7,7 @@ Class {
 
 { #category : 'accessing' }
 AHCashew class >> expectedYield [
-	<parameterFloatDefault: 450>
+	<parameterFloatMin: 0 max: 1000 default: 450>
 	^ expectedYield
 ]
 

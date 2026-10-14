@@ -3,7 +3,8 @@ Class {
 	#superclass : 'CMModel',
 	#instVars : [
 		'doesPopulationGrow',
-		'cattleSizeMax'
+		'cattleSizeMax',
+		'expansionFrequency'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
@@ -131,6 +132,26 @@ AHModel >> doesPopulationGrow: anObject [
 ]
 
 { #category : 'accessing' }
+AHModel >> expansionFrequency [
+"The farms expand every 10 Years"
+	<parameterIntegerMin: 0 max: 200 default: 10>
+	^ expansionFrequency
+]
+
+{ #category : 'accessing' }
+AHModel >> expansionFrequency: anObject [
+
+	expansionFrequency := anObject
+]
+
+{ #category : 'probes' }
+AHModel >> farmsArea [
+
+	<probeNamed: 'farms area' color: '27AE60'>
+	^ (self @@ AHPlot select: [ :p | p belongsToSomebody]) size
+]
+
+{ #category : 'accessing' }
 AHModel >> forestPlots [
 	"return the cells in  forest"
 
@@ -147,7 +168,7 @@ AHModel >> globalFertility [
 { #category : 'initialization' }
 AHModel >> init [
 
-	<init>
+"	<init>"
 	cattleSizeMax := 0.
 	self
 		createGridNumberOfRows: 8
@@ -315,7 +336,7 @@ AHModel >> stepDrySeason [
 
 { #category : 'control' }
 AHModel >> stepRainySeason [
-	"t = impair (odd) => rainy season"
+	"t = semester. t impair (odd) => rainy season"
 
 	self @@ AHFarmer do: #rainyStep.
 	self thePlots do: #stepRainySeason.
@@ -323,7 +344,7 @@ AHModel >> stepRainySeason [
 	self @@ AHCattleBatch do: #reproduce.
 	"comme currentTime est toujours impair en rainyStep, il faut rajouter 1"
 	doesPopulationGrow ifTrue: [
-			(self currentTimeStep + 1 / 10) isInteger ifTrue: [
+			(self currentTimeStep + 1 / (self expansionFrequency * 2)) isInteger ifTrue: [
 				(self shuffled: (self @@ AHFarmer)) do: #expandFarm ] ]
 ]
 

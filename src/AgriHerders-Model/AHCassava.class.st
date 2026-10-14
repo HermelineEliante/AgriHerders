@@ -7,8 +7,8 @@ Class {
 
 { #category : 'accessing' }
 AHCassava class >> expectedYield [
-	<parameterIntegerDefault: 80>
-	^expectedYield
+	<parameterFloatMin: 0 max: 1000 default: 80>
+	^ expectedYield
 ]
 
 { #category : 'pov' }
