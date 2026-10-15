@@ -49,6 +49,12 @@ AHFarmer >> harvestCasava [
 					plot cover biomass: plot cover residue ] ]
 ]
 
+{ #category : 'control' }
+AHFarmer >> rainyStep [
+
+	self harvestCasava.
+]
+
 { #category : 'initialization' }
 AHFarmer >> setNobodysPlots [
 	"L’agriculteur sélectionne les parcelles libres les plus proche de sa maison. Une parcelle libre est celle sans propriétaire, donc celle ayant un couvert de type parcours naturel ou de type forêt. 
