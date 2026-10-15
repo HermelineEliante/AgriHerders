@@ -1,8 +1,9 @@
 Class {
 	#name : 'AHSedentary',
 	#superclass : 'AHHerder',
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'pov' }
@@ -30,18 +31,12 @@ AHSedentary >> shape [
 ]
 
 { #category : 'control' }
-AHSedentary >> sowMaize [
-	"je fais continuellemnt du maïs sur une parcelle de ma propriété avec un niveau de fertilité > 0 "
+AHSedentary >> sow [
+	"= sow maize : je fais continuellemnt du maïs sur une parcelle de ma propriété avec un niveau de fertilité > 0 "
 
 	| fertilePlots |
 	(self myFarm components select: [ :p | p cover class = AHMaize ])
-		isEmpty ifTrue: [ "plotWithFallow := self myFarm components
-				                  detect: [ :p | p cover class = AHFallow ]
-				                  ifNone: [ nil ].
-			plotWithFallow ifNotNil: [plotWithFallow setLandcover: AHCassava ] "
-			fertilePlots := (self myFarm components select: [ :p |
-				                 p cover class = AHFallow and: [
-					                 p soilFertility > 0 ] ]) sorted: [ :a :b |
-				                a soilFertility <= b soilFertility ].
-			fertilePlots ifNotEmpty: [ fertilePlots last setLandcover: AHMaize ] ]
+		isEmpty ifFalse: [ ^nil].
+			fertilePlots := self fertileFallowPlots.
+			fertilePlots ifNotEmpty: [ fertilePlots last setLandcover: AHMaize ] 
 ]

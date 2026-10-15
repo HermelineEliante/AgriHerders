@@ -1,21 +1,21 @@
 Class {
 	#name : 'AHSoja',
 	#superclass : 'AHAnnualCrop',
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'accessing' }
 AHSoja class >> expectedYield [
-
-	<parameterFloatDefault: 200>
+	<parameterFloatMin: 0 max: 1000 default: 200>
 	^ expectedYield
 ]
 
 { #category : 'accessing' }
 AHSoja class >> maxSupplyFertility [
 
-	<parameterFloatDefault: 5>
+	<parameterFloatMin: 0 max: 20 default: 5>
 	^ maxSupplyFertility
 ]
 

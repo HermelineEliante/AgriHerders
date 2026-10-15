@@ -1,14 +1,15 @@
 Class {
 	#name : 'AHCotton',
 	#superclass : 'AHAnnualCrop',
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'accessing' }
 AHCotton class >> expectedYield [
 
-	<parameterFloatDefault: 750>
+	<parameterFloatMin: 0 max: 1000 default: 750>
 	^ expectedYield
 ]
 

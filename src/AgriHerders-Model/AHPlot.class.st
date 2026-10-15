@@ -8,28 +8,25 @@ Class {
 		'cover'
 	],
 	#classInstVars : [
-		'cowsNumberForFertility'
+		'initialSoilFertility'
 	],
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
-{ #category : 'accessing' }
-AHPlot class >> cowsNumberForFertility [
-
-	^ cowsNumberForFertility
-]
-
-{ #category : 'accessing' }
-AHPlot class >> cowsNumberForFertility: anObject [
-
-	cowsNumberForFertility := anObject
-]
-
 { #category : 'initialization' }
-AHPlot class >> initializeParameters [ 
-super initializeParameters.
-cowsNumberForFertility := 100
+AHPlot class >> initialSoilFertility [
+
+	<parameterFloatMin: 0 max: 20 default: 5>
+	<parameterFloatDefault: 5>
+	^ initialSoilFertility
+]
+
+{ #category : 'accessing' }
+AHPlot class >> initialSoilFertility: anObject [
+
+	initialSoilFertility := anObject
 ]
 
 { #category : 'accessing' }
@@ -48,6 +45,11 @@ AHPlot >> area: anObject [
 { #category : 'testing' }
 AHPlot >> belongsToOwner: anAgent [
 	^ self belongsToAggregate: anAgent myFarm
+]
+
+{ #category : 'testing' }
+AHPlot >> belongsToSomebody [
+	^ self belongsToAggregateType: AHFarm 
 ]
 
 { #category : 'accessing' }
@@ -78,20 +80,9 @@ AHPlot >> cowsCounter: anObject [
 AHPlot >> initialize [
 
 	super initialize.
-	soilFertility := 5.
-	"self initializeWithRandomfertilitylevel."
+	soilFertility := self class initialSoilFertility. "5"
 	area := 1. "ha"
 	cowsCounter := 0
-]
-
-{ #category : 'initialize' }
-AHPlot >> initializeWithRandomfertilitylevel [
-
-	self soilFertility: (self selectRandomlyFrom: self possibleSoilFertilities)
-
-
-
-
 ]
 
 { #category : 'testing' }
@@ -105,18 +96,6 @@ AHPlot >> isOpenForCorraling [
 AHPlot >> myFarm [
 
 	^ self aggregates detect: [ :a | a isKindOf: AHFarm ] ifNone: [ nil ]
-]
-
-{ #category : 'accessing' }
-AHPlot >> nextSoilFertility [
-	| i |
-	i := self possibleSoilFertilities indexOf: self soilFertility.
-	i >= self possibleSoilFertilities size ifTrue: [ ^self soilFertility ] ifFalse: [ ^self possibleSoilFertilities at: i + 1 ]
-]
-
-{ #category : 'accessing' }
-AHPlot >> possibleSoilFertilities [
-^(Interval from: 0 to: 20) asArray.
 ]
 
 { #category : 'pov' }

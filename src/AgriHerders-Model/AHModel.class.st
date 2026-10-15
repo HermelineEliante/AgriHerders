@@ -3,7 +3,8 @@ Class {
 	#superclass : 'CMModel',
 	#instVars : [
 		'doesPopulationGrow',
-		'cattleSizeMax'
+		'cattleSizeMax',
+		'expansionFrequency'
 	],
 	#category : 'AgriHerders-Model',
 	#package : 'AgriHerders-Model'
@@ -131,6 +132,26 @@ AHModel >> doesPopulationGrow: anObject [
 ]
 
 { #category : 'accessing' }
+AHModel >> expansionFrequency [
+"The farms expand every 10 Years"
+	<parameterIntegerMin: 0 max: 200 default: 10>
+	^ expansionFrequency
+]
+
+{ #category : 'accessing' }
+AHModel >> expansionFrequency: anObject [
+
+	expansionFrequency := anObject
+]
+
+{ #category : 'probes' }
+AHModel >> farmsArea [
+
+	<probeNamed: 'farms area' color: '27AE60'>
+	^ (self @@ AHPlot select: [ :p | p belongsToSomebody]) size
+]
+
+{ #category : 'accessing' }
 AHModel >> forestPlots [
 	"return the cells in  forest"
 
@@ -147,7 +168,7 @@ AHModel >> globalFertility [
 { #category : 'initialization' }
 AHModel >> init [
 
-	<init>
+"	<init>"
 	cattleSizeMax := 0.
 	self
 		createGridNumberOfRows: 8
@@ -308,22 +329,21 @@ AHModel >> stepDrySeason [
 	(self allEntitiesOfClass: AHActor) do: #harvest.
 	self thePlots do: #stepDrySeason. "Evolution naturelle des couverts"
 	(self shuffled: (self allEntitiesOfClass: AHHerder)) do: #moveHerd.
-	self @@ AHFarmer do: #sow.
-	self @@ AHSedentary do: #sowMaize.
+	self @@ AHActor do: #sow.
 	self @@ AHCattleBatch reverseDo: #naturalMortality
 ]
 
 { #category : 'control' }
 AHModel >> stepRainySeason [
-	"t = impair (odd) => rainy season"
+	"t = semester. t impair (odd) => rainy season"
 
-	self @@ AHFarmer do: #rainyStep.
+	self @@ AHFarmer do: #harvestCasava.
 	self thePlots do: #stepRainySeason.
 	(self shuffled: (self allEntitiesOfClass: AHHerder)) do: #moveHerd.
 	self @@ AHCattleBatch do: #reproduce.
-	"comme currentTime est toujours impair en rainyStep, il faut rajouter 1"
-	doesPopulationGrow ifTrue: [
-			(self currentTimeStep + 1 / 10) isInteger ifTrue: [
+	"Farms expansion"
+	doesPopulationGrow ifTrue: ["comme currentTime est toujours impair en rainyStep, il faut rajouter 1"
+			(self currentTimeStep + 1 / (self expansionFrequency * 2)) isInteger ifTrue: [
 				(self shuffled: (self @@ AHFarmer)) do: #expandFarm ] ]
 ]
 

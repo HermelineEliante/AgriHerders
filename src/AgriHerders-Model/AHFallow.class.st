@@ -1,16 +1,23 @@
 Class {
 	#name : 'AHFallow',
 	#superclass : 'AHNaturalVegetation',
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'accessing' }
-AHFallow class >> initializeParameters [
+AHFallow class >> biomassMax [
 
-	super initializeParameters.
-	maxSupplyFertility := 5.
-	biomassMax := 1000.
+	<parameterFloatMin: 0 max: 50000 default: 10000>
+	^ biomassMax
+]
+
+{ #category : 'accessing' }
+AHFallow class >> maxSupplyFertility [
+
+	<parameterFloatMin: 0 max: 20 default: 5>
+	^ maxSupplyFertility
 ]
 
 { #category : 'pov' }

@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'state'
 	],
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'accessing' }
@@ -19,6 +20,13 @@ AHForest class >> biomassMax [
 
 	<parameterFloatDefault: 18000>
 	^ biomassMax
+]
+
+{ #category : 'accessing' }
+AHForest class >> maxSupplyFertility [
+
+	<parameterFloatMin: 0 max: 20 default: 20>
+	^ maxSupplyFertility
 ]
 
 { #category : 'pov' }

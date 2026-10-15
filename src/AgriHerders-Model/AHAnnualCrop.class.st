@@ -1,8 +1,9 @@
 Class {
 	#name : 'AHAnnualCrop',
 	#superclass : 'AHCultivatedVegetation',
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'as yet unclassified' }

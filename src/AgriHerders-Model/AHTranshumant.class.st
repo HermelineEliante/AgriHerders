@@ -1,13 +1,21 @@
 Class {
 	#name : 'AHTranshumant',
 	#superclass : 'AHHerder',
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'pov' }
 AHTranshumant >> color [
 ^CMColor colorOfNumber: self id + 33
+]
+
+{ #category : 'control' }
+AHTranshumant >> harvest [
+
+	self myFarm ifNil: [ ^self ].
+	super harvest
 ]
 
 { #category : 'control' }
@@ -21,4 +29,11 @@ AHTranshumant >> openedPlotsForCoralling [
 { #category : 'pov' }
 AHTranshumant >> shape [
 	^#pentagon
+]
+
+{ #category : 'control' }
+AHTranshumant >> sow [
+
+	self myFarm ifNil: [ ^self ].
+	super sow
 ]

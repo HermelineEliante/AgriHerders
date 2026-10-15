@@ -24,6 +24,13 @@ ManifestAgriHerdersModel class >> ruleEndTrueFalseRuleV1FalsePositive [
 ]
 
 { #category : 'code-critics' }
+ManifestAgriHerdersModel class >> ruleReGuardClauseRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#AHSedentary #sowMaize #false)) #'2026-10-14T18:33:36.369791+02:00') )
+]
+
+{ #category : 'code-critics' }
 ManifestAgriHerdersModel class >> ruleTempsReadBeforeWrittenRuleV1FalsePositive [
 
 	<ignoreForCoverage>
