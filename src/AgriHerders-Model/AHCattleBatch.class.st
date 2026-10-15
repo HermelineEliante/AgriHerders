@@ -21,8 +21,9 @@ Class {
 		'thresholdBadCC',
 		'maximumSize'
 	],
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'accessing parameters' }
@@ -338,19 +339,6 @@ AHCattleBatch >> owner [
 AHCattleBatch >> owner: anObject [
 
 	owner := anObject
-]
-
-{ #category : 'pov' }
-AHCattleBatch >> pov [
-
-	<pov>
-	| size |
-	"self heads > 40 ifTrue: [ size := 1 ] ifFalse: [size := 0.7].
-	self heads < 10 ifTrue: [ size := 0.2 ]."
-	size := 0.3 + (self heads / 50) .
-	self owner id = 1
-		ifTrue: [ ^ CMPointOfView tile: AHTilesSet cowPink size: size ]
-		ifFalse: [ ^ CMPointOfView tile: AHTilesSet cowBlue size: size ]
 ]
 
 { #category : 'pov' }

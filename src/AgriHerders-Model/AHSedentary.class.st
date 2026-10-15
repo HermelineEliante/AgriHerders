@@ -1,8 +1,9 @@
 Class {
 	#name : 'AHSedentary',
 	#superclass : 'AHHerder',
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'pov' }
@@ -22,18 +23,6 @@ AHSedentary >> harvest [
 				plot cover isMature ifTrue: [
 						self money: self money + (plot cover yield * plot cover price).
 						plot cover biomass: plot cover residue ] ]
-]
-
-{ #category : 'pov' }
-AHSedentary >> pov [
-
-	<pov>
-	self id = 1 ifTrue: [ ^ CMPointOfView
-		tile: AHTilesSet herderRed
-		size: 0.7 ] ifFalse: [  ^ CMPointOfView
-		tile: AHTilesSet herderBlue 
-		size: 0.7]
-	
 ]
 
 { #category : 'pov' }

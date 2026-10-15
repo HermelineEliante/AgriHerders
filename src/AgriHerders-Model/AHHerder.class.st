@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'herd'
 	],
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'controlling' }

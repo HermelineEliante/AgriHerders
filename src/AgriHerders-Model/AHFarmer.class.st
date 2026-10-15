@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'nobodysPlots'
 	],
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'pov' }
@@ -46,15 +47,6 @@ AHFarmer >> harvestCasava [
 			plot cover isMature ifTrue: [
 					self money: self money + (plot cover yield * plot cover price).
 					plot cover biomass: plot cover residue ] ]
-]
-
-{ #category : 'pov' }
-AHFarmer >> pov [
-
-	<pov>
-	id = 1
-		ifTrue: [ ^CMPointOfView tile: AHTilesSet farmer size: 0.7 ]
-		ifFalse: [ ^ CMPointOfView tile: AHTilesSet farmerColored size: 0.7 ]
 ]
 
 { #category : 'initialization' }
