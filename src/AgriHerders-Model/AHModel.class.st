@@ -6,8 +6,9 @@ Class {
 		'cattleSizeMax',
 		'expansionFrequency'
 	],
-	#category : 'AgriHerders-Model',
-	#package : 'AgriHerders-Model'
+	#category : 'AgriHerders-Model-coreModel',
+	#package : 'AgriHerders-Model',
+	#tag : 'coreModel'
 }
 
 { #category : 'as yet unclassified' }
@@ -34,7 +35,7 @@ AHModel >> areCowsExtinguished [
 AHModel >> averageBiomass [
 	"^ (self @@ AHPlot collect: [ :p | p cover biomass ]) average"
 
-	"<probeNamed: 'Average biomass' color: #green>"
+	<probeNamed: 'Average biomass' color: #green>
 
 	^ self totalResidue + self naturalBiomass
 ]
@@ -81,7 +82,7 @@ AHModel >> corporalCondition [
 { #category : 'probes' }
 AHModel >> cottonSize [
 
-	<probeNamed: 'Cotton size' color: 'CBDCB7'>
+	<probeNamed: 'Cotton size' color: 'C0AC8F'>
 	^ (self @@ AHPlot select: [ :p | p cover class = AHCotton ]) size
 ]
 
@@ -233,7 +234,7 @@ AHModel >> initLandcover [
 	#( 17 18 25 32 36 37 58 ) do: [ :i |
 		(self cellAt: i) setLandcover: AHMaize ].
 	#( 34 45 ) do: [ :i |
-		(self cellAt: i) setLandcover: AHSoja ].
+		(self cellAt: i) setLandcover: AHSoya ].
 	#( 26 27 35 44 ) do: [ :i | (self cellAt: i) setLandcover: AHCotton ].
 	#( 33 43 ) do: [ :i | (self cellAt: i) setLandcover: AHCassava ].
 	#( 54 55 62 ) do: [ :i |
@@ -316,17 +317,18 @@ AHModel >> plotsCoveredBy: aTypeOfCover [
 ]
 
 { #category : 'probes' }
-AHModel >> sojaSize [
+AHModel >> soyaSize [
 
 	<probeNamed: 'Soja size' color: 'B29EBB'>
-	^ (self @@ AHPlot select: [ :p | p cover class = AHSoja ]) size
+	^ (self @@ AHPlot select: [ :p | p cover class = AHSoya ]) size
 ]
 
 { #category : 'control' }
 AHModel >> stepDrySeason [
 	"t = pair (even) => dry season"
 
-	(self allEntitiesOfClass: AHActor) do: #harvest.
+	self @@ AHActor do: #resetHarvest.
+	self @@ AHActor do: #harvest.
 	self thePlots do: #stepDrySeason. "Evolution naturelle des couverts"
 	(self shuffled: (self allEntitiesOfClass: AHHerder)) do: #moveHerd.
 	self @@ AHActor do: #sow.
@@ -337,14 +339,15 @@ AHModel >> stepDrySeason [
 AHModel >> stepRainySeason [
 	"t = semester. t impair (odd) => rainy season"
 
-	self @@ AHFarmer do: #harvestCasava.
+	self @@ AHActor do: #harvestCasava.
 	self thePlots do: #stepRainySeason.
 	(self shuffled: (self allEntitiesOfClass: AHHerder)) do: #moveHerd.
 	self @@ AHCattleBatch do: #reproduce.
 	"Farms expansion"
-	doesPopulationGrow ifTrue: ["comme currentTime est toujours impair en rainyStep, il faut rajouter 1"
-			(self currentTimeStep + 1 / (self expansionFrequency * 2)) isInteger ifTrue: [
-				(self shuffled: (self @@ AHFarmer)) do: #expandFarm ] ]
+	doesPopulationGrow ifTrue: [ "comme currentTime est toujours impair en rainyStep, il faut rajouter 1"
+			(self currentTimeStep + 1 / (self expansionFrequency * 2))
+				isInteger ifTrue: [
+				(self shuffled: self @@ AHFarmer) do: #expandFarm ] ]
 ]
 
 { #category : 'control' }
@@ -379,6 +382,14 @@ AHModel >> totalFertility [
 ]
 
 { #category : 'probes' }
+AHModel >> totalHarvest [
+
+	<probeNamed: 'total harvest' color: 'C0392B'> 
+
+	^ self @@ AHFarmer sum: [ :p | p sumOfTotalHarvest ]
+]
+
+{ #category : 'probes' }
 AHModel >> totalResidue [
 	<probeNamed: 'totalResidue' color: '9CB553'>
 
@@ -392,4 +403,32 @@ AHModel >> villagePlots [
 	"return the 3 FarmerHouse cells"
 
 	^ self plotsCoveredBy:  AHFarmerHouse
+]
+
+{ #category : 'probes' }
+AHModel >> yield_Cassava [
+
+	<probeNamed: 'Yield cassava' color: 'DCC603'>
+	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHCassava ]
+]
+
+{ #category : 'probes' }
+AHModel >> yield_Cotton [
+
+	<probeNamed: 'Yield cotton' color: 'C0AC8F'>
+	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHCotton ]
+]
+
+{ #category : 'probes' }
+AHModel >> yield_Maize [
+
+	<probeNamed: 'Yield maize' color: 'FFE95A'>
+	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHMaize ]
+]
+
+{ #category : 'probes' }
+AHModel >> yield_Soya [
+
+	<probeNamed: 'Yield soya' color: '866EB3'>
+	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHSoya ]
 ]

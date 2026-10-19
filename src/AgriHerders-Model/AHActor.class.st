@@ -7,12 +7,18 @@ Class {
 		'myFarm',
 		'territory',
 		'others',
-		'money'
+		'money',
+		'totalHarvest'
 	],
 	#category : 'AgriHerders-Model-coreModel',
 	#package : 'AgriHerders-Model',
 	#tag : 'coreModel'
 }
+
+{ #category : 'accessing' }
+AHActor >> addTotalHarvestFor: aCover [
+totalHarvest at: aCover class put: ((totalHarvest at: aCover class) + aCover yield)
+]
 
 { #category : 'accessing' }
 AHActor >> agreement [
@@ -32,7 +38,7 @@ AHActor >> color [
 	^ CMColor colorOfNumber: 100
 ]
 
-{ #category : 'control' }
+{ #category : 'accessing' }
 AHActor >> fertileFallowPlots [
 	"Return a list of fallow plots sorted by fertility level (>0)"
 
@@ -45,12 +51,28 @@ AHActor >> fertileFallowPlots [
 AHActor >> harvest [
 	"Au début de la saison sèche, toutes les cultures matures de sa ferme sont récoltées.
 	La récolte sera vendue. Puis, sera ajouté à l'argent que le fermier possède le prix de la culture. Enfin, il ne reste sur les plots que les résidus"
-
-	self myFarm components do: [ :plot | 
+	self myFarm ifNil: [ ^ self ].
+	self myFarm components do: [ :plot |
 			plot cover isMature ifTrue: [
-					self money:
-						self money + (plot cover yield * plot cover price).
+					self money: self money + (plot cover yield * plot cover price).
+					self addTotalHarvestFor: plot cover.
 					plot cover biomass: plot cover residue ] ]
+]
+
+{ #category : 'control' }
+AHActor >> harvestCasava [
+	"Au début de la saison des pluies, tous les maniocs matures de sa ferme sont récoltés"
+
+	"La récolte sera vendue. Puis, sera ajouté à l'argent que le fermier possède le prix de la culture et il va rester sur le plot des résidus"
+
+	self myFarm ifNil: [ ^ self ].
+	(self myFarm components select: [ :p | p cover class = AHCassava ])
+		do: [ :plot |
+				plot cover isMature ifTrue: [
+						self money: self money + (plot cover yield * plot cover price).
+						self addTotalHarvestFor: plot cover.
+						plot cover biomass: plot cover residue.
+						plot cover hasBeenHarvested: true ] ]
 ]
 
 { #category : 'accessing' }
@@ -70,7 +92,8 @@ AHActor >> initialize [
 
 	super initialize.
 	agreement := false.
-	money := 1
+	money := 1.
+	self resetHarvest
 ]
 
 { #category : 'testing' }
@@ -105,7 +128,7 @@ AHActor >> myFarm: anObject [
 	myFarm := anObject
 ]
 
-{ #category : 'control' }
+{ #category : 'accessing' }
 AHActor >> myOwnPlotsForCoralling [
 	"retourne une list de mes plots déjà récoltés, sinon, retourne une liste vide "
 
@@ -126,7 +149,7 @@ AHActor >> name [
 	^ self class name, '_', self id asString
 ]
 
-{ #category : 'control' }
+{ #category : 'accessing' }
 AHActor >> openedPlotsForCoralling [
 	"si agrement = true, alors retourne une list de plots déjà récoltés, sinon, retourne une liste vide "
 
@@ -157,6 +180,15 @@ AHActor >> pov [
 		  shape: self shape 
 ]
 
+{ #category : 'initialize' }
+AHActor >> resetHarvest [
+
+	totalHarvest := Dictionary new.
+	AHCultivatedVegetation allTerminalClasses do: [ :aClass |
+		totalHarvest at: aClass put: 0 ].
+	^ totalHarvest
+]
+
 { #category : 'pov' }
 AHActor >> shape [ 
 ^#circle
@@ -168,13 +200,15 @@ AHActor >> sow [
 	Pour les autres cultures: Quand le niveau de fertilité des plots de ma propriété est supérieur à 6, et qu'il n'y pas de culture, il fait du coton. Lorsqu’il est supérieur à 4 il fait le maïs, dans le cas contraire il cultive le soja."
 
 	| fertilePlots |
+	self myFarm ifNil: [ ^ self ].
 	(self myFarm components select: [ :p | p cover class = AHCassava ])
 		isEmpty ifTrue: [
 			fertilePlots := self fertileFallowPlots.
-			fertilePlots ifNotEmpty: [  fertilePlots first setLandcover: AHCassava ]].
+			fertilePlots ifNotEmpty: [
+				fertilePlots first setLandcover: AHCassava ] ].
 
 	"autres cultures"
-	(self myFarm components select: [ :p | 
+	(self myFarm components select: [ :p |
 		 p cover isKindOf: AHNaturalVegetation ]) do: [ :plot |
 		self sowOnPlot: plot ]
 ]
@@ -186,7 +220,15 @@ AHActor >> sowOnPlot: aPlot [
 
 			aPlot soilFertility >= 6 ifTrue: [ ^aPlot setLandcover: AHCotton ].
 			aPlot soilFertility >= 4 ifTrue: [ ^aPlot setLandcover: AHMaize ].
-			^aPlot setLandcover: AHSoja
+			^aPlot setLandcover: AHSoya
+]
+
+{ #category : 'accessing' }
+AHActor >> sumOfTotalHarvest [
+	| tot |
+	tot := 0.
+	totalHarvest valuesDo: [ : v |  tot := tot + v].
+	^tot
 ]
 
 { #category : 'accessing' }
@@ -199,4 +241,16 @@ AHActor >> territory [
 AHActor >> territory: anObject [
 
 	territory := anObject
+]
+
+{ #category : 'accessing' }
+AHActor >> totalHarvest [
+
+	^ totalHarvest
+]
+
+{ #category : 'accessing' }
+AHActor >> totalHarvest: anObject [
+
+	totalHarvest := anObject
 ]

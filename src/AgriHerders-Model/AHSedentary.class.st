@@ -18,11 +18,13 @@ AHSedentary >> color [
 { #category : 'control' }
 AHSedentary >> harvest [
 	"je ne récolte que le mais"
-	(self myFarm components select: [ :p | p cover class = AHMaize ])
+	super harvest.
+	"(self myFarm components select: [ :p | p cover class = AHMaize ])
 		do: [ :plot |
 				plot cover isMature ifTrue: [
 						self money: self money + (plot cover yield * plot cover price).
-						plot cover biomass: plot cover residue ] ]
+						self addTotalHarvestFor: plot cover.
+						plot cover biomass: plot cover residue ] ]"
 ]
 
 { #category : 'pov' }
@@ -36,7 +38,7 @@ AHSedentary >> sow [
 
 	| fertilePlots |
 	(self myFarm components select: [ :p | p cover class = AHMaize ])
-		isEmpty ifFalse: [ ^nil].
-			fertilePlots := self fertileFallowPlots.
-			fertilePlots ifNotEmpty: [ fertilePlots last setLandcover: AHMaize ] 
+		isEmpty ifFalse: [ ^ nil ].
+	fertilePlots := self fertileFallowPlots.
+	fertilePlots ifNotEmpty: [ fertilePlots first setLandcover: AHMaize ]
 ]

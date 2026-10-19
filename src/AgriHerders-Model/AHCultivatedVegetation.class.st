@@ -98,10 +98,11 @@ Dans le même temps, la plante aura pompé une quantité de fertilité égale au
 La quantité de résidus produite par le maïs et de 7 kg MS/ha, 1 kg MS/ha pour le coton et 2 kg MS/ha pour le soja. "
 
 	super rainyStep.
-	self biomass: self residue + self yield. "kg MS/plot"
-	"reduction de la fertilité"
-	self cell soilFertility:
-		((self cell soilFertility - self optimalFertility) max: 0)
+	self isMature ifTrue: [
+			self biomass: self residue + self yield. "kg MS/plot"
+			"reduction de la fertilité"
+			self cell soilFertility:
+				(self cell soilFertility - self optimalFertility max: 0) ]
 ]
 
 { #category : 'accessing' }

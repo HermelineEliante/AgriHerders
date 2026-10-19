@@ -65,7 +65,7 @@ AHVegetation >> rainyStep [
 
 { #category : 'control' }
 AHVegetation >> semesterStep [
-
+"age += 0.5. SoilFertility += 0.5"
 	age := age + 0.5.
 	self cell soilFertility < self class maxSupplyFertility ifTrue: [
 		self cell soilFertility: self cell soilFertility + 0.5 ]

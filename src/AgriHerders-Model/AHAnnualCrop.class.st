@@ -6,7 +6,7 @@ Class {
 	#tag : 'coreModel'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'controlling' }
 AHAnnualCrop >> dryStep [
 	"A la fin de la saison seche, l'annual crop devient Fallow"
 
@@ -20,7 +20,8 @@ AHAnnualCrop >> dryStep [
 
 { #category : 'testing' }
 AHAnnualCrop >> hasBeenHarvested [
-
+"Answer if the crop has already been harvested.
+ie. if its eatable biomass is = or less than the residue"
 	^ self biomass <= self residue 
 ]
 

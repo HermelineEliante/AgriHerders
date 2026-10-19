@@ -10,6 +10,13 @@ Class {
 	#tag : 'coreModel'
 }
 
+{ #category : 'managing classes' }
+AHLandcover class >> allTerminalClasses [
+"Ex: AHCultivatedVegetation allTerminalClasses => an OrderedCollection(AHCashew AHCassava AHCotton AHMaize AHSoja)"
+	^ self allSubclasses select: [ :subclass |
+		  subclass allSubclasses isEmpty ]
+]
+
 { #category : 'pov' }
 AHLandcover class >> myColor [
 

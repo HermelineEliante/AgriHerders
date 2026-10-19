@@ -12,13 +12,6 @@ AHTranshumant >> color [
 ]
 
 { #category : 'control' }
-AHTranshumant >> harvest [
-
-	self myFarm ifNil: [ ^self ].
-	super harvest
-]
-
-{ #category : 'control' }
 AHTranshumant >> openedPlotsForCoralling [
 	"si agrement = true, alors retourne une list de plots déjà récoltés, sinon, retourne une liste vide "
 	
@@ -29,11 +22,4 @@ AHTranshumant >> openedPlotsForCoralling [
 { #category : 'pov' }
 AHTranshumant >> shape [
 	^#pentagon
-]
-
-{ #category : 'control' }
-AHTranshumant >> sow [
-
-	self myFarm ifNil: [ ^self ].
-	super sow
 ]

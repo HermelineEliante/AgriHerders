@@ -18,13 +18,6 @@ AHFarmer >> color [
 ]
 
 { #category : 'control' }
-AHFarmer >> dryStep [
-	"Au début de la saison sèche : récolte et décision de semis. D'abord la récolte des cultures existantes"
-
-"	self harvest"
-]
-
-{ #category : 'control' }
 AHFarmer >> expandFarm [
 	"Chaque 10 ans (Lié à l’augmentation démographique de la famille), l’agriculteur décide d’augmenter sa surface en augmentant 2 plots supplémentaires. Il choisit donc deux  parcelles. il sélectionne les parcelles libres les plus proche de sa maison. Une parcelle libre est celle sans propriétaire, donc celle ayant un couvert de type parcours naturel ou de type forêt. S’il y a des troupeaux sur les nouvelles parcelles qu’il veut exploiter, il les chasse (renvoie) dans leur campement."
 
@@ -36,23 +29,6 @@ AHFarmer >> expandFarm [
 			(p occupantsOfClass: AHCattleBatch) do: #goHome.
 			counter := counter + 1.
 			counter >= 2 ifTrue: [ ^ self ] ]
-]
-
-{ #category : 'control' }
-AHFarmer >> harvestCasava [
-	"Au début de la saison des pluies, tous les maniocs matures de sa ferme sont récoltées"
-	"La récolte sera vendue. Puis, sera ajouté à l'argent que le fermier possède le prix de la culture et il va rester sur le plot des résidus"
-
-	(self myFarm components select: [:p | p cover class = AHCassava]) do: [ :plot |
-			plot cover isMature ifTrue: [
-					self money: self money + (plot cover yield * plot cover price).
-					plot cover biomass: plot cover residue ] ]
-]
-
-{ #category : 'control' }
-AHFarmer >> rainyStep [
-
-	self harvestCasava.
 ]
 
 { #category : 'initialization' }
