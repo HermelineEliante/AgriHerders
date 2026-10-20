@@ -5,7 +5,8 @@ Class {
 		'area',
 		'cowsCounter',
 		'soilFertility',
-		'cover'
+		'cover',
+		'conflicts'
 	],
 	#classInstVars : [
 		'initialSoilFertility'
@@ -53,6 +54,18 @@ AHPlot >> belongsToSomebody [
 ]
 
 { #category : 'accessing' }
+AHPlot >> conflicts [
+
+	^ conflicts
+]
+
+{ #category : 'accessing' }
+AHPlot >> conflicts: anObject [
+
+	conflicts := anObject
+]
+
+{ #category : 'accessing' }
 AHPlot >> cover [
 
 	^ cover
@@ -82,7 +95,8 @@ AHPlot >> initialize [
 	super initialize.
 	soilFertility := self class initialSoilFertility. "5"
 	area := 1. "ha"
-	cowsCounter := 0
+	cowsCounter := 0.
+	conflicts := 0
 ]
 
 { #category : 'testing' }
@@ -107,6 +121,19 @@ AHPlot >> povBiomass [
 	^ CMPointOfView color: (CMColor colorValue: (self cover biomass) min: 0 color: #white max: (self cover biomassMax ) color: self cover class myColor).
 	"^ CMPointOfView color: self cover class myColor"
 	
+]
+
+{ #category : 'pov' }
+AHPlot >> povConflicts [
+
+	<pov>
+	conflicts = 0 ifTrue: [ ^ self povLandcover ].
+	^ CMPointOfView color: (CMColor
+			   colorValue: conflicts
+			   min: 0
+			   max: 4
+			   color: #red)
+	"^ CMPointOfView color: self cover class myColor"
 ]
 
 { #category : 'pov' }
@@ -190,7 +217,9 @@ AHPlot >> povSoilFertility [
 
 { #category : 'initialize' }
 AHPlot >> resetCowsCounter [
-	self cowsCounter: 0
+
+	cowsCounter:= 0.
+	conflicts := 0
 ]
 
 { #category : 'controlling' }

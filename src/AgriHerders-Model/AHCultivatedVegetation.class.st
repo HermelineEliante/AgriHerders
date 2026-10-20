@@ -115,8 +115,8 @@ AHCultivatedVegetation >> residue [
 AHCultivatedVegetation >> yield [
 	"Le rendement de chaque culture (kg/plot) dépend du niveau optimal de fertilité demandé par la plante. Quand le niveau de fertilité est optimal ou plus, le rendement de la culture est égal au rendement espéré. Si le niveau de fertilité est inférieur, le rendement sera proportionnel à la différence entre optimal fertility et fertility effective.
 Yield= Expected yield*(soilFertility/optimalFertility) avec un maximum = expected yield "
-
-	^ ((self expectedYield
-	   * (self cell soilFertility / self optimalFertility)) min:
+	self biomass = 0 ifTrue: [ ^ 0 ].
+	^ (self expectedYield
+	   * (self cell soilFertility / self optimalFertility) min:
 		   self expectedYield) * self cell area "kg/plot"
 ]

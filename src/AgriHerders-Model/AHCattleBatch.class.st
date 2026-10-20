@@ -202,15 +202,15 @@ AHCattleBatch >> dailyForrageNeed [
 AHCattleBatch >> defecateOn: visitedPlots [
 	"On répartit le nombre de fècès total sur tous les plots visités. 
 	Ainsi, on note une Mise à jour de la fertilité des plots visités par les animaux. Excreta deposits are proportional to the time spent by the animals on the plot. ""2.8 * 4 * 183 /1000 = 2T/ha ce qui correspond à une élévation de 1 de la fertilité (Une publication technique mentionne que pour nourrir des microorganismes du sol et améliorer certains aspects de fertilité, des apports de 2 à 4 t/ha de compost jeune de fumier peuvent déjà avoir un effet mesurable. D’où je garde 4 dans ce calcul « ""2.8 * 4 * 183 /1000 = 2T/ha ») .
-""le troupeau prélève 6.25 * le nombre de tête de la biomasse du couvert. Si il n’est pas rassasié et qu’il y a de plot ouvert où il peut manger, il va sur ces plots.
 "
 
 	| qtyFaecesPerPlot |
 	visitedPlots ifEmpty: [ ^ self ].
-	qtyFaecesPerPlot "Tonnes":= self faecesPerDay * self heads * (183 / visitedPlots size)
-	                   * (self corporalCondition / 10) / 1000.
-	visitedPlots do: [ :plot |
-		plot soilFertility: plot soilFertility + (qtyFaecesPerPlot / 2)] "on divise par 2 car 2T/ha correspond à une élévation de 1"
+	qtyFaecesPerPlot := self faecesPerDay * self heads
+	                    * (183 / visitedPlots size)
+	                    * (self corporalCondition / 10) / 1000. "Tonnes"
+	visitedPlots do: [ :plot | "on divise par 2 car 2T/ha correspond à une élévation de 1"
+		plot soilFertility: plot soilFertility + (qtyFaecesPerPlot / 2) ]
 ]
 
 { #category : 'controlling' }
@@ -229,17 +229,23 @@ AHCattleBatch >> faecesPerDay [
 { #category : 'control' }
 AHCattleBatch >> feedOnPlot [
 	"le troupeau prélève 6.25 * le nombre de têtes de la biomasse du couvert (si possible). Met à jour sa Condition Corporelle"
-	self cell cover biomass = 0 ifTrue: [ ^self updateCorporalCondition ].
-				
+
+	self cell cover biomass = 0 ifTrue: [ ^ self updateCorporalCondition ].
+
 	self cell cover biomass >= needs
 		ifTrue: [
 				self cell cover biomass: (self cell cover biomass - needs).
 				needs := 0.
-				self corporalCondition: 10]
+				self corporalCondition: 10 ]
 		ifFalse: [
 				needs := needs - self cell cover biomass.
 				self cell cover biomass: 0.
-				self updateCorporalCondition]
+				self updateCorporalCondition ]
+	"self owner isDrySeason
+		ifFalse: [ self cell conflicts: self cell conflicts + 1 ]
+		ifTrue: [
+				self cell isOpenForCorraling ifFalse: [
+					self cell conflicts: self cell conflicts + 1 ] ]"
 ]
 
 { #category : 'control' }
@@ -290,6 +296,26 @@ AHCattleBatch >> initialize [
 	corporalCondition := self class initialCorporalCondition.
 ]
 
+{ #category : 'testing' }
+AHCattleBatch >> isStarving [
+
+	^ self corporalCondition <= self class thresholdBadCC
+	
+]
+
+{ #category : 'control' }
+AHCattleBatch >> moveAndFeedOnPlots: listOfPlots [
+
+	| visitedPlots |
+	visitedPlots := OrderedCollection new.
+	listOfPlots do: [ :aPlot |
+			self needs > 0 ifFalse: [ ^ visitedPlots ].
+			self moveTo: aPlot.
+			self feedOnPlot.
+			visitedPlots add: aPlot ].
+	^ visitedPlots
+]
+
 { #category : 'control' }
 AHCattleBatch >> moveTo: aPlot [
 "(aPlot hasOccupantsOfClass: AHCattleBatch) ifTrue: [ self halt ]."
@@ -308,6 +334,7 @@ Si Condition_moyenne_annuelle < 2 :
 Morts_naturelles = heads × Taux_mortalité"
 
 	| taux_mortalité |
+	self corporalCondition = 0 ifTrue: [ ^self delete ].
 	taux_mortalité := self class naturalMortalityRate "0.02".
 	(self corporalCondition between: 2 and: 4) ifTrue: [
 		taux_mortalité := taux_mortalité + 0.1 ].

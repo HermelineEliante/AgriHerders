@@ -25,6 +25,14 @@ AHHerder >> aggregateHerds [
 ]
 
 { #category : 'accessing' }
+AHHerder >> anyPlotsWithBiomass [
+	"Return plots of the territory with biomass, whatever if they are opened or not"
+
+	
+	^ territory select: [ :p | p cover biomass > 0 ]
+]
+
+{ #category : 'accessing' }
 AHHerder >> authorizedfallowAndBushPlots [
 	"retourne toutes les plots en Pasture"
 
@@ -91,19 +99,27 @@ AHHerder >> dry_MoveOneCattleBatch: aBatch [
 	Puis je les envoie sur d'autres 'natural plots' pour satisfaire leur besoin restant :
 	Priorité 1 : Pasture, 2 : Fallow & bush, 3 : Forest. "
 
-	| visitedPlots |
+	| visitedPlots conflictingPlots |
 	visitedPlots := OrderedCollection new.
 	aBatch needs: aBatch totalNeeds.
-
-	"D'abord sur les bestOpenedPlots"
+	"1- D'abord sur les bestOpenedPlots"
 	aBatch needs > 0 ifTrue: [
 			visitedPlots addAll:
-				(self moveBatch: aBatch to: self openedPlotsWithBiomass) ].
-			
-	"Puis sur les natural plots"
+				(aBatch moveAndFeedOnPlots: self openedPlotsWithBiomass) ].
+	"2- Puis sur les natural plots"
 	aBatch needs > 0 ifTrue: [
-		self moveToNaturalPlotsOneCattleBatch: aBatch ].
-	aBatch updateCorporalCondition
+		visitedPlots addAll: (self moveToNaturalPlotsOneCattleBatch: aBatch) ].
+	aBatch updateCorporalCondition.
+	"3- Enfin, si mes vaches sont encore affamées, je les envoie dans des parcelles cultivées"
+	aBatch isStarving ifTrue: [
+			conflictingPlots := aBatch moveAndFeedOnPlots:
+				                    (self anyPlotsWithBiomass "self plotsWithBiomassAround: visitedPlots").
+			(conflictingPlots select: [ :c | c isOpenForCorraling not ]) do: [
+				:p | p conflicts: p conflicts + 1 ].
+			visitedPlots addAll: conflictingPlots.
+			aBatch updateCorporalCondition ].
+
+	aBatch defecateOn: visitedPlots
 ]
 
 { #category : 'testing' }
@@ -175,19 +191,6 @@ AHHerder >> initialize [
 ]
 
 { #category : 'controlling' }
-AHHerder >> moveBatch: aBatch to: listOfPlots [
-	
-
-	|  visitedPlots |
-	visitedPlots := OrderedCollection new.
-	listOfPlots do: [ : aPlot | aBatch needs > 0 ifFalse: [ ^visitedPlots ].
-		aBatch moveTo: aPlot.
-							aBatch feedOnPlot.
-							visitedPlots add: aPlot].
-						^visitedPlots
-]
-
-{ #category : 'controlling' }
 AHHerder >> moveHerd [
 	" Main activity at each season.
 	Si le besoin des animaux est supérieur à 0, je les envoie sur les meilleurs pâturages sinon, je les envoie sur d'autres plots pour satisfaire leur besoin restant."
@@ -211,21 +214,21 @@ AHHerder >> moveToNaturalPlotsOneCattleBatch: aBatch [
 
 	| visitedPlots |
 	visitedPlots := OrderedCollection new.
-	aBatch needs > 0 ifTrue: [  
-	visitedPlots addAll:
-		(self moveBatch: aBatch to: self pasturePlotsWithBiomass)].
-	aBatch needs > 0 ifTrue: [  
-	visitedPlots addAll:
-		(self moveBatch: aBatch to: self authorizedfallowAndBushPlotsWithBiomass)].
-	aBatch needs > 0 ifTrue: [  
-	visitedPlots addAll:
-		(self moveBatch: aBatch to: self forestPlotsWithBiomass)].
+	aBatch needs > 0 ifTrue: [
+			visitedPlots addAll:
+				(aBatch moveAndFeedOnPlots: self pasturePlotsWithBiomass) ].
+	aBatch needs > 0 ifTrue: [
+			visitedPlots addAll: (aBatch moveAndFeedOnPlots:
+					 self authorizedfallowAndBushPlotsWithBiomass) ].
+	aBatch needs > 0 ifTrue: [
+			visitedPlots addAll:
+				(aBatch moveAndFeedOnPlots: self forestPlotsWithBiomass) ].
 
-	(aBatch needs > 0 ) ifTrue: [
+	aBatch needs > 0 ifTrue: [
 			aBatch goHome.
 			aBatch feedOnPlot.
 			visitedPlots add: aBatch cell ].
-	aBatch defecateOn: visitedPlots
+	^ visitedPlots
 ]
 
 { #category : 'accessing' }
@@ -274,13 +277,35 @@ AHHerder >> pasturePlotsWithBiomass [
 	^ self pasturePlots select: [ :c | c cover biomass > 0 ].
 ]
 
+{ #category : 'accessing' }
+AHHerder >> plotsWithBiomassAround: visitedPlots [
+	"Return plots around the list of visitedPlots with biomass, whatever if they are opened or not"
+
+	| newPlots |
+	newPlots := Set new.
+	visitedPlots do: [ :p | newPlots addAll: p neighbourhood ].
+	newPlots copy do: [ :p | newPlots addAll: p neighbourhood ].
+	newPlots removeAll: visitedPlots.
+	^ newPlots asSortedCollection: [ :p1 :p2 |
+		  p1 cover biomass > p2 cover biomass ]
+]
+
 { #category : 'controlling' }
 AHHerder >> rainy_MoveOneCattleBatch: aBatch [
 	" Si le besoin du aBatch (avec plusieurs heads) est supérieur à 0, je les envoie sur les meilleurs pâturages.
 	sinon je les envoie sur d'autres plots en foret pour satisfaire leur besoin restant.
 	Priorité 1 : Pasture, 2 : Fallow & bush, 3 : Forest. "
 
+	| conflictingPlots visitedPlots |
 	aBatch needs: aBatch totalNeeds.
-	self moveToNaturalPlotsOneCattleBatch: aBatch.
-	aBatch updateCorporalCondition
+	visitedPlots := self moveToNaturalPlotsOneCattleBatch: aBatch.
+	aBatch updateCorporalCondition.
+	"Si mes vaches sont encore affamées, je les envoie dans des parcelles cultivées"
+	aBatch isStarving ifTrue: [
+			conflictingPlots := aBatch moveAndFeedOnPlots: self anyPlotsWithBiomass. "self plotsWithBiomassAround: visitedPlots"
+			conflictingPlots "select: [ :c | c isOpenForCorraling not ])" do: [ :p | p conflicts: p conflicts + 1 ]. 
+			visitedPlots addAll: conflictingPlots.
+			aBatch updateCorporalCondition ].
+
+	aBatch defecateOn: visitedPlots
 ]

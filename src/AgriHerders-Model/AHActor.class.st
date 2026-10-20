@@ -15,7 +15,7 @@ Class {
 	#tag : 'coreModel'
 }
 
-{ #category : 'accessing' }
+{ #category : 'control' }
 AHActor >> addTotalHarvestFor: aCover [
 totalHarvest at: aCover class put: ((totalHarvest at: aCover class) + aCover yield)
 ]

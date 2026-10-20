@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'doesPopulationGrow',
 		'cattleSizeMax',
-		'expansionFrequency'
+		'expansionFrequency',
+		'cumulConflicts'
 	],
 	#category : 'AgriHerders-Model-coreModel',
 	#package : 'AgriHerders-Model',
@@ -67,6 +68,26 @@ AHModel >> cattleSizeMax [
 ]
 
 { #category : 'probes' }
+AHModel >> conflicts [
+	"retourne le nombre total de conflits, pour suivre l'evolution de tout le troupeau"
+
+	<probeNamed: 'conflicts' color: 'DC2411'>
+	|currentConflicts|
+	currentConflicts := self @@ AHPlot sum: [ :p | p conflicts ].
+	cumulConflicts := cumulConflicts + currentConflicts.
+	^currentConflicts 
+]
+
+{ #category : 'probes' }
+AHModel >> conflictsAverage [
+	"retourne le nombre total de conflits, pour suivre l'evolution de tout le troupeau"
+
+	<probeNamed: 'conflicts average' color: 'DC2411'>
+	self currentTimeStep = 0 ifTrue: [ ^0 ].
+	^ cumulConflicts / self currentTimeStep
+]
+
+{ #category : 'probes' }
 AHModel >> corporalCondition [
 	"evolution de CC moyen de tout le troupeau (moyenne pondérée) "
 
@@ -119,6 +140,20 @@ AHModel >> createOneFarmFrom: aListOfIDs forAgent: aTypeOfAgent [
 				aFarm addComponent: ag house ] ]
 ]
 
+{ #category : 'probes' }
+AHModel >> cumulConflicts [
+	"retourne le nombre total de conflits, pour suivre l'evolution de tout le troupeau"
+
+	<probeNamed: 'cumulConflicts' color: '9B3429'>
+	^ cumulConflicts
+]
+
+{ #category : 'accessing' }
+AHModel >> cumulConflicts: anObject [
+
+	cumulConflicts := anObject
+]
+
 { #category : 'accessing' }
 AHModel >> doesPopulationGrow [
 
@@ -168,9 +203,10 @@ AHModel >> globalFertility [
 
 { #category : 'initialization' }
 AHModel >> init [
+	"	<init>"
 
-"	<init>"
 	cattleSizeMax := 0.
+	cumulConflicts := 0.
 	self
 		createGridNumberOfRows: 8
 		numberOfColumns: 8
