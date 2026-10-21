@@ -33,15 +33,6 @@ AHModel >> areCowsExtinguished [
 ]
 
 { #category : 'probes' }
-AHModel >> averageBiomass [
-	"^ (self @@ AHPlot collect: [ :p | p cover biomass ]) average"
-
-	<probeNamed: 'Average biomass' color: #green>
-
-	^ self totalResidue + self naturalBiomass
-]
-
-{ #category : 'probes' }
 AHModel >> batchNumber [ 
 "retourne le nombre total de vaches, pour suivre l'evolution de tout le troupeau"
 
@@ -62,7 +53,7 @@ AHModel >> cattleSize [
 AHModel >> cattleSizeMax [ 
 "retourne le plus grand nombre total de vaches,"
 
-	<probeNamed: 'Cattle size max' color: 'E74C3C' >
+	"<probeNamed: 'Cattle size max' color: 'E74C3C' >"
 	cattleSizeMax := self cattleSize max: cattleSizeMax .
 	^cattleSizeMax
 ]
@@ -103,7 +94,7 @@ AHModel >> corporalCondition [
 { #category : 'probes' }
 AHModel >> cottonSize [
 
-	<probeNamed: 'Cotton size' color: 'C0AC8F'>
+	"<probeNamed: 'Cotton size' color: 'C0AC8F'>"
 	^ (self @@ AHPlot select: [ :p | p cover class = AHCotton ]) size
 ]
 
@@ -144,7 +135,7 @@ AHModel >> createOneFarmFrom: aListOfIDs forAgent: aTypeOfAgent [
 AHModel >> cumulConflicts [
 	"retourne le nombre total de conflits, pour suivre l'evolution de tout le troupeau"
 
-	<probeNamed: 'cumulConflicts' color: '9B3429'>
+	"<probeNamed: 'cumulConflicts' color: '9B3429'>"
 	^ cumulConflicts
 ]
 
@@ -300,8 +291,21 @@ AHModel >> isDrySeason [
 { #category : 'probes' }
 AHModel >> maizeSize [
 
-	<probeNamed: 'Maize size' color: 'F1F10F'>
+	"<probeNamed: 'Maize size' color: 'F1F10F'>"
 	^ (self @@ AHPlot select: [ :p | p cover class = AHMaize ]) size
+]
+
+{ #category : 'probes' }
+AHModel >> mobileCC [
+	"evolution de CC moyen de tout le troupeau (moyenne pondérée) "
+
+	<probeNamed: 'Mobile Corporal condition' color: 'F39C12'>
+	| heads |
+	self @@ AHCattleBatch ifEmpty: [ ^ 0 ].
+	heads := (self @@ AHCattleBatch collect: [ :each | each heads ]) sum.
+	heads = 0 ifTrue: [ ^ 0 ].
+	^ (self @@ AHCattleBatch collect: [ :each |
+		   each heads * each mobileCC ]) sum / heads
 ]
 
 { #category : 'probes' }
@@ -333,7 +337,7 @@ AHModel >> naturalBiomass [
 AHModel >> naturalZoneFertility [
 	"moyenne de la fertilité des plots en natural fertility : #(2 6 7) average"
 
-	<probeNamed: 'naturalZone fertility' color: #black>
+	"<probeNamed: 'naturalZone fertility' color: #black>"
 	| coll |
 	"coll := OrderedCollection new.
 	coll addAll: (self plotsCoveredBy: AHForest).
@@ -355,7 +359,7 @@ AHModel >> plotsCoveredBy: aTypeOfCover [
 { #category : 'probes' }
 AHModel >> soyaSize [
 
-	<probeNamed: 'Soja size' color: 'B29EBB'>
+	"<probeNamed: 'Soja size' color: 'B29EBB'>"
 	^ (self @@ AHPlot select: [ :p | p cover class = AHSoya ]) size
 ]
 
@@ -393,6 +397,7 @@ AHModel >> stepSemester [
 
 	<control>
 	self @@ AHPlot do: #resetCowsCounter.
+	self @@ AHCattleBatch do: #setPreviousCC.
 	self isDrySeason
 		ifTrue: [ self stepDrySeason "pair" ]
 		ifFalse: [ self stepRainySeason ]
@@ -408,6 +413,15 @@ AHModel >> theCattleBatches [
 AHModel >> thePlots [
 
 	^ self @@ AHPlot 
+]
+
+{ #category : 'probes' }
+AHModel >> totalBiomass [
+	"^ (self @@ AHPlot collect: [ :p | p cover biomass ]) average"
+
+	"<probeNamed: 'Total biomass' color: #green>"
+
+	^ self totalResidue + self naturalBiomass
 ]
 
 { #category : 'probes' }
@@ -428,7 +442,7 @@ AHModel >> totalHarvest [
 
 { #category : 'probes' }
 AHModel >> totalResidue [
-	<probeNamed: 'totalResidue' color: '9CB553'>
+	"<probeNamed: 'totalResidue' color: '9CB553'>"
 
 	^ ((self @@ AHPlot select: [ :p |
 		    p cover isKindOf: AHCultivatedVegetation ]) collect: [ :p |
@@ -445,27 +459,27 @@ AHModel >> villagePlots [
 { #category : 'probes' }
 AHModel >> yield_Cassava [
 
-	<probeNamed: 'Yield cassava' color: 'DCC603'>
+	"<probeNamed: 'Yield cassava' color: 'DCC603'>"
 	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHCassava ]
 ]
 
 { #category : 'probes' }
 AHModel >> yield_Cotton [
 
-	<probeNamed: 'Yield cotton' color: 'C0AC8F'>
+	"<probeNamed: 'Yield cotton' color: 'C0AC8F'>"
 	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHCotton ]
 ]
 
 { #category : 'probes' }
 AHModel >> yield_Maize [
 
-	<probeNamed: 'Yield maize' color: 'FFE95A'>
+	"<probeNamed: 'Yield maize' color: 'FFE95A'>"
 	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHMaize ]
 ]
 
 { #category : 'probes' }
 AHModel >> yield_Soya [
 
-	<probeNamed: 'Yield soya' color: '866EB3'>
+	"<probeNamed: 'Yield soya' color: '866EB3'>"
 	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHSoya ]
 ]

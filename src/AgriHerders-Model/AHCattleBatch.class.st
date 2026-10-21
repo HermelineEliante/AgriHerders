@@ -5,7 +5,8 @@ Class {
 		'heads',
 		'corporalCondition',
 		'owner',
-		'needs'
+		'needs',
+		'previousCC'
 	],
 	#classInstVars : [
 		'faecesPerDay',
@@ -19,14 +20,15 @@ Class {
 		'thresholdGoodCC',
 		'thresholdLowCC',
 		'thresholdBadCC',
-		'maximumSize'
+		'maximumSize',
+		'harvestingMortalityRate'
 	],
 	#category : 'AgriHerders-Model-coreModel',
 	#package : 'AgriHerders-Model',
 	#tag : 'coreModel'
 }
 
-{ #category : 'accessing parameters' }
+{ #category : 'accessing' }
 AHCattleBatch class >> dailyForrageNeed [
 	"6.25 kgMS"
 	
@@ -50,6 +52,18 @@ AHCattleBatch class >> faecesPerDay [
 AHCattleBatch class >> faecesPerDay: anObject [
 
 	faecesPerDay := anObject
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> harvestingMortalityRate [
+	<parameterFloatMin: 0 max: 1 default: 0.2>
+	^ harvestingMortalityRate
+]
+
+{ #category : 'accessing' }
+AHCattleBatch class >> harvestingMortalityRate: anObject [
+
+	harvestingMortalityRate := anObject
 ]
 
 { #category : 'accessing' }
@@ -294,6 +308,7 @@ AHCattleBatch >> initialize [
 	needs := 0.
 	heads := self class initialHeads.
 	corporalCondition := self class initialCorporalCondition.
+	previousCC := corporalCondition
 ]
 
 { #category : 'testing' }
@@ -301,6 +316,12 @@ AHCattleBatch >> isStarving [
 
 	^ self corporalCondition <= self class thresholdBadCC
 	
+]
+
+{ #category : 'accessing' }
+AHCattleBatch >> mobileCC [
+"mobile corporal condition on the last 2 semesters"
+	^ (corporalCondition + previousCC) / 2
 ]
 
 { #category : 'control' }
@@ -339,7 +360,7 @@ Morts_naturelles = heads × Taux_mortalité"
 	(self corporalCondition between: 2 and: 4) ifTrue: [
 		taux_mortalité := taux_mortalité + 0.1 ].
 	self corporalCondition < 2 ifTrue: [
-		taux_mortalité := taux_mortalité + 0.2 ].
+		taux_mortalité := taux_mortalité + self class harvestingMortalityRate "0.2" ].
 	self heads: (heads - (heads * taux_mortalité)) "rounded".
 	self heads < 1 ifTrue: [ self delete ]
 ]
@@ -398,6 +419,12 @@ Naissances = heads × Taux_reproduction
 	self hasBadCorporalCondition ifTrue: [
 		^ self heads: (heads * self class reproductionRate_bad "0.05") + heads ].
 	nil "otherwise, no reproduction"
+]
+
+{ #category : 'control' }
+AHCattleBatch >> setPreviousCC [
+
+	previousCC := corporalCondition 
 ]
 
 { #category : 'control' }
