@@ -217,14 +217,6 @@ AHModel >> init [
 ]
 
 { #category : 'initialization' }
-AHModel >> initAgreement [
-
-	<init>
-	self init.
-	self @@ AHActor do: [ :act | act agreement: true ]
-]
-
-{ #category : 'initialization' }
 AHModel >> initFarmsAndAgents [
 
 	self createOneFarmFrom: #( 17 18 25 26 27 33 ) forAgent: AHFarmer.
@@ -275,6 +267,22 @@ AHModel >> initLandcover [
 
 { #category : 'initialization' }
 AHModel >> initNoAgreement [
+
+	<init>
+	self init.
+	self @@ AHActor do: [ :act | act agreement: false ]
+]
+
+{ #category : 'initialization' }
+AHModel >> initWithAgreement [
+
+	<init>
+	self init.
+	self @@ AHActor do: [ :act | act agreement: true ]
+]
+
+{ #category : 'initialization' }
+AHModel >> initWithoutAgreement [
 
 	<init>
 	self init.

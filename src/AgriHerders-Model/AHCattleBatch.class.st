@@ -215,7 +215,7 @@ AHCattleBatch >> dailyForrageNeed [
 { #category : 'control' }
 AHCattleBatch >> defecateOn: visitedPlots [
 	"On répartit le nombre de fècès total sur tous les plots visités. 
-	Ainsi, on note une Mise à jour de la fertilité des plots visités par les animaux. Excreta deposits are proportional to the time spent by the animals on the plot. ""2.8 * 4 * 183 /1000 = 2T/ha ce qui correspond à une élévation de 1 de la fertilité (Une publication technique mentionne que pour nourrir des microorganismes du sol et améliorer certains aspects de fertilité, des apports de 2 à 4 t/ha de compost jeune de fumier peuvent déjà avoir un effet mesurable. D’où je garde 4 dans ce calcul « ""2.8 * 4 * 183 /1000 = 2T/ha ») .
+	Ainsi, on note une Mise à jour de la fertilité des plots visités par les animaux. Excreta deposits are proportional to the time spent by the animals on the plot. ""2.8 * 4 * 183 /1000 = 2T/ha ce qui correspond à une élévation de 1 de la fertilité (Une publication technique mentionne que pour nourrir des microorganismes du sol et améliorer certains aspects de fertilité, des apports de 2 à 4 t/ha de compost jeune de fumier peuvent déjà avoir un effet mesurable. D’où je garde 4 (quoi ?? animaux ?) dans ce calcul « ""2.8 * 4 * 183 /1000 = 2T/ha ») .
 "
 
 	| qtyFaecesPerPlot |
