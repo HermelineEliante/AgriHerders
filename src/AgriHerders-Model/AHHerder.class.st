@@ -26,10 +26,10 @@ AHHerder >> aggregateHerds [
 
 { #category : 'accessing' }
 AHHerder >> anyPlotsWithBiomass [
-	"Return plots of the territory with biomass, whatever if they are opened or not"
+	"Return plots of the territory with biomass, whatever if they are opened or not (rejecting owns plots)"
 
 	
-	^ territory select: [ :p | p cover biomass > 0 ]
+	^ territory select: [ :p | ((p belongsToOwner: self) not) and: [p cover biomass > 0 ]]
 ]
 
 { #category : 'accessing' }

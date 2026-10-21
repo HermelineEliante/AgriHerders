@@ -10,6 +10,13 @@ Class {
 }
 
 { #category : 'code-critics' }
+ManifestAgriHerdersModel class >> ruleCollectionProtocolRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#AHCattleBatch #moveAndFeedOnPlots: #false)) #'2026-10-21T11:09:47.966173+02:00') )
+]
+
+{ #category : 'code-critics' }
 ManifestAgriHerdersModel class >> ruleNotEliminationRuleV1FalsePositive [
 
 	<ignoreForCoverage>

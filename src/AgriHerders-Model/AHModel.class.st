@@ -378,6 +378,7 @@ AHModel >> stepRainySeason [
 	self @@ AHActor do: #harvestCasava.
 	self thePlots do: #stepRainySeason.
 	(self shuffled: (self allEntitiesOfClass: AHHerder)) do: #moveHerd.
+	self @@ AHCattleBatch reverseDo: #naturalMortality.
 	self @@ AHCattleBatch do: #reproduce.
 	"Farms expansion"
 	doesPopulationGrow ifTrue: [ "comme currentTime est toujours impair en rainyStep, il faut rajouter 1"

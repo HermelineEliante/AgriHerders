@@ -334,7 +334,7 @@ Si Condition_moyenne_annuelle < 2 :
 Morts_naturelles = heads × Taux_mortalité"
 
 	| taux_mortalité |
-	self corporalCondition = 0 ifTrue: [ ^self delete ].
+	"self corporalCondition = 0 ifTrue: [ ^self delete ]."
 	taux_mortalité := self class naturalMortalityRate "0.02".
 	(self corporalCondition between: 2 and: 4) ifTrue: [
 		taux_mortalité := taux_mortalité + 0.1 ].
@@ -426,7 +426,7 @@ AHCattleBatch >> updateCorporalCondition [
 
 	needs > 0
 		ifTrue: [
-		self corporalCondition: 10 * (1 - (needs / self totalNeeds)) ]
+			self corporalCondition: 10 * (1 - (needs / self totalNeeds)) ]
 		ifFalse: [ "Ratio = Daily-ing / dailyForrageNeeds"
-		self corporalCondition: 10 ]
+			self corporalCondition: 10 ]
 ]
