@@ -12,7 +12,7 @@ Class {
 	#tag : 'coreModel'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 AHModel class >> modelName [
 
 	^ 'AgriHerders'
@@ -75,7 +75,7 @@ AHModel >> conflictsAverage [
 
 	<probeNamed: 'conflicts average' color: 'DC2411'>
 	self currentTimeStep = 0 ifTrue: [ ^0 ].
-	^ cumulConflicts / self currentTimeStep
+	^ (cumulConflicts / self currentTimeStep) asFloat
 ]
 
 { #category : 'probes' }
@@ -87,8 +87,8 @@ AHModel >> corporalCondition [
 	self @@ AHCattleBatch ifEmpty: [ ^ 0 ].
 	heads := (self @@ AHCattleBatch collect: [ :each | each heads ]) sum.
 	heads = 0 ifTrue: [ ^ 0 ].
-	^ (self @@ AHCattleBatch collect: [ :each |
-		   each heads * each corporalCondition ]) sum / heads
+	^ ((self @@ AHCattleBatch collect: [ :each |
+		   each heads * each corporalCondition ]) sum / heads) asFloat
 ]
 
 { #category : 'probes' }
@@ -189,13 +189,14 @@ AHModel >> forestPlots [
 AHModel >> globalFertility [
 "moyenne de la fertilité de tous les plots : #(2 6 7) average"
 	<probeNamed: 'global fertility' color: #black>
-	^ (self @@ AHPlot collect: [ :p | p soilFertility ]) average
+	^ (self @@ AHPlot collect: [ :p | p soilFertility ]) average asFloat
 ]
 
 { #category : 'initialization' }
 AHModel >> init [
 	"	<init>"
 
+	| file |
 	cattleSizeMax := 0.
 	cumulConflicts := 0.
 	self
@@ -212,8 +213,12 @@ AHModel >> init [
 	self makeAgentsScatteredInCells.
 	context currentTimeStep: 0.
 
-	AHPlot activePovSelector: #povLandcover
+	AHPlot activePovSelector: #povLandcover.
 	"(self @@ AHFarm select: [ : f | f owner isNil ]) inspect"
+	
+file := 'probes_steps.csv' asFileReference writeStream.
+file nextPutAll: 'step,totalHarvest,conflictsAverage', String cr.
+file close.
 ]
 
 { #category : 'initialization' }
@@ -266,14 +271,6 @@ AHModel >> initLandcover [
 ]
 
 { #category : 'initialization' }
-AHModel >> initNoAgreement [
-
-	<init>
-	self init.
-	self @@ AHActor do: [ :act | act agreement: false ]
-]
-
-{ #category : 'initialization' }
 AHModel >> initWithAgreement [
 
 	<init>
@@ -312,8 +309,8 @@ AHModel >> mobileCC [
 	self @@ AHCattleBatch ifEmpty: [ ^ 0 ].
 	heads := (self @@ AHCattleBatch collect: [ :each | each heads ]) sum.
 	heads = 0 ifTrue: [ ^ 0 ].
-	^ (self @@ AHCattleBatch collect: [ :each |
-		   each heads * each mobileCC ]) sum / heads
+	^ ((self @@ AHCattleBatch collect: [ :each |
+		   each heads * each mobileCC ]) sum / heads) asFloat
 ]
 
 { #category : 'probes' }
@@ -404,11 +401,30 @@ AHModel >> stepSemester [
 	"t = 1 => rainy season, si t est pair => dry season"
 
 	<control>
+	| file existingContent |
 	self @@ AHPlot do: #resetCowsCounter.
 	self @@ AHCattleBatch do: #setPreviousCC.
 	self isDrySeason
 		ifTrue: [ self stepDrySeason "pair" ]
-		ifFalse: [ self stepRainySeason ]
+		ifFalse: [ self stepRainySeason ].
+		
+	"Créer ou ouvrir un fichier CSV pour écrire les données"
+"file := 'probes_steps.csv' asFileReference writeStream.
+file nextPutAll: (self currentTimeStep printString), ',', (self totalHarvest printString), ',', (self conflictsAverage printString), String cr.
+file close."
+
+file := 'probes_steps.csv' asFileReference.
+"Lire le contenu existant (s'il existe)"
+existingContent := file exists
+    ifTrue: [ file readStream contents ]
+    ifFalse: [ '' ].
+
+"Ajouter la nouvelle ligne"
+file writeStreamDo: [ :stream |
+    stream nextPutAll: existingContent.
+    stream nextPutAll: (self currentTimeStep printString), ',', (self totalHarvest printString), ',', (self conflictsAverage printString), String cr.
+].
+
 ]
 
 { #category : 'accessing' }
