@@ -183,10 +183,9 @@ AHPlot >> povFarm [
 AHPlot >> povLandcover [
 
 	<pov>
-	| pov owner borderColor borderWidth |
+"	| pov owner borderColor borderWidth |
 	pov := CMPointOfView new
 		       borderWidth: 0.0;
-		       "borderColor: CMColor darkGray;"
 		       yourself.
 	(self getAggregateType: AHFarm) ifNotNil: [
 			owner := (self getAggregateType: AHFarm) owner.
@@ -195,8 +194,11 @@ AHPlot >> povLandcover [
 			pov color: owner color;
 				borderWidth: borderWidth;
 				borderColor: borderColor ].
-	cover ifNil: [ ^ pov color: Color black ].
-	^ pov color: self cover class myColor
+	cover ifNil: [ ^ pov color: Color black ]."
+	^ CMPointOfView new
+		       borderWidth: 0.0;
+		       color: self cover class myColor;
+				yourself
 ]
 
 { #category : 'pov' }

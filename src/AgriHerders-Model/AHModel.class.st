@@ -196,7 +196,6 @@ AHModel >> globalFertility [
 AHModel >> init [
 	"	<init>"
 
-	| file |
 	cattleSizeMax := 0.
 	cumulConflicts := 0.
 	self
@@ -214,11 +213,9 @@ AHModel >> init [
 	context currentTimeStep: 0.
 
 	AHPlot activePovSelector: #povLandcover.
+	AHFarm activePovSelector: #povBorder.
 	"(self @@ AHFarm select: [ : f | f owner isNil ]) inspect"
 	
-file := 'probes_steps.csv' asFileReference writeStream.
-file nextPutAll: 'step,totalHarvest,conflictsAverage', String cr.
-file close.
 ]
 
 { #category : 'initialization' }
