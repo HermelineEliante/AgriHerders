@@ -401,30 +401,13 @@ AHModel >> stepSemester [
 	"t = 1 => rainy season, si t est pair => dry season"
 
 	<control>
-	| file existingContent |
 	self @@ AHPlot do: #resetCowsCounter.
 	self @@ AHCattleBatch do: #setPreviousCC.
 	self isDrySeason
 		ifTrue: [ self stepDrySeason "pair" ]
 		ifFalse: [ self stepRainySeason ].
 		
-	"Créer ou ouvrir un fichier CSV pour écrire les données"
-"file := 'probes_steps.csv' asFileReference writeStream.
-file nextPutAll: (self currentTimeStep printString), ',', (self totalHarvest printString), ',', (self conflictsAverage printString), String cr.
-file close."
-
-file := 'probes_steps.csv' asFileReference.
-"Lire le contenu existant (s'il existe)"
-existingContent := file exists
-    ifTrue: [ file readStream contents ]
-    ifFalse: [ '' ].
-
-"Ajouter la nouvelle ligne"
-file writeStreamDo: [ :stream |
-    stream nextPutAll: existingContent.
-    stream nextPutAll: (self currentTimeStep printString), ',', (self totalHarvest printString), ',', (self conflictsAverage printString), String cr.
-].
-
+ 
 ]
 
 { #category : 'accessing' }
