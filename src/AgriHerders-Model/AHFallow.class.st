@@ -8,8 +8,8 @@ Class {
 
 { #category : 'accessing' }
 AHFallow class >> biomassMax [
-
-	<parameterFloatMin: 0 max: 50000 default: 10000>
+"correspond au couvert herbacé. A cela, il faut ajouter les résidus de la culture initialement en place (cf. méthode rainyStep & dryStep)"
+	<parameterFloatMin: 0 max: 500 default: 100>
 	^ biomassMax
 ]
 

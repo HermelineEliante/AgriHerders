@@ -8,7 +8,7 @@ Class {
 
 { #category : 'accessing' }
 AHSoya class >> expectedYield [
-	<parameterFloatMin: 0 max: 1000 default: 200>
+	<parameterFloatMin: 500 max: 1500 default: 1044>
 	^ expectedYield
 ]
 
@@ -41,7 +41,7 @@ AHSoya class >> price [
 
 { #category : 'accessing' }
 AHSoya class >> residue [
-
-	<parameterFloatDefault: 1200>
+"KG MS/ha"
+	<parameterFloatDefault: 2000>
 	^ residue
 ]

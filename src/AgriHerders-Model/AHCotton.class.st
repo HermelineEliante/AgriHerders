@@ -9,7 +9,7 @@ Class {
 { #category : 'accessing' }
 AHCotton class >> expectedYield [
 
-	<parameterFloatMin: 0 max: 1000 default: 750>
+	<parameterFloatMin: 1000 max: 2500 default: 1350>
 	^ expectedYield
 ]
 
@@ -35,7 +35,7 @@ AHCotton class >> price [
 
 { #category : 'accessing' }
 AHCotton class >> residue [
-
-	<parameterFloatDefault: 700>
+"KG MS/ha"
+	<parameterFloatMin: 5100 max: 6900 default: 5500>
 	^ residue
 ]

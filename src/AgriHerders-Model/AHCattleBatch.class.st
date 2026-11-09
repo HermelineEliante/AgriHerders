@@ -209,6 +209,7 @@ AHCattleBatch >> corporalCondition: anObject [
 
 { #category : 'accessing parameters' }
 AHCattleBatch >> dailyForrageNeed [
+	"6.25 kgMS par tête adulte, sinon 4.19 kgMS par tête d'un troupeau (adulte, juvenil)"
 	^ self class dailyForrageNeed
 ]
 
@@ -313,7 +314,7 @@ AHCattleBatch >> initialize [
 
 { #category : 'testing' }
 AHCattleBatch >> isStarving [
-
+"if CC <= 3"
 	^ self corporalCondition <= self class thresholdBadCC
 	
 ]

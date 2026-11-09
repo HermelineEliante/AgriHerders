@@ -8,7 +8,8 @@ Class {
 
 { #category : 'accessing' }
 AHCashew class >> expectedYield [
-	<parameterFloatMin: 0 max: 1000 default: 450>
+"90% de MS"
+	<parameterFloatMin: 250 max: 600 default: 450>
 	^ expectedYield
 ]
 
@@ -27,8 +28,8 @@ AHCashew class >> price [
 
 { #category : 'accessing' }
 AHCashew class >> residue [
-
-	<parameterFloatDefault: 400>
+"KG MS/ha"
+	<parameterFloatMin: 2650 max: 4550 default: 3600>
 	^ residue
 ]
 

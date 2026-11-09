@@ -11,7 +11,8 @@ Class {
 
 { #category : 'accessing' }
 AHCassava class >> expectedYield [
-	<parameterFloatMin: 0 max: 1000 default: 80>
+"30% de MS"
+	<parameterFloatMin: 1800 max: 4500 default: 3000>
 	^ expectedYield
 ]
 
@@ -30,8 +31,9 @@ AHCassava class >> price [
 
 { #category : 'accessing' }
 AHCassava class >> residue [
-	<parameterIntegerDefault: 500>
-	^residue
+"KG MS/ha"
+	<parameterFloatMin: 1360 max: 2810 default: 2300>
+	^ residue
 ]
 
 { #category : 'control' }
