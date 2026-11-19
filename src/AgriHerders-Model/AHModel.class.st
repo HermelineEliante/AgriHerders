@@ -402,7 +402,7 @@ AHModel >> stepSemester [
 	self @@ AHCattleBatch do: #setPreviousCC.
 	self isDrySeason
 		ifTrue: [ self stepDrySeason "pair" ]
-		ifFalse: [ self stepRainySeason ].
+		ifFalse: [ self stepRainySeason ]. 
 		
  
 ]
