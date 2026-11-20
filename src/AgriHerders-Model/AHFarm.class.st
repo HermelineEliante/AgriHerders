@@ -9,6 +9,14 @@ Class {
 	#tag : 'coreModel'
 }
 
+{ #category : 'pov' }
+AHFarm >> aspectBorder: look [
+		<aspect>
+	look
+		  borderColor: (owner color);
+		  borderThickness: 0.04
+]
+
 { #category : 'accessing' }
 AHFarm >> owner [
 

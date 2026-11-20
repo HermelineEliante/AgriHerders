@@ -195,7 +195,7 @@ AHModel >> globalFertility [
 { #category : 'initialization' }
 AHModel >> init [
 	"	<init>"
-
+	
 	cattleSizeMax := 0.
 	cumulConflicts := 0.
 	self
@@ -212,9 +212,8 @@ AHModel >> init [
 	self makeAgentsScatteredInCells.
 	context currentTimeStep: 0.
 
-	AHPlot activePovSelector: #povLandcover.
-	AHFarm activePovSelector: #povBorder.
-	"(self @@ AHFarm select: [ : f | f owner isNil ]) inspect"
+"	AHPlot activePovSelector: #povLandcover.
+	AHFarm activePovSelector: #povBorder."
 	
 ]
 
@@ -271,6 +270,7 @@ AHModel >> initLandcover [
 AHModel >> initWithAgreement [
 
 	<init>
+	<perspective: #perspectiveEcology >
 	self init.
 	self @@ AHActor do: [ :act | act agreement: true ]
 ]
@@ -279,6 +279,7 @@ AHModel >> initWithAgreement [
 AHModel >> initWithoutAgreement [
 
 	<init>
+	<perspective: #perspectiveEcology >
 	self init.
 	self @@ AHActor do: [ :act | act agreement: false ]
 ]
@@ -349,6 +350,21 @@ AHModel >> naturalZoneFertility [
 	coll := self plotsCoveredBy: AHNaturalVegetation.
 	coll isEmpty ifTrue: [ ^ 0 ].
 	^ (coll collect: [ :p | p soilFertility ]) average
+]
+
+{ #category : 'perspectives' }
+AHModel >> perspectiveEcology [
+    "equivalent old habitus"
+    <perspective>
+    ^ CMPerspective new
+        show: AHPlot as: #aspectLandcover:;
+        show: AHFarm as: #aspectBorder:;
+        "hide: WSHShepherd;
+        hide: WSHFlockLink;
+        hide: WSHFlock;"
+        yourself
+
+
 ]
 
 { #category : 'accessing' }

@@ -43,6 +43,42 @@ AHPlot >> area: anObject [
 	area := anObject
 ]
 
+{ #category : 'pov' }
+AHPlot >> aspectBiomass: look [
+
+	<aspect>
+	cover ifNil: [ ^ look color: Color black ].
+	(self cover isKindOf: AHHabitation) ifTrue: [ ^ self aspectLandcover: look ].
+	"^ CMPointOfView color: (CMColor colorValue: (self cover biomass) min: 0 color: #white max: (self cover biomassMax ) color: self cover class myColor)."
+	
+	look colorShadeOf: self cover class myColor forValue: (self cover biomass) from: 0 to: self cover biomassMax 
+	
+]
+
+{ #category : 'pov' }
+AHPlot >> aspectLandcover: look [
+
+	<aspect>
+	look
+		borderThickness: 0.0;
+		color: self cover class myColor
+]
+
+{ #category : 'pov' }
+AHPlot >> aspectSoilFertility: look [
+	"	| aColor |
+	self soilFertility = 0 ifTrue: [ aColor := Color white ].
+	self soilFertility = 1 ifTrue: [ aColor := Color yellow ].
+	self soilFertility = 2 ifTrue: [ aColor := Color orange ].
+	self soilFertility = 3 ifTrue: [ aColor := Color green ]."
+
+	<aspect>
+	look colorShadeOf: CMColor orange 
+		forValue: self soilFertility
+		from: 0
+		to: 20
+]
+
 { #category : 'testing' }
 AHPlot >> belongsToOwner: anAgent [
 	^ self belongsToAggregate: anAgent myFarm
