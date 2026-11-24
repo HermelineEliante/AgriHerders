@@ -194,10 +194,35 @@ AHCattleBatch class >> thresholdLowCC: anObject [
 	thresholdLowCC := anObject
 ]
 
-{ #category : 'accessing' }
-AHCattleBatch >> corporalCondition [
-	"<parameterIntegerDefault: 10>"
+{ #category : 'charts' }
+AHCattleBatch >> chartCorporalCondition [
+	"Are my cattle well fed?"
 
+	<chart>
+	^ CMChart new
+		  title: 'Corporal condition';
+		  lineX: #currentTimeStep y: #corporalCondition;
+		  yFrom: 0 to: 10;
+		  hideLegend;
+		  yourself
+]
+
+{ #category : 'charts' }
+AHCattleBatch >> chartHeads [
+	"How does my batch grow and shrink?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Heads';
+		  lineX: #currentTimeStep y: #heads;
+		  hideLegend;
+		  yourself
+]
+
+{ #category : 'probes' }
+AHCattleBatch >> corporalCondition [
+
+	<probe>
 	^ corporalCondition
 ]
 
@@ -289,10 +314,10 @@ AHCattleBatch >> hasLowCorporalCondition [
 	^self corporalCondition > self class thresholdLowCC 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'probes' }
 AHCattleBatch >> heads [
 
-"	<parameterIntegerDefault: 10>"
+	<probe>
 	^ heads
 ]
 

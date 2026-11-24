@@ -89,6 +89,18 @@ AHPlot >> belongsToSomebody [
 	^ self belongsToAggregateType: AHFarm 
 ]
 
+{ #category : 'charts' }
+AHPlot >> chartSoilFertility [
+	"How does the fertility of my soil change?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Soil fertility';
+		  lineX: #currentTimeStep y: #soilFertility;
+		  hideLegend;
+		  yourself
+]
+
 { #category : 'accessing' }
 AHPlot >> conflicts [
 
@@ -140,6 +152,14 @@ AHPlot >> isOpenForCorraling [
 	| agg |
 	agg := self getAggregateType: AHFarm.
 	agg ifNil: [^ true ] ifNotNil: [ ^agg owner agreement ]
+]
+
+{ #category : 'probes' }
+AHPlot >> landcover [
+	"Answer the name of my cover, such as 'Maize' or 'Forest'"
+
+	<probe>
+	^ cover class landcoverName
 ]
 
 { #category : 'accessing' }
@@ -268,10 +288,11 @@ AHPlot >> setLandcover: aTypeOfLandcover [
 	^cover 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'probes' }
 AHPlot >> soilFertility [
 
 	<parameterFloatDefault: 5>
+	<probe>
 	^ soilFertility
 ]
 

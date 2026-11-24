@@ -17,6 +17,13 @@ AHFarm >> aspectBorder: look [
 		  borderThickness: 0.04
 ]
 
+{ #category : 'probes' }
+AHFarm >> numberOfPlots [
+
+	<probe>
+	^ self components size
+]
+
 { #category : 'accessing' }
 AHFarm >> owner [
 
@@ -47,4 +54,11 @@ AHFarm >> povFilled [
 		  borderColor: Color red;
 		  borderWidth: 0.1;
 		  yourself
+]
+
+{ #category : 'printing' }
+AHFarm >> printOn: aStream [
+
+	aStream nextPutAll: 'Farm of '.
+	owner printOn: aStream
 ]

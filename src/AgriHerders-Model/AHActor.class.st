@@ -33,6 +33,18 @@ AHActor >> agreement: anObject [
 	agreement := anObject
 ]
 
+{ #category : 'charts' }
+AHActor >> chartMoney [
+	"How does my money change?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Money';
+		  lineX: #currentTimeStep y: #money;
+		  hideLegend;
+		  yourself
+]
+
 { #category : 'pov' }
 AHActor >> color [
 	^ CMColor colorOfNumber: 100
@@ -103,10 +115,11 @@ AHActor >> isDrySeason [
 	^ self currentTimeStep even
 ]
 
-{ #category : 'accessing' }
+{ #category : 'probes' }
 AHActor >> money [
 
 	<parameterFloatDefault: 1>
+	<probe>
 	^ money
 ]
 
@@ -178,6 +191,12 @@ AHActor >> pov [
 	^ CMPointOfView
 		  color: self color
 		  shape: self shape 
+]
+
+{ #category : 'printing' }
+AHActor >> printOn: aStream [
+
+	aStream nextPutAll: self name
 ]
 
 { #category : 'initialize' }

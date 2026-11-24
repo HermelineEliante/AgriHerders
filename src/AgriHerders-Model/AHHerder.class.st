@@ -93,6 +93,19 @@ AHHerder >> bestPlotInto: aListOfPlots [
 		  (freePlots select: [ :p | p cover biomass = biomassMax ])
 ]
 
+{ #category : 'charts' }
+AHHerder >> chartHerd [
+	"How does my herd grow?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Herd';
+		  lineX: #currentTimeStep y: #herdSize;
+		  yTitle: 'Heads';
+		  hideLegend;
+		  yourself
+]
+
 { #category : 'controlling' }
 AHHerder >> dry_MoveOneCattleBatch: aBatch [
 	" Si le besoin du aBatch (avec plusieurs heads) est supérieur à 0, je les envoie d'abord sur les meilleurs plots que mes collègues ont ouvert (bestOpenedPlot).
@@ -182,6 +195,14 @@ AHHerder >> herd [
 AHHerder >> herd: anObject [
 
 	herd := anObject
+]
+
+{ #category : 'probes' }
+AHHerder >> herdSize [
+	"Answer the number of heads of all my cattle batches"
+
+	<probe>
+	^ herd inject: 0 into: [ :sum :each | sum + each heads ]
 ]
 
 { #category : 'initialization' }
