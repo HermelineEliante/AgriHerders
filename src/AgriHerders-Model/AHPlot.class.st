@@ -20,7 +20,6 @@ Class {
 AHPlot class >> initialSoilFertility [
 
 	<parameterFloatMin: 0 max: 20 default: 5>
-	<parameterFloatDefault: 5>
 	^ initialSoilFertility
 ]
 
@@ -33,7 +32,6 @@ AHPlot class >> initialSoilFertility: anObject [
 { #category : 'accessing' }
 AHPlot >> area [
 "ha"
-	<parameterFloatDefault: 1>
 	^ area
 ]
 
@@ -165,7 +163,6 @@ AHPlot >> cover: anObject [
 
 { #category : 'accessing' }
 AHPlot >> cowsCounter [
-	<parameterIntegerDefault: 0>
 	^ cowsCounter
 ]
 
@@ -224,7 +221,6 @@ AHPlot >> setLandcover: aTypeOfLandcover [
 { #category : 'probes' }
 AHPlot >> soilFertility [
 
-	<parameterFloatDefault: 5>
 	<probe>
 	^ soilFertility
 ]

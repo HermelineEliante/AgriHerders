@@ -28,7 +28,6 @@ AHVegetation class >> maxSupplyFertility: anObject [
 { #category : 'accessing' }
 AHVegetation >> age [
 
-	<parameterIntegerDefault: 0>
 	^ age
 ]
 
@@ -41,7 +40,6 @@ AHVegetation >> age: anObject [
 { #category : 'accessing' }
 AHVegetation >> biomass [
 
-	<parameterFloatDefault: 0.01>
 	^ biomass
 ]
 
@@ -55,6 +53,14 @@ AHVegetation >> biomass: anObject [
 AHVegetation >> dryStep [
 
 	^self semesterStep
+]
+
+{ #category : 'initialization' }
+AHVegetation >> initialize [
+
+	super initialize.
+	age := 0.
+	biomass := 0.01
 ]
 
 { #category : 'control' }

@@ -23,7 +23,6 @@ totalHarvest at: aCover class put: ((totalHarvest at: aCover class) + aCover yie
 { #category : 'accessing' }
 AHActor >> agreement [
 
-	<parameterBooleanDefault: true>
 	^ agreement
 ]
 
@@ -129,7 +128,6 @@ AHActor >> isDrySeason [
 { #category : 'probes' }
 AHActor >> money [
 
-	<parameterFloatDefault: 1>
 	<probe>
 	^ money
 ]
