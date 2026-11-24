@@ -23,7 +23,6 @@ totalHarvest at: aCover class put: ((totalHarvest at: aCover class) + aCover yie
 { #category : 'accessing' }
 AHActor >> agreement [
 
-	<parameterBooleanDefault: true>
 	^ agreement
 ]
 
@@ -33,9 +32,32 @@ AHActor >> agreement: anObject [
 	agreement := anObject
 ]
 
-{ #category : 'pov' }
+{ #category : 'aspects' }
+AHActor >> aspectDefault: look [
+
+	<aspect>
+	look
+		color: self color;
+		shape: self shape
+]
+
+{ #category : 'charts' }
+AHActor >> chartMoney [
+	"How does my money change?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Money';
+		  lineX: #currentTimeStep y: #money;
+		  hideLegend;
+		  yourself
+]
+
+{ #category : 'aspects' }
 AHActor >> color [
-	^ CMColor colorOfNumber: 100
+	"Answer my colour, which also shows my farm and my cattle"
+
+	^ self subclassResponsibility
 ]
 
 { #category : 'accessing' }
@@ -103,10 +125,10 @@ AHActor >> isDrySeason [
 	^ self currentTimeStep even
 ]
 
-{ #category : 'accessing' }
+{ #category : 'probes' }
 AHActor >> money [
 
-	<parameterFloatDefault: 1>
+	<probe>
 	^ money
 ]
 
@@ -171,13 +193,10 @@ AHActor >> others: anObject [
 	others := anObject
 ]
 
-{ #category : 'pov' }
-AHActor >> pov [
+{ #category : 'printing' }
+AHActor >> printOn: aStream [
 
-	<pov>
-	^ CMPointOfView
-		  color: self color
-		  shape: self shape 
+	aStream nextPutAll: self name
 ]
 
 { #category : 'initialize' }
@@ -189,9 +208,10 @@ AHActor >> resetHarvest [
 	^ totalHarvest
 ]
 
-{ #category : 'pov' }
-AHActor >> shape [ 
-^#circle
+{ #category : 'aspects' }
+AHActor >> shape [
+
+	^ #circle
 ]
 
 { #category : 'control' }

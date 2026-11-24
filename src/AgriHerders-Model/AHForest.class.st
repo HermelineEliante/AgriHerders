@@ -29,7 +29,7 @@ AHForest class >> maxSupplyFertility [
 	^ maxSupplyFertility
 ]
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHForest class >> myColor [
 
 	^ Color fromHexString: '25663D'

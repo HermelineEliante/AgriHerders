@@ -22,7 +22,7 @@ AHBush class >> maxSupplyFertility [
 	^ maxSupplyFertility
 ]
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHBush class >> myColor [
 
 	^ Color fromHexString: 'C9DAA3'

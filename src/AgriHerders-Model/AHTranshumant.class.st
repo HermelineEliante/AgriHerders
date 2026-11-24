@@ -6,9 +6,10 @@ Class {
 	#tag : 'coreModel'
 }
 
-{ #category : 'pov' }
+{ #category : 'aspects' }
 AHTranshumant >> color [
-^CMColor colorOfNumber: self id + 33
+
+	^ CMColor purple
 ]
 
 { #category : 'control' }
@@ -19,7 +20,8 @@ AHTranshumant >> openedPlotsForCoralling [
 
 ]
 
-{ #category : 'pov' }
+{ #category : 'aspects' }
 AHTranshumant >> shape [
-	^#pentagon
+
+	^ #hexagon
 ]

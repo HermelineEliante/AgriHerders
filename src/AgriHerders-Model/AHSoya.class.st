@@ -19,7 +19,7 @@ AHSoya class >> maxSupplyFertility [
 	^ maxSupplyFertility
 ]
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHSoya class >> myColor [
 
 	^ Color fromHexString: 'B29EBB'

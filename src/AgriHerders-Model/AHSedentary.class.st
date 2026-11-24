@@ -6,13 +6,23 @@ Class {
 	#tag : 'coreModel'
 }
 
-{ #category : 'pov' }
+{ #category : 'aspects' }
+AHSedentary >> aspectImage: look [
+
+	<aspect>
+	look
+		image: (id = 1
+				 ifTrue: [ 'herder-red' ]
+				 ifFalse: [ 'herder-blue' ]);
+		size: 0.7
+]
+
+{ #category : 'aspects' }
 AHSedentary >> color [
 
 	id = 1 ifTrue: [ ^ CMColor pink ].
 	id = 2 ifTrue: [ ^ CMColor lightBlue ].
-
-	^ CMColor colorOfNumber: id 
+	^ CMColor palette at: id \\ CMColor palette size + 1
 ]
 
 { #category : 'control' }
@@ -27,9 +37,10 @@ AHSedentary >> harvest [
 						plot cover biomass: plot cover residue ] ]"
 ]
 
-{ #category : 'pov' }
-AHSedentary >> shape [ 
-^#diamond
+{ #category : 'aspects' }
+AHSedentary >> shape [
+
+	^ #diamond
 ]
 
 { #category : 'control' }

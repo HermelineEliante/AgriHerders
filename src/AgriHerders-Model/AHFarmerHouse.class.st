@@ -6,7 +6,7 @@ Class {
 	#tag : 'coreModel'
 }
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHFarmerHouse class >> myColor [
 
 	^ Color fromHexString: 'D7DFE0'

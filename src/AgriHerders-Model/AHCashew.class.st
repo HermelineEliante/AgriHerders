@@ -13,7 +13,7 @@ AHCashew class >> expectedYield [
 	^ expectedYield
 ]
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHCashew class >> myColor [
 
 	^ Color fromHexString: 'F9C3C0'

@@ -17,7 +17,14 @@ AHLandcover class >> allTerminalClasses [
 		  subclass allSubclasses isEmpty ]
 ]
 
-{ #category : 'pov' }
+{ #category : 'accessing' }
+AHLandcover class >> landcoverName [
+	"Answer my name without the prefix of the model, such as 'Maize' for AHMaize"
+
+	^ self name allButFirst: 2
+]
+
+{ #category : 'colors' }
 AHLandcover class >> myColor [
 
 	^ Color white

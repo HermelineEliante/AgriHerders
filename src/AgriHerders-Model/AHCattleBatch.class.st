@@ -194,10 +194,58 @@ AHCattleBatch class >> thresholdLowCC: anObject [
 	thresholdLowCC := anObject
 ]
 
-{ #category : 'accessing' }
-AHCattleBatch >> corporalCondition [
-	"<parameterIntegerDefault: 10>"
+{ #category : 'aspects' }
+AHCattleBatch >> aspectDefault: look [
+	"A star of my owner's colour, as large as my number of heads"
 
+	<aspect>
+	look
+		color: owner color;
+		shape: #star;
+		size: heads / 70
+]
+
+{ #category : 'aspects' }
+AHCattleBatch >> aspectImage: look [
+	"A cow of my owner's colour, as large as my number of heads"
+
+	<aspect>
+	look
+		image: (owner id = 1
+				 ifTrue: [ 'cow-pink' ]
+				 ifFalse: [ 'cow-blue' ]);
+		size: 0.3 + (heads / 50)
+]
+
+{ #category : 'charts' }
+AHCattleBatch >> chartCorporalCondition [
+	"Are my cattle well fed?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Corporal condition';
+		  lineX: #currentTimeStep y: #corporalCondition;
+		  yFrom: 0 to: 10;
+		  hideLegend;
+		  yourself
+]
+
+{ #category : 'charts' }
+AHCattleBatch >> chartHeads [
+	"How does my batch grow and shrink?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Heads';
+		  lineX: #currentTimeStep y: #heads;
+		  hideLegend;
+		  yourself
+]
+
+{ #category : 'probes' }
+AHCattleBatch >> corporalCondition [
+
+	<probe>
 	^ corporalCondition
 ]
 
@@ -289,10 +337,10 @@ AHCattleBatch >> hasLowCorporalCondition [
 	^self corporalCondition > self class thresholdLowCC 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'probes' }
 AHCattleBatch >> heads [
 
-"	<parameterIntegerDefault: 10>"
+	<probe>
 	^ heads
 ]
 
@@ -388,14 +436,6 @@ AHCattleBatch >> owner [
 AHCattleBatch >> owner: anObject [
 
 	owner := anObject
-]
-
-{ #category : 'pov' }
-AHCattleBatch >> povNumberOfHeads [
-
-	<pov>
-
-	^ CMPointOfView color: self owner color shape: #star size: heads / 70
 ]
 
 { #category : 'control' }

@@ -6,7 +6,7 @@ Class {
 	#tag : 'coreModel'
 }
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHFulaniCamp class >> myColor [
 
 	^ Color fromHexString: 'BFBFC4'

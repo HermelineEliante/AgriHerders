@@ -9,12 +9,23 @@ Class {
 	#tag : 'coreModel'
 }
 
-{ #category : 'pov' }
+{ #category : 'aspects' }
+AHFarmer >> aspectImage: look [
+
+	<aspect>
+	look
+		image: (id = 1
+				 ifTrue: [ 'farmer' ]
+				 ifFalse: [ 'farmer-colored' ]);
+		size: 0.7
+]
+
+{ #category : 'aspects' }
 AHFarmer >> color [
 
 	id = 1 ifTrue: [ ^ CMColor orange ].
 	id = 2 ifTrue: [ ^ CMColor olympic ].
-	^ CMColor colorOfNumber: self id + 2
+	^ CMColor palette at: id \\ CMColor palette size + 1
 ]
 
 { #category : 'control' }
@@ -40,9 +51,4 @@ AHFarmer >> setNobodysPlots [
 	nobodysPlots := nobodysPlots asSortedCollection: [ :p1 :p2 |
 		             (p1 distanceTo: self house)
 		             < (p2 distanceTo: self house) ].
-]
-
-{ #category : 'pov' }
-AHFarmer >> shape [ 
-^#circle
 ]

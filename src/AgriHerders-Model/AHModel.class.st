@@ -3,7 +3,6 @@ Class {
 	#superclass : 'CMModel',
 	#instVars : [
 		'doesPopulationGrow',
-		'cattleSizeMax',
 		'expansionFrequency',
 		'cumulConflicts'
 	],
@@ -33,47 +32,215 @@ AHModel >> areCowsExtinguished [
 ]
 
 { #category : 'probes' }
-AHModel >> batchNumber [ 
-"retourne le nombre total de vaches, pour suivre l'evolution de tout le troupeau"
-
-	"<probeNamed: 'Cattle batchs' color: 'E74C3C' >"
-	^(self @@ AHCattleBatch) size.
-]
-
-{ #category : 'probes' }
 AHModel >> cattleSize [ 
 "retourne le nombre total de vaches, pour suivre l'evolution de tout le troupeau"
 
-	<probeNamed: 'Cattle size' color: 'E74C3C' >
+	<probe>
 	self @@ AHCattleBatch ifEmpty: [ ^0 ].
 	^(self @@ AHCattleBatch collect: [ :each | each heads ]) sum rounded.
 ]
 
-{ #category : 'probes' }
-AHModel >> cattleSizeMax [ 
-"retourne le plus grand nombre total de vaches,"
+{ #category : 'charts' }
+AHModel >> chartBiomass [
+	"How much forage is left for the cattle, in natural covers and as crop residues?"
 
-	"<probeNamed: 'Cattle size max' color: 'E74C3C' >"
-	cattleSizeMax := self cattleSize max: cattleSizeMax .
-	^cattleSizeMax
+	<chart>
+	^ CMChart new
+		  title: 'Biomass';
+		  add: (CMLineSeries new
+				   x: #currentTimeStep y: #naturalBiomass;
+				   label: 'Mean of natural covers';
+				   yourself);
+		  add: (CMLineSeries new
+				   x: #currentTimeStep y: #totalResidue;
+				   label: 'Mean residue of crops';
+				   yourself);
+		  yourself
+]
+
+{ #category : 'charts' }
+AHModel >> chartCattle [
+	"How many cattle are there, and whose herds grow?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Cattle of each herder';
+		  areasX: #currentTimeStep y: #herdSize ofAll: AHHerder;
+		  yTitle: 'Heads';
+		  yourself
+]
+
+{ #category : 'charts' }
+AHModel >> chartConflicts [
+	"How many conflicts do cattle cause in the fields, and how does their average change?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Conflicts';
+		  add: (CMBarSeries new
+				   x: #currentTimeStep y: #conflicts;
+				   label: 'Conflicts of the semester';
+				   yourself);
+		  add: (CMLineSeries new
+				   x: #currentTimeStep y: #conflictsAverage;
+				   label: 'Average since the start';
+				   yourself);
+		  yourself
+]
+
+{ #category : 'charts' }
+AHModel >> chartCorporalCondition [
+	"Are the cattle well fed, enough to give birth?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Corporal condition of the cattle';
+		  add: (CMLineSeries new
+				   x: #currentTimeStep y: #corporalCondition;
+				   label: 'Mean of the semester';
+				   yourself);
+		  add: (CMLineSeries new
+				   x: #currentTimeStep y: #mobileCC;
+				   label: 'Mean of the last two semesters';
+				   yourself);
+		  lineAtY: AHCattleBatch thresholdGoodCC label: 'Good condition';
+		  lineAtY: AHCattleBatch thresholdLowCC label: 'Low condition';
+		  lineAtY: AHCattleBatch thresholdBadCC label: 'Bad condition';
+		  yFrom: 0 to: 10;
+		  yourself
+]
+
+{ #category : 'charts' }
+AHModel >> chartCorporalConditionSpread [
+	"Are all cattle batches in the same condition, or do some starve while others thrive?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Corporal condition of the cattle batches';
+		  boxesX: #currentTimeStep
+		  y: #corporalCondition
+		  ofAll: AHCattleBatch;
+		  yFrom: 0 to: 10;
+		  hideLegend;
+		  yourself
+]
+
+{ #category : 'charts' }
+AHModel >> chartFarms [
+	"Who takes the land, and how fast do farms grow?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Plots of each farm';
+		  areasX: #currentTimeStep y: #numberOfPlots ofAll: AHFarm;
+		  yTitle: 'Plots';
+		  yourself
+]
+
+{ #category : 'charts' }
+AHModel >> chartHarvest [
+	"What is harvested, crop by crop?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Harvest';
+		  add: (CMBarSeries new
+				   x: #currentTimeStep y: #yield_Cassava;
+				   label: 'Cassava';
+				   yourself);
+		  add: (CMBarSeries new
+				   x: #currentTimeStep y: #yield_Cotton;
+				   label: 'Cotton';
+				   yourself);
+		  add: (CMBarSeries new
+				   x: #currentTimeStep y: #yield_Maize;
+				   label: 'Maize';
+				   yourself);
+		  add: (CMBarSeries new
+				   x: #currentTimeStep y: #yield_Soya;
+				   label: 'Soya';
+				   yourself);
+		  yTitle: 'kg';
+		  yourself
+]
+
+{ #category : 'charts' }
+AHModel >> chartLandUse [
+	"How do crops, fallows and natural covers share the land over the years?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Land use';
+		  areasX: #currentTimeStep y: #landcover ofAll: AHPlot;
+		  yTitle: 'Plots';
+		  yourself
+]
+
+{ #category : 'charts' }
+AHModel >> chartMoneyOfFarmers [
+	"Which farmer gets richer?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Money of farmers';
+		  linesX: #currentTimeStep y: #money ofAll: AHFarmer;
+		  yourself
+]
+
+{ #category : 'charts' }
+AHModel >> chartMoneyOfHerders [
+	"Which herder gets richer?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Money of herders';
+		  linesX: #currentTimeStep y: #money ofAll: AHHerder;
+		  yourself
+]
+
+{ #category : 'charts' }
+AHModel >> chartSoilFertility [
+	"Do soils get richer or poorer, on the whole and where nobody farms?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Soil fertility';
+		  add: (CMLineSeries new
+				   x: #currentTimeStep y: #globalFertility;
+				   label: 'Mean of all plots';
+				   yourself);
+		  add: (CMLineSeries new
+				   x: #currentTimeStep y: #naturalZoneFertility;
+				   label: 'Mean of natural covers';
+				   yourself);
+		  yourself
+]
+
+{ #category : 'charts' }
+AHModel >> chartSoilFertilitySpread [
+	"Do all plots keep their fertility, or do some get exhausted?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Soil fertility of the plots';
+		  boxesX: #currentTimeStep y: #soilFertility ofAll: AHPlot;
+		  hideLegend;
+		  yourself
 ]
 
 { #category : 'probes' }
 AHModel >> conflicts [
-	"retourne le nombre total de conflits, pour suivre l'evolution de tout le troupeau"
+	"Answer the number of conflicts of this semester"
 
-	<probeNamed: 'conflicts' color: 'DC2411'>
-	|currentConflicts|
-	currentConflicts := self @@ AHPlot sum: [ :p | p conflicts ].
-	cumulConflicts := cumulConflicts + currentConflicts.
-	^currentConflicts 
+	<probe>
+	^ self thePlots sum: [ :p | p conflicts ]
 ]
 
 { #category : 'probes' }
 AHModel >> conflictsAverage [
 	"retourne le nombre total de conflits, pour suivre l'evolution de tout le troupeau"
 
-	<probeNamed: 'conflicts average' color: 'DC2411'>
+	<probe>
 	self currentTimeStep = 0 ifTrue: [ ^0 ].
 	^ (cumulConflicts / self currentTimeStep) asFloat
 ]
@@ -82,20 +249,13 @@ AHModel >> conflictsAverage [
 AHModel >> corporalCondition [
 	"evolution de CC moyen de tout le troupeau (moyenne pondérée) "
 
-	<probeNamed: 'Corporal condition' color: 'F39C12'>
+	<probe>
 	| heads |
 	self @@ AHCattleBatch ifEmpty: [ ^ 0 ].
 	heads := (self @@ AHCattleBatch collect: [ :each | each heads ]) sum.
 	heads = 0 ifTrue: [ ^ 0 ].
 	^ ((self @@ AHCattleBatch collect: [ :each |
 		   each heads * each corporalCondition ]) sum / heads) asFloat
-]
-
-{ #category : 'probes' }
-AHModel >> cottonSize [
-
-	"<probeNamed: 'Cotton size' color: 'C0AC8F'>"
-	^ (self @@ AHPlot select: [ :p | p cover class = AHCotton ]) size
 ]
 
 { #category : 'initialization' }
@@ -174,7 +334,7 @@ AHModel >> expansionFrequency: anObject [
 { #category : 'probes' }
 AHModel >> farmsArea [
 
-	<probeNamed: 'farms area' color: '27AE60'>
+	<probe>
 	^ (self @@ AHPlot select: [ :p | p belongsToSomebody]) size
 ]
 
@@ -188,7 +348,7 @@ AHModel >> forestPlots [
 { #category : 'probes' }
 AHModel >> globalFertility [
 "moyenne de la fertilité de tous les plots : #(2 6 7) average"
-	<probeNamed: 'global fertility' color: #black>
+	<probe>
 	^ (self @@ AHPlot collect: [ :p | p soilFertility ]) average asFloat
 ]
 
@@ -196,7 +356,6 @@ AHModel >> globalFertility [
 AHModel >> init [
 	"	<init>"
 	
-	cattleSizeMax := 0.
 	cumulConflicts := 0.
 	self
 		createGridNumberOfRows: 8
@@ -292,17 +451,10 @@ AHModel >> isDrySeason [
 ]
 
 { #category : 'probes' }
-AHModel >> maizeSize [
-
-	"<probeNamed: 'Maize size' color: 'F1F10F'>"
-	^ (self @@ AHPlot select: [ :p | p cover class = AHMaize ]) size
-]
-
-{ #category : 'probes' }
 AHModel >> mobileCC [
 	"evolution de CC moyen de tout le troupeau (moyenne pondérée) "
 
-	<probeNamed: 'Mobile Corporal condition' color: 'F39C12'>
+	<probe>
 	| heads |
 	self @@ AHCattleBatch ifEmpty: [ ^ 0 ].
 	heads := (self @@ AHCattleBatch collect: [ :each | each heads ]) sum.
@@ -314,20 +466,20 @@ AHModel >> mobileCC [
 { #category : 'probes' }
 AHModel >> moneyFarmers [
 
-"	<probeNamed: 'Money farmers' color: '526C85'> moneyFarmers écrase tout"
+	<probe>
 	^ self @@ AHFarmer sum: [ :p | p money ]
 ]
 
 { #category : 'probes' }
 AHModel >> moneyHerders [
-"
-	<probeNamed: 'Money herders' color: '97350C'>"
+
+	<probe>
 	^ self @@ AHHerder sum: [ :p | p money ]
 ]
 
 { #category : 'probes' }
 AHModel >> naturalBiomass [
-	"<probeNamed: 'naturalBiomass' color: '5A9186'>"
+	<probe>
 
 	| vegetations |
 	vegetations := self @@ AHPlot select: [ :p |
@@ -340,7 +492,7 @@ AHModel >> naturalBiomass [
 AHModel >> naturalZoneFertility [
 	"moyenne de la fertilité des plots en natural fertility : #(2 6 7) average"
 
-	"<probeNamed: 'naturalZone fertility' color: #black>"
+	<probe>
 	| coll |
 	"coll := OrderedCollection new.
 	coll addAll: (self plotsCoveredBy: AHForest).
@@ -354,17 +506,16 @@ AHModel >> naturalZoneFertility [
 
 { #category : 'perspectives' }
 AHModel >> perspectiveEcology [
-    "equivalent old habitus"
-    <perspective>
-    ^ CMPerspective new
-        show: AHPlot as: #aspectLandcover:;
-        show: AHFarm as: #aspectBorder:;
-        "hide: WSHShepherd;
-        hide: WSHFlockLink;
-        hide: WSHFlock;"
-        yourself
+	"The land covers, the farms of each actor, and the actors and their cattle as pictures"
 
-
+	<perspective>
+	^ CMPerspective new
+		  show: AHPlot as: #aspectLandcover:;
+		  show: AHFarm as: #aspectBorder:;
+		  show: AHFarmer as: #aspectImage:;
+		  show: AHSedentary as: #aspectImage:;
+		  show: AHCattleBatch as: #aspectImage:;
+		  yourself
 ]
 
 { #category : 'accessing' }
@@ -372,13 +523,6 @@ AHModel >> plotsCoveredBy: aTypeOfCover [
 	"return the cells covered by aTypeOfCover"
 
 	^ self thePlots select: [ :c | c cover isKindOf: aTypeOfCover ]
-]
-
-{ #category : 'probes' }
-AHModel >> soyaSize [
-
-	"<probeNamed: 'Soja size' color: 'B29EBB'>"
-	^ (self @@ AHPlot select: [ :p | p cover class = AHSoya ]) size
 ]
 
 { #category : 'control' }
@@ -418,9 +562,8 @@ AHModel >> stepSemester [
 	self @@ AHCattleBatch do: #setPreviousCC.
 	self isDrySeason
 		ifTrue: [ self stepDrySeason "pair" ]
-		ifFalse: [ self stepRainySeason ]. 
-		
- 
+		ifFalse: [ self stepRainySeason ].
+	cumulConflicts := cumulConflicts + self conflicts
 ]
 
 { #category : 'accessing' }
@@ -436,33 +579,16 @@ AHModel >> thePlots [
 ]
 
 { #category : 'probes' }
-AHModel >> totalBiomass [
-	"^ (self @@ AHPlot collect: [ :p | p cover biomass ]) average"
-
-	"<probeNamed: 'Total biomass' color: #green>"
-
-	^ self totalResidue + self naturalBiomass
-]
-
-{ #category : 'probes' }
-AHModel >> totalFertility [
-	"Somme de la fertilité de tous les plots "
-
-	"<probeNamed: 'total fertility' color: '2E4F70'>"
-	^ (self @@ AHPlot collect: [ :p | p soilFertility ]) sum
-]
-
-{ #category : 'probes' }
 AHModel >> totalHarvest [
 
-	<probeNamed: 'total harvest' color: 'C0392B'> 
+	<probe>
 
 	^ self @@ AHFarmer sum: [ :p | p sumOfTotalHarvest ]
 ]
 
 { #category : 'probes' }
 AHModel >> totalResidue [
-	"<probeNamed: 'totalResidue' color: '9CB553'>"
+	<probe>
 
 	^ ((self @@ AHPlot select: [ :p |
 		    p cover isKindOf: AHCultivatedVegetation ]) collect: [ :p |
@@ -479,27 +605,27 @@ AHModel >> villagePlots [
 { #category : 'probes' }
 AHModel >> yield_Cassava [
 
-	"<probeNamed: 'Yield cassava' color: 'DCC603'>"
+	<probe>
 	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHCassava ]
 ]
 
 { #category : 'probes' }
 AHModel >> yield_Cotton [
 
-	"<probeNamed: 'Yield cotton' color: 'C0AC8F'>"
+	<probe>
 	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHCotton ]
 ]
 
 { #category : 'probes' }
 AHModel >> yield_Maize [
 
-	"<probeNamed: 'Yield maize' color: 'FFE95A'>"
+	<probe>
 	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHMaize ]
 ]
 
 { #category : 'probes' }
 AHModel >> yield_Soya [
 
-	"<probeNamed: 'Yield soya' color: '866EB3'>"
+	<probe>
 	^ self @@ AHActor sum: [ :p | p totalHarvest at: AHSoya ]
 ]
