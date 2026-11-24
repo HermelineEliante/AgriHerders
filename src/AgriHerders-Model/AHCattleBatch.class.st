@@ -194,6 +194,29 @@ AHCattleBatch class >> thresholdLowCC: anObject [
 	thresholdLowCC := anObject
 ]
 
+{ #category : 'aspects' }
+AHCattleBatch >> aspectDefault: look [
+	"A star of my owner's colour, as large as my number of heads"
+
+	<aspect>
+	look
+		color: owner color;
+		shape: #star;
+		size: heads / 70
+]
+
+{ #category : 'aspects' }
+AHCattleBatch >> aspectImage: look [
+	"A cow of my owner's colour, as large as my number of heads"
+
+	<aspect>
+	look
+		image: (owner id = 1
+				 ifTrue: [ 'cow-pink' ]
+				 ifFalse: [ 'cow-blue' ]);
+		size: 0.3 + (heads / 50)
+]
+
 { #category : 'charts' }
 AHCattleBatch >> chartCorporalCondition [
 	"Are my cattle well fed?"
@@ -413,14 +436,6 @@ AHCattleBatch >> owner [
 AHCattleBatch >> owner: anObject [
 
 	owner := anObject
-]
-
-{ #category : 'pov' }
-AHCattleBatch >> povNumberOfHeads [
-
-	<pov>
-
-	^ CMPointOfView color: self owner color shape: #star size: heads / 70
 ]
 
 { #category : 'control' }

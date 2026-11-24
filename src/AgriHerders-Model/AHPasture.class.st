@@ -20,7 +20,7 @@ AHPasture class >> maxSupplyFertility [
 	^ maxSupplyFertility
 ]
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHPasture class >> myColor [
 
 	^ Color fromHexString: 'D2F6C3'

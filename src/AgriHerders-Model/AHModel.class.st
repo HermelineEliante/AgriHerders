@@ -506,17 +506,16 @@ AHModel >> naturalZoneFertility [
 
 { #category : 'perspectives' }
 AHModel >> perspectiveEcology [
-    "equivalent old habitus"
-    <perspective>
-    ^ CMPerspective new
-        show: AHPlot as: #aspectLandcover:;
-        show: AHFarm as: #aspectBorder:;
-        "hide: WSHShepherd;
-        hide: WSHFlockLink;
-        hide: WSHFlock;"
-        yourself
+	"The land covers, the farms of each actor, and the actors and their cattle as pictures"
 
-
+	<perspective>
+	^ CMPerspective new
+		  show: AHPlot as: #aspectLandcover:;
+		  show: AHFarm as: #aspectBorder:;
+		  show: AHFarmer as: #aspectImage:;
+		  show: AHSedentary as: #aspectImage:;
+		  show: AHCattleBatch as: #aspectImage:;
+		  yourself
 ]
 
 { #category : 'accessing' }

@@ -24,7 +24,7 @@ AHLandcover class >> landcoverName [
 	^ self name allButFirst: 2
 ]
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHLandcover class >> myColor [
 
 	^ Color white

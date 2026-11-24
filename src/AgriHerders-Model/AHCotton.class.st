@@ -13,7 +13,7 @@ AHCotton class >> expectedYield [
 	^ expectedYield
 ]
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHCotton class >> myColor [
 
 	^ Color fromHexString: 'EEEEC8'

@@ -20,7 +20,7 @@ AHFallow class >> maxSupplyFertility [
 	^ maxSupplyFertility
 ]
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHFallow class >> myColor [
 
 	^ Color fromHexString: 'A6B58A'

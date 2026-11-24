@@ -13,7 +13,7 @@ AHMaize class >> expectedYield [
 	^ expectedYield
 ]
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHMaize class >> myColor [
 
 	^ Color fromHexString: 'FFE95A'

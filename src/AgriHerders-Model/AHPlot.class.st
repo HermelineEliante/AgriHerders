@@ -43,38 +43,76 @@ AHPlot >> area: anObject [
 	area := anObject
 ]
 
-{ #category : 'pov' }
+{ #category : 'aspects' }
 AHPlot >> aspectBiomass: look [
 
 	<aspect>
-	cover ifNil: [ ^ look color: Color black ].
-	(self cover isKindOf: AHHabitation) ifTrue: [ ^ self aspectLandcover: look ].
-	"^ CMPointOfView color: (CMColor colorValue: (self cover biomass) min: 0 color: #white max: (self cover biomassMax ) color: self cover class myColor)."
-	
-	look colorShadeOf: self cover class myColor forValue: (self cover biomass) from: 0 to: self cover biomassMax 
-	
+	(cover isKindOf: AHHabitation) ifTrue: [
+		^ self aspectLandcover: look ].
+	look
+		colorShadeOf: cover class myColor
+		forValue: cover biomass
+		from: 0
+		to: cover biomassMax
 ]
 
-{ #category : 'pov' }
+{ #category : 'aspects' }
+AHPlot >> aspectConflicts: look [
+
+	<aspect>
+	conflicts = 0 ifTrue: [ ^ self aspectLandcover: look ].
+	look
+		colorShadeOf: CMColor red
+		forValue: conflicts
+		from: 0
+		to: 4
+]
+
+{ #category : 'aspects' }
+AHPlot >> aspectCowsCounter: look [
+	"Show how many cows came on me this semester, with the border of my farm's owner"
+
+	<aspect>
+	self myFarm ifNotNil: [ :farm |
+			look
+				borderColor: farm owner color;
+				borderThickness: 0.01 ].
+	cowsCounter = 0 ifTrue: [ ^ look color: Color white ].
+	look
+		colorShadeOf: CMColor brown
+		forValue: cowsCounter
+		from: 0
+		to: 60
+]
+
+{ #category : 'aspects' }
+AHPlot >> aspectFarm: look [
+	"Show the owner of my farm by its colour"
+
+	<aspect>
+	self myFarm ifNil: [ look color: Color white ] ifNotNil: [ :farm |
+			look
+				color: farm owner color;
+				borderColor: farm owner color;
+				borderThickness: 0.05 ]
+]
+
+{ #category : 'aspects' }
 AHPlot >> aspectLandcover: look [
 
 	<aspect>
 	look
-		borderThickness: 0.0;
-		color: self cover class myColor
+		borderThickness: 0;
+		color: cover class myColor
 ]
 
-{ #category : 'pov' }
+{ #category : 'aspects' }
 AHPlot >> aspectSoilFertility: look [
-	"	| aColor |
-	self soilFertility = 0 ifTrue: [ aColor := Color white ].
-	self soilFertility = 1 ifTrue: [ aColor := Color yellow ].
-	self soilFertility = 2 ifTrue: [ aColor := Color orange ].
-	self soilFertility = 3 ifTrue: [ aColor := Color green ]."
 
 	<aspect>
-	look colorShadeOf: CMColor orange 
-		forValue: self soilFertility
+	look
+		colorShadeOf: CMColor orange
+		forValue: soilFertility
 		from: 0
 		to: 20
 ]
@@ -166,111 +204,6 @@ AHPlot >> landcover [
 AHPlot >> myFarm [
 
 	^ self aggregates detect: [ :a | a isKindOf: AHFarm ] ifNone: [ nil ]
-]
-
-{ #category : 'pov' }
-AHPlot >> povBiomass [
-
-	<pov>
-	cover ifNil: [ ^ CMPointOfView color: Color black ].
-	(self cover isKindOf: AHHabitation) ifTrue: [ ^ self povLandcover ].
-	^ CMPointOfView color: (CMColor colorValue: (self cover biomass) min: 0 color: #white max: (self cover biomassMax ) color: self cover class myColor).
-	"^ CMPointOfView color: self cover class myColor"
-	
-]
-
-{ #category : 'pov' }
-AHPlot >> povConflicts [
-
-	<pov>
-	conflicts = 0 ifTrue: [ ^ self povLandcover ].
-	^ CMPointOfView color: (CMColor
-			   colorValue: conflicts
-			   min: 0
-			   max: 4
-			   color: #red)
-	"^ CMPointOfView color: self cover class myColor"
-]
-
-{ #category : 'pov' }
-AHPlot >> povCowsCounter [
-
-	<pov>
-	| pov owner borderColor borderWidth |
-	pov := CMPointOfView new
-		       borderWidth: 0.0;
-		       "borderColor: CMColor darkGray;"
-		       yourself.
-	(self getAggregateType: AHFarm) ifNotNil: [
-			owner := (self getAggregateType: AHFarm) owner.
-			borderColor := owner color.
-			borderWidth := 0.01.
-			pov color: owner color;
-				borderWidth: borderWidth;
-				borderColor: borderColor ].
-	cover ifNil: [ ^ pov color: Color black ].
-	
-	cowsCounter = 0 ifTrue: [ ^ pov color: #white ].
-	^ pov color: (CMColor
-			   colorValue: self cowsCounter
-			   min: 0
-			   max: 60
-			   color: Color brown)
-]
-
-{ #category : 'pov' }
-AHPlot >> povFarm [
-
-	<pov>
-	| owner borderColor borderWidth |
-	(self getAggregateType: AHFarm)
-		ifNil: [ ^ CMPointOfView color: Color white ]
-		ifNotNil: [
-			owner := (self getAggregateType: AHFarm) owner.
-
-			borderColor := owner color.
-			borderWidth := 0.05 .
-		^ CMPointOfView new color: owner color;
-		  borderWidth: borderWidth;
-		  borderColor: borderColor yourself ]
-]
-
-{ #category : 'pov' }
-AHPlot >> povLandcover [
-
-	<pov>
-"	| pov owner borderColor borderWidth |
-	pov := CMPointOfView new
-		       borderWidth: 0.0;
-		       yourself.
-	(self getAggregateType: AHFarm) ifNotNil: [
-			owner := (self getAggregateType: AHFarm) owner.
-			borderColor := owner color.
-			borderWidth := 0.01.
-			pov color: owner color;
-				borderWidth: borderWidth;
-				borderColor: borderColor ].
-	cover ifNil: [ ^ pov color: Color black ]."
-	^ CMPointOfView new
-		       borderWidth: 0.0;
-		       color: self cover class myColor;
-				yourself
-]
-
-{ #category : 'pov' }
-AHPlot >> povSoilFertility [
-	"	| aColor |
-	self soilFertility = 0 ifTrue: [ aColor := Color white ].
-	self soilFertility = 1 ifTrue: [ aColor := Color yellow ].
-	self soilFertility = 2 ifTrue: [ aColor := Color orange ].
-	self soilFertility = 3 ifTrue: [ aColor := Color green ]."
-
-	<pov>
-	^ CMPointOfView color: (CMColor
-			   colorValue: self soilFertility
-			   min: 0
-			   max: 20
-			   color: Color orange)
 ]
 
 { #category : 'initialize' }

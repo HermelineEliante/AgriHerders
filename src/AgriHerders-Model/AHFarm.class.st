@@ -9,12 +9,24 @@ Class {
 	#tag : 'coreModel'
 }
 
-{ #category : 'pov' }
+{ #category : 'aspects' }
 AHFarm >> aspectBorder: look [
-		<aspect>
+
+	<aspect>
 	look
-		  borderColor: (owner color);
-		  borderThickness: 0.04
+		borderColor: owner color;
+		borderThickness: 0.04
+]
+
+{ #category : 'aspects' }
+AHFarm >> aspectFilled: look [
+	"Show the farm as one solid shape, with a line around it"
+
+	<aspect>
+	look
+		color: ((Color fromHexString: '486862') alpha: 0.2);
+		borderColor: Color red;
+		borderThickness: 0.1
 ]
 
 { #category : 'probes' }
@@ -34,26 +46,6 @@ AHFarm >> owner [
 AHFarm >> owner: anObject [
 
 	owner := anObject
-]
-
-{ #category : 'pov' }
-AHFarm >> povBorder [
-		<pov>
-	^ CMPointOfView new
-		  borderColor: owner povId color;
-		  borderWidth: 0.04;
-		  yourself
-]
-
-{ #category : 'pov' }
-AHFarm >> povFilled [
-	"Show the grove as one solid shape, with a line around it"
-
-	<pov>
-	^ (CMPointOfView color: ((Color fromHexString: '486862') alpha: 0.2))
-		  borderColor: Color red;
-		  borderWidth: 0.1;
-		  yourself
 ]
 
 { #category : 'printing' }

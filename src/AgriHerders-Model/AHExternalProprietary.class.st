@@ -6,7 +6,7 @@ Class {
 	#tag : 'coreModel'
 }
 
-{ #category : 'pov' }
+{ #category : 'aspects' }
 AHExternalProprietary >> color [
 
 	^ CMColor gray

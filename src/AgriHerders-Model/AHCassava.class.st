@@ -16,7 +16,7 @@ AHCassava class >> expectedYield [
 	^ expectedYield
 ]
 
-{ #category : 'pov' }
+{ #category : 'colors' }
 AHCassava class >> myColor [
 
 	^ Color fromHexString: 'DCC603'
