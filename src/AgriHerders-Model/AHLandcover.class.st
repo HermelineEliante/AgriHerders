@@ -31,11 +31,6 @@ AHLandcover class >> myColor [
 ]
 
 { #category : 'accessing' }
-AHLandcover >> biomass [
-	^0
-]
-
-{ #category : 'accessing' }
 AHLandcover >> cell [
 
 	^ cell
@@ -56,6 +51,11 @@ AHLandcover >> dryStep [
 AHLandcover >> hasBeenHarvested [
 "Répond si le cover a été récolté ou non."
 ^ false
+]
+
+{ #category : 'accessing' }
+AHLandcover >> ingestibleBiomass [
+	^0
 ]
 
 { #category : 'initialization' }

@@ -7,10 +7,11 @@ Class {
 }
 
 { #category : 'accessing' }
-AHFallow class >> biomassMax [
-"correspond au couvert herbacé. A cela, il faut ajouter les résidus de la culture initialement en place (cf. méthode rainyStep & dryStep)"
-	<parameterFloatMin: 0 max: 500 default: 100>
-	^ biomassMax
+AHFallow class >> maxIngestibleBiomass [
+	"correspond au couvert herbacé. A cela, il faut ajouter les résidus de la culture initialement en place (cf. méthode rainyStep & dryStep)"
+
+	<parameterFloatMin: 0 max: 50000 default: 10000>
+	^ maxIngestibleBiomass
 ]
 
 { #category : 'accessing' }

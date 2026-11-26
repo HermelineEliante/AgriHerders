@@ -49,9 +49,9 @@ AHPlot >> aspectBiomass: look [
 		^ self aspectLandcover: look ].
 	look
 		colorShadeOf: cover class myColor
-		forValue: cover biomass
+		forValue: cover ingestibleBiomass
 		from: 0
-		to: cover biomassMax
+		to: cover maxIngestibleBiomass
 ]
 
 { #category : 'aspects' }
@@ -137,8 +137,9 @@ AHPlot >> chartSoilFertility [
 		  yourself
 ]
 
-{ #category : 'accessing' }
+{ #category : 'probes' }
 AHPlot >> conflicts [
+	<probe>
 
 	^ conflicts
 ]
@@ -161,8 +162,9 @@ AHPlot >> cover: anObject [
 	cover := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : 'probes' }
 AHPlot >> cowsCounter [
+	<probe>
 	^ cowsCounter
 ]
 

@@ -3,7 +3,7 @@ Class {
 	#superclass : 'AHLandcover',
 	#instVars : [
 		'age',
-		'biomass'
+		'ingestibleBiomass'
 	],
 	#classInstVars : [
 		'maxSupplyFertility'
@@ -37,22 +37,22 @@ AHVegetation >> age: anObject [
 	age := anObject
 ]
 
-{ #category : 'accessing' }
-AHVegetation >> biomass [
-
-	^ biomass
-]
-
-{ #category : 'accessing' }
-AHVegetation >> biomass: anObject [
-
-	biomass := anObject
-]
-
 { #category : 'control' }
 AHVegetation >> dryStep [
 
 	^self semesterStep
+]
+
+{ #category : 'accessing' }
+AHVegetation >> ingestibleBiomass [
+
+	^ ingestibleBiomass
+]
+
+{ #category : 'accessing' }
+AHVegetation >> ingestibleBiomass: anObject [
+
+	ingestibleBiomass := anObject
 ]
 
 { #category : 'initialization' }
@@ -60,7 +60,7 @@ AHVegetation >> initialize [
 
 	super initialize.
 	age := 0.
-	biomass := 0.01
+	ingestibleBiomass := 0.01
 ]
 
 { #category : 'control' }

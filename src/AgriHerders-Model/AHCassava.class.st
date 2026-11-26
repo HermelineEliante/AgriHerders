@@ -45,7 +45,7 @@ AHCassava >> dryStep [
 	self isMature ifTrue: [
 			self hasBeenHarvested ifTrue: [
 					fallow := self cell setLandcover: AHFallow.
-					fallow biomass: fallow biomass + self residue.
+					fallow ingestibleBiomass: fallow ingestibleBiomass + self residue.
 					isDead := true ] ]
 ]
 
@@ -82,13 +82,13 @@ AHCassava >> rainyStep [
 	| fallow resid |
 	self semesterStep.
 	self isMature ifTrue: [
-		self biomass: self residue + self yield. "kg MS/plot"
+		self ingestibleBiomass: self residue + self yield. "kg MS/plot"
 		"reduction de la fertilité"
 		self cell soilFertility:
 			(self cell soilFertility - self optimalFertility max: 0).
 		self hasBeenHarvested ifTrue: [
 					resid := self residue.
 					fallow := self cell setLandcover: AHFallow.
-					fallow biomass: fallow biomass + resid.
+					fallow ingestibleBiomass: fallow ingestibleBiomass + resid.
 					isDead := true ] ]
 ]

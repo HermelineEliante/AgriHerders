@@ -65,7 +65,13 @@ AHModel >> chartCattle [
 	<chart>
 	^ CMChart new
 		  title: 'Cattle of each herder';
-		  areasX: #currentTimeStep y: #herdSize ofAll: AHHerder;
+			linesX: #currentTimeStep y: #herdSize ofAll: AHSedentary;
+		  "areasX: #currentTimeStep y: #herdSize ofAll: AHSedentary;"
+		  add: (CMLineSeries new
+				   x: #currentTimeStep y: #cattleSize;
+				   label: 'Total cattle'; 
+					color: CMColor darkGray;
+ 				   yourself);
 		  yTitle: 'Heads';
 		  yourself
 ]
@@ -485,7 +491,7 @@ AHModel >> naturalBiomass [
 	vegetations := self @@ AHPlot select: [ :p |
 		    p cover isKindOf: AHNaturalVegetation ]. 
 	vegetations ifEmpty: [ ^0 ] ifNotEmpty: [ ^(vegetations collect: [ :p |
-		   p cover biomass ]) average]
+		   p cover ingestibleBiomass ]) average]
 ]
 
 { #category : 'probes' }
@@ -592,7 +598,7 @@ AHModel >> totalResidue [
 
 	^ ((self @@ AHPlot select: [ :p |
 		    p cover isKindOf: AHCultivatedVegetation ]) collect: [ :p |
-		   p cover biomass ]) average
+		   p cover ingestibleBiomass ]) average
 ]
 
 { #category : 'accessing' }

@@ -29,7 +29,7 @@ AHHerder >> anyPlotsWithBiomass [
 	"Return plots of the territory with biomass, whatever if they are opened or not (rejecting owns plots)"
 
 	
-	^ territory select: [ :p | ((p belongsToOwner: self) not) and: [p cover biomass > 0 ]]
+	^ territory select: [ :p | ((p belongsToOwner: self) not) and: [p cover ingestibleBiomass > 0 ]]
 ]
 
 { #category : 'accessing' }
@@ -43,7 +43,7 @@ AHHerder >> authorizedfallowAndBushPlots [
 AHHerder >> authorizedfallowAndBushPlotsWithBiomass [
 	"retourne toutes les plots en fallow & bush avec biomasse"
 
-	^ self authorizedfallowAndBushPlots select: [ :c | c cover biomass > 0 ]
+	^ self authorizedfallowAndBushPlots select: [ :c | c cover ingestibleBiomass > 0 ]
 ]
 
 { #category : 'accessing' }
@@ -85,12 +85,12 @@ AHHerder >> bestPlotInto: aListOfPlots [
 	| freePlots biomassMax |
 	freePlots := aListOfPlots select: [ :c |
 		             (c hasOccupantsOfClass: AHCattleBatch) not and: [
-			             c cover biomass > 0 ] ].
+			             c cover ingestibleBiomass > 0 ] ].
 
 	freePlots isEmpty ifTrue: [ ^ nil ].
-	biomassMax := (freePlots collect: [ :p | p cover biomass ]) max. "collecte toutes les biomasses et retourne la plus élevée"
+	biomassMax := (freePlots collect: [ :p | p cover ingestibleBiomass ]) max. "collecte toutes les biomasses et retourne la plus élevée"
 	^ self selectRandomlyFrom:
-		  (freePlots select: [ :p | p cover biomass = biomassMax ])
+		  (freePlots select: [ :p | p cover ingestibleBiomass = biomassMax ])
 ]
 
 { #category : 'charts' }
@@ -141,7 +141,7 @@ AHHerder >> existFreeNaturalPlotsWithBiomass [
 
 	^ self naturalPlots
 		  detect: [ :p |
-			  p cover biomass > 0 and: [
+			  p cover ingestibleBiomass > 0 and: [
 				  (p hasOccupantsOfClass: AHCattleBatch) not ] ]
 		  ifFound: [ true ]
 		  ifNone: [ false ]
@@ -168,7 +168,7 @@ AHHerder >> fallowAndBushPlots [
 AHHerder >> fallowAndBushPlotsWithBiomass [
 	"retourne toutes les plots en fallow & bush avec biomasse"
 
-	^ self fallowAndBushPlots select: [ :c | c cover biomass > 0 ]
+	^ self fallowAndBushPlots select: [ :c | c cover ingestibleBiomass > 0 ]
 ]
 
 { #category : 'accessing' }
@@ -182,7 +182,7 @@ AHHerder >> forestPlots [
 AHHerder >> forestPlotsWithBiomass [
 	"retourne toutes les plots en foret avec biomasse"
 
-	^ self forestPlots select: [ :c | c cover biomass > 0 ]
+	^ self forestPlots select: [ :c | c cover ingestibleBiomass > 0 ]
 ]
 
 { #category : 'accessing' }
@@ -264,7 +264,7 @@ AHHerder >> naturalPlots [
 AHHerder >> naturalPlotsWithBiomass [
 	"repond si il y a des natural plots avec de la biomasse et non occupés"
 
-	^ self naturalPlots select: [ :c | c cover biomass > 0 ]
+	^ self naturalPlots select: [ :c | c cover ingestibleBiomass > 0 ]
 ]
 
 { #category : 'accessing' }
@@ -283,7 +283,7 @@ AHHerder >> openedPlots [
 AHHerder >> openedPlotsWithBiomass [
 	"répond les plots ouverts non occupé et avec de la biommasse"
 
-	^ self openedPlots select: [ :c | c cover biomass > 0 ]
+	^ self openedPlots select: [ :c | c cover ingestibleBiomass > 0 ]
 ]
 
 { #category : 'accessing' }
@@ -295,7 +295,7 @@ AHHerder >> pasturePlots [
 { #category : 'accessing' }
 AHHerder >> pasturePlotsWithBiomass [
 	"retourne toutes les plots en Pasture avec biomasse"
-	^ self pasturePlots select: [ :c | c cover biomass > 0 ].
+	^ self pasturePlots select: [ :c | c cover ingestibleBiomass > 0 ].
 ]
 
 { #category : 'accessing' }
@@ -308,7 +308,7 @@ AHHerder >> plotsWithBiomassAround: visitedPlots [
 	newPlots copy do: [ :p | newPlots addAll: p neighbourhood ].
 	newPlots removeAll: visitedPlots.
 	^ newPlots asSortedCollection: [ :p1 :p2 |
-		  p1 cover biomass > p2 cover biomass ]
+		  p1 cover ingestibleBiomass > p2 cover ingestibleBiomass ]
 ]
 
 { #category : 'controlling' }

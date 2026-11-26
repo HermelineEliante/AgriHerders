@@ -2,7 +2,7 @@ Class {
 	#name : 'AHNaturalVegetation',
 	#superclass : 'AHVegetation',
 	#classInstVars : [
-		'biomassMax',
+		'maxIngestibleBiomass',
 		'biomassDecreaseRate'
 	],
 	#category : 'AgriHerders-Model-coreModel',
@@ -24,28 +24,23 @@ AHNaturalVegetation class >> biomassDecreaseRate: anObject [
 ]
 
 { #category : 'accessing' }
-AHNaturalVegetation class >> biomassMax [
+AHNaturalVegetation class >> maxIngestibleBiomass [
 
 	<parameterIntegerDefault: 10>
-	^ biomassMax
+	^ maxIngestibleBiomass
 ]
 
 { #category : 'accessing' }
-AHNaturalVegetation class >> biomassMax: anObject [
+AHNaturalVegetation class >> maxIngestibleBiomass: anObject [
 
-	biomassMax := anObject
-]
-
-{ #category : 'accessing' }
-AHNaturalVegetation >> biomassMax [
-	^self class biomassMax
+	maxIngestibleBiomass := anObject
 ]
 
 { #category : 'control' }
 AHNaturalVegetation >> dryStep [
 	"la biomasse perd 90% (ou 40% si Foret)"
 	super dryStep.
-	self biomass: self biomass * (100 - self class biomassDecreaseRate / 100)
+	self ingestibleBiomass: self ingestibleBiomass * (100 - self class biomassDecreaseRate / 100)
 ]
 
 { #category : 'testing' }
@@ -59,11 +54,16 @@ AHNaturalVegetation >> initialize [
 
 	super initialize.
 	age := 0. "years"
-	biomass := self randomIntegerBetween: (self class biomassMax / 2) and: self class biomassMax "kg/ha"
+	ingestibleBiomass := self randomIntegerBetween: (self class maxIngestibleBiomass / 2) and: self class maxIngestibleBiomass "kg/ha"
+]
+
+{ #category : 'accessing' }
+AHNaturalVegetation >> maxIngestibleBiomass [
+	^self class maxIngestibleBiomass
 ]
 
 { #category : 'control' }
 AHNaturalVegetation >> rainyStep [
 	super rainyStep.
-	self biomass: self class biomassMax
+	self ingestibleBiomass: self class maxIngestibleBiomass
 ]

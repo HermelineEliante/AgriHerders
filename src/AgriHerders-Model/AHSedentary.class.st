@@ -8,7 +8,7 @@ Class {
 
 { #category : 'aspects' }
 AHSedentary >> aspectImage: look [
-
+"get the png"
 	<aspect>
 	look
 		image: (id = 1

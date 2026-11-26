@@ -16,10 +16,10 @@ AHForest class >> biomassDecreaseRate [
 ]
 
 { #category : 'accessing' }
-AHForest class >> biomassMax [
+AHForest class >> maxIngestibleBiomass [
 
 	<parameterFloatDefault: 18000>
-	^ biomassMax
+	^ maxIngestibleBiomass
 ]
 
 { #category : 'accessing' }

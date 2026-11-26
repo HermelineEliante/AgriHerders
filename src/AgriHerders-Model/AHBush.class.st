@@ -7,12 +7,10 @@ Class {
 }
 
 { #category : 'accessing' }
-AHBush class >> biomassMax [
+AHBush class >> maxIngestibleBiomass [
 
 	<parameterFloatMin: 0 max: 50000 default: 13000>
-	^ biomassMax
-	
-	
+	^ maxIngestibleBiomass 
 ]
 
 { #category : 'accessing' }

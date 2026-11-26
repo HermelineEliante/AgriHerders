@@ -14,7 +14,7 @@ AHAnnualCrop >> dryStep [
 	super dryStep.
 	self isMature ifTrue: [
 			fallow := self cell setLandcover: AHFallow.
-			fallow biomass: fallow biomass + self residue.
+			fallow ingestibleBiomass: fallow ingestibleBiomass + self residue.
 			isDead := true ]
 ]
 
@@ -22,7 +22,7 @@ AHAnnualCrop >> dryStep [
 AHAnnualCrop >> hasBeenHarvested [
 "Answer if the crop has already been harvested.
 ie. if its eatable biomass is = or less than the residue"
-	^ self biomass <= self residue 
+	^ self ingestibleBiomass <= self residue 
 ]
 
 { #category : 'testing' }

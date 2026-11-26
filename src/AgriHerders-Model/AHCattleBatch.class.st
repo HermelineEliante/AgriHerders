@@ -242,6 +242,45 @@ AHCattleBatch >> chartHeads [
 		  yourself
 ]
 
+{ #category : 'charts' }
+AHCattleBatch >> chartMobileCC [
+	"Are my cattle well fed?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Mobil corporal condition';
+		  lineX: #currentTimeStep y: #mobileCC;
+		  yFrom: 0 to: 10;
+		  hideLegend;
+		  yourself
+]
+
+{ #category : 'charts' }
+AHCattleBatch >> chartMobileCC_Heads [
+	"Are my cattle well fed?"
+
+	<chart>
+	^ CMChart new
+		  title: 'CC vs heads';
+		  "pointsX: #mobileCC y: #heads;"
+		  lineX: #mobileCC y: #heads;
+		  yFrom: 0 to: 10;
+		  yTitle: 'mobileCC';
+		  yourself
+]
+
+{ #category : 'charts' }
+AHCattleBatch >> chartNeeds [
+	"How does my needs evolve?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Needs';
+		  lineX: #currentTimeStep y: #needs;
+		  hideLegend;
+		  yourself
+]
+
 { #category : 'probes' }
 AHCattleBatch >> corporalCondition [
 
@@ -293,16 +332,16 @@ AHCattleBatch >> faecesPerDay [
 AHCattleBatch >> feedOnPlot [
 	"le troupeau prélève 6.25 * le nombre de têtes de la biomasse du couvert (si possible). Met à jour sa Condition Corporelle"
 
-	self cell cover biomass = 0 ifTrue: [ ^ self updateCorporalCondition ].
+	self cell cover ingestibleBiomass = 0 ifTrue: [ ^ self updateCorporalCondition ].
 
-	self cell cover biomass >= needs
+	self cell cover ingestibleBiomass >= needs
 		ifTrue: [
-				self cell cover biomass: (self cell cover biomass - needs).
+				self cell cover ingestibleBiomass: (self cell cover ingestibleBiomass - needs).
 				needs := 0.
 				self corporalCondition: 10 ]
 		ifFalse: [
-				needs := needs - self cell cover biomass.
-				self cell cover biomass: 0.
+				needs := needs - self cell cover ingestibleBiomass.
+				self cell cover ingestibleBiomass: 0.
 				self updateCorporalCondition ]
 	"self owner isDrySeason
 		ifFalse: [ self cell conflicts: self cell conflicts + 1 ]
@@ -367,9 +406,10 @@ AHCattleBatch >> isStarving [
 	
 ]
 
-{ #category : 'accessing' }
+{ #category : 'probes' }
 AHCattleBatch >> mobileCC [
 "mobile corporal condition on the last 2 semesters"
+	<probe>
 	^ (corporalCondition + previousCC) / 2
 ]
 
@@ -414,8 +454,9 @@ Morts_naturelles = heads × Taux_mortalité"
 	self heads < 1 ifTrue: [ self delete ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'probes' }
 AHCattleBatch >> needs [
+	<probe>
 
 	^ needs
 ]
@@ -453,6 +494,7 @@ AverageRainySeasonCondition	Taux de reproduction	Explication:
 Naissances = heads × Taux_reproduction
 "
 
+	self isStarving ifTrue: [^nil].
 	self hasGoodCorporalCondition ifTrue: [
 		^ self heads: (heads * self class reproductionRate_good "0.25") + heads ].
 	self hasLowCorporalCondition ifTrue: [

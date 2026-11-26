@@ -15,11 +15,6 @@ Class {
 	#tag : 'coreModel'
 }
 
-{ #category : 'control' }
-AHActor >> addTotalHarvestFor: aCover [
-totalHarvest at: aCover class put: ((totalHarvest at: aCover class) + aCover yield)
-]
-
 { #category : 'accessing' }
 AHActor >> agreement [
 
@@ -72,13 +67,14 @@ AHActor >> fertileFallowPlots [
 { #category : 'control' }
 AHActor >> harvest [
 	"Au début de la saison sèche, toutes les cultures matures de sa ferme sont récoltées.
-	La récolte sera vendue. Puis, sera ajouté à l'argent que le fermier possède le prix de la culture. Enfin, il ne reste sur les plots que les résidus"
+	La récolte est vendue. La recette de la culture (rendement effectif x prix)) est ajouté à l'argent du fermier possède. Enfin, il ne reste sur les plots que les résidus"
+
 	self myFarm ifNil: [ ^ self ].
 	self myFarm components do: [ :plot |
 			plot cover isMature ifTrue: [
 					self money: self money + (plot cover yield * plot cover price).
-					self addTotalHarvestFor: plot cover.
-					plot cover biomass: plot cover residue ] ]
+					self increaseTotalHarvestFor: plot cover.
+					plot cover ingestibleBiomass: plot cover residue ] ]
 ]
 
 { #category : 'control' }
@@ -92,8 +88,8 @@ AHActor >> harvestCasava [
 		do: [ :plot |
 				plot cover isMature ifTrue: [
 						self money: self money + (plot cover yield * plot cover price).
-						self addTotalHarvestFor: plot cover.
-						plot cover biomass: plot cover residue.
+						self increaseTotalHarvestFor: plot cover.
+						plot cover ingestibleBiomass: plot cover residue.
 						plot cover hasBeenHarvested: true ] ]
 ]
 
@@ -107,6 +103,18 @@ AHActor >> house [
 AHActor >> house: anObject [
 
 	house := anObject
+]
+
+{ #category : 'control' }
+AHActor >> increaseTotalHarvestFor: aCover [
+	"Add to totalHarvest the quantity harvested on aCover"
+
+	| harvest |
+	harvest := aCover yield.
+	totalHarvest
+		at: aCover class
+		put: (totalHarvest at: aCover class) + harvest.
+	^ harvest
 ]
 
 { #category : 'initialize' }
@@ -243,8 +251,9 @@ AHActor >> sowOnPlot: aPlot [
 			^aPlot setLandcover: AHSoya
 ]
 
-{ #category : 'accessing' }
+{ #category : 'probes' }
 AHActor >> sumOfTotalHarvest [
+	<probe>
 	| tot |
 	tot := 0.
 	totalHarvest valuesDo: [ : v |  tot := tot + v].

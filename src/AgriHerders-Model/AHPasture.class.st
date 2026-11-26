@@ -7,10 +7,10 @@ Class {
 }
 
 { #category : 'accessing' }
-AHPasture class >> biomassMax [
+AHPasture class >> maxIngestibleBiomass [
 
 	<parameterFloatMin: 0 max: 50000 default: 15000>
-	^ biomassMax
+	^ maxIngestibleBiomass
 ]
 
 { #category : 'accessing' }
